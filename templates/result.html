@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card w-full max-w-md">
+  <h2 class="title mb-4">Prediction</h2>
+  <table class="result-table">
+    <thead><tr><th>Algorithm</th><th>Probability</th></tr></thead>
+    <tbody>
+      {% for alg, p in probs %}
+      <tr><td>{{ alg }}</td><td>{{ "%.1f%%"|format(p*100) }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{{ url_for('index') }}" class="btn-link mt-6">New&nbsp;query</a>
+</section>
+{% endblock %}
