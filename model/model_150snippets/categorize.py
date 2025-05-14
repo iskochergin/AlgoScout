@@ -1,8 +1,3 @@
-"""
-categorize.py  –  Flask UI for algorithm classification
-Run:  python categorize.py
-"""
-
 from pathlib import Path
 import torch, html
 from flask import Flask, render_template, request, redirect, url_for, flash

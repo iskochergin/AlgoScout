@@ -58,11 +58,4 @@ if cont != "y":
 from preprocess_dataset import preprocess_dataset
 preprocess_dataset(df=pd.read_csv("algo_dataset.csv"))
 print("preprocess finished successfully")
-print("turning to format preprocessed dataset")
-cont = input("Continue? [y/n]")
-if cont != "y":
-    exit(0)
-
-format_csv(FILES=(("algo_dataset_preprocessed.csv", '_',),))
-
 print("all done!")

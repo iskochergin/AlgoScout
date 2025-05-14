@@ -17,7 +17,7 @@ import tokenize
 
 # ───────────────────────── 1) LEXICAL STRIP ───────────────────────── #
 
-def _remove_comments_blanks_blanks(src: str) -> str:
+def _remove_comments_blanks(src: str) -> str:
     out, prev_row = [], -2
     for tok in tokenize.generate_tokens(io.StringIO(src).readline):
         ttype, tstr, (row, _), _, _ = tok
