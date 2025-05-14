@@ -1,0 +1,3340 @@
+number,code
+1,"def turtle_dp_recursive_memo(grid):
+    n = len(grid)
+    if n == 0: return 0, """"
+    m = len(grid[0])
+    if m == 0: return 0, """"
+    memo = {}
+    def solve(row, col):
+        if (row, col) in memo: return memo[(row, col)]
+        if row == n - 1 and col == m - 1: return grid[row][col], """"
+        if row >= n or col >= m: return float('inf'), """"
+        down_cost, down_path = solve(row + 1, col)
+        right_cost, right_path = solve(row, col + 1)
+        if down_cost < right_cost:
+            memo[(row, col)] = grid[row][col] + down_cost, ""D"" + down_path
+        else:
+            memo[(row, col)] = grid[row][col] + right_cost, ""R"" + right_path
+        return memo[(row, col)]
+    return solve(0, 0)"
+2,"def turtle_dp_iterative(cost_matrix):
+    rows = len(cost_matrix)
+    if rows == 0: return 0, """"
+    cols = len(cost_matrix[0])
+    if cols == 0: return 0, """"
+    dp = [[0] * cols for _ in range(rows)]
+    path = [[''] * cols for _ in range(rows)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0: continue
+            up = dp[i-1][j] if i > 0 else float('inf')
+            left = dp[i][j-1] if j > 0 else float('inf')
+            if up < left:
+                dp[i][j] = cost_matrix[i][j] + up
+                path[i][j] = 'D'
+            else:
+                dp[i][j] = cost_matrix[i][j] + left
+                path[i][j] = 'R'
+    result = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+        result = path[i][j] + result
+        if path[i][j] == 'D':
+            i -= 1
+        else:
+            j -= 1
+    return dp[rows - 1][cols - 1], result"
+3,"def turtle_dp_rolling_array(prices):
+    n = len(prices)
+    if n == 0: return 0, """"
+    m = len(prices[0])
+    if m == 0: return 0, """"
+    dp = [0] * m
+    path = [''] * m
+    for i in range(n):
+        prev = 0
+        prev_path = ''
+        for j in range(m):
+            up = dp[j]
+            left = prev if j > 0 else float('inf')
+            if up < left:
+                dp[j] = prices[i][j] + up
+                path[j] = 'D'
+            else:
+                dp[j] = prices[i][j] + left
+                path[j] = 'R'
+            prev = dp[j]
+            prev_path = path[j]
+    result = """"
+    j = m - 1
+    i = n - 1
+    while i > 0 or j > 0:
+        result = path[j] + result
+        if path[j] == 'D':
+            i -= 1
+        else:
+            j -= 1
+    return dp[m - 1], result"
+4,"def turtle_dp_in_place(cost_grid):
+    n = len(cost_grid)
+    if n == 0: return 0, """"
+    m = len(cost_grid[0])
+    if m == 0: return 0, """"
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0: continue
+            if i > 0 and j > 0:
+                cost_grid[i][j] += min(cost_grid[i-1][j], cost_grid[i][j-1])
+            elif i > 0:
+                cost_grid[i][j] += cost_grid[i-1][j]
+            else:
+                cost_grid[i][j] += cost_grid[i][j-1]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and cost_grid[i-1][j] <= cost_grid[i][j-1]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return cost_grid[n-1][m-1], path"
+5,"def turtle_dp_parent_pointers(matrix):
+    rows = len(matrix)
+    if rows == 0: return 0, """"
+    cols = len(matrix[0])
+    if cols == 0: return 0, """"
+    dp = [[0] * cols for _ in range(rows)]
+    parent = [[None] * cols for _ in range(rows)]
+    dp[0][0] = matrix[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0: continue
+            if i > 0 and j > 0:
+                if dp[i-1][j] < dp[i][j-1]:
+                    dp[i][j] = matrix[i][j] + dp[i-1][j]
+                    parent[i][j] = (i-1, j)
+                else:
+                    dp[i][j] = matrix[i][j] + dp[i][j-1]
+                    parent[i][j] = (i, j-1)
+            elif i > 0:
+                dp[i][j] = matrix[i][j] + dp[i-1][j]
+                parent[i][j] = (i-1, j)
+            else:
+                dp[i][j] = matrix[i][j] + dp[i][j-1]
+                parent[i][j] = (i, j-1)
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i != 0 or j != 0:
+        if parent[i][j] == (i-1, j):
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[rows-1][cols-1], path"
+6,"def turtle_dp_generator(grid_data):
+    n = len(grid_data)
+    if n == 0: return 0, """"
+    m = len(grid_data[0])
+    if m == 0: return 0, """"
+    def path_generator(row, col):
+        if row == n - 1 and col == m - 1:
+            yield """"
+            return
+        if row + 1 < n:
+            for path in path_generator(row + 1, col):
+                yield ""D"" + path
+        if col + 1 < m:
+            for path in path_generator(row, col + 1):
+                yield ""R"" + path
+    min_cost = float('inf')
+    min_path = """"
+    for path in path_generator(0, 0):
+        cost = 0
+        r, c = 0, 0
+        for move in path:
+            cost += grid_data[r][c]
+            if move == 'D':
+                r += 1
+            else:
+                c += 1
+        cost += grid_data[r][c]
+        if cost < min_cost:
+            min_cost = cost
+            min_path = path
+    return min_cost, min_path"
+7,"from functools import reduce
+def turtle_dp_reduce(cost_grid):
+    n = len(cost_grid)
+    if n == 0: return 0, """"
+    m = len(cost_grid[0])
+    if m == 0: return 0, """"
+    dp = reduce(lambda acc, i: acc + [reduce(lambda acc2, j: acc2 + [cost_grid[i][j] + (acc[i-1][j] if i > 0 else 0) + (acc[i][j-1] if j > 0 else 0)], [0] * m, 0)], [0] * n, [])
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[i - 1][j] <= dp[i][j - 1]):
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[n-1][m-1], path"
+8,"import numpy as np
+def turtle_dp_numpy(grid):
+    grid = np.array(grid)
+    n, m = grid.shape
+    if n == 0 or m == 0: return 0, """"
+    dp = np.zeros((n, m), dtype=int)
+    dp[0, 0] = grid[0, 0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0: continue
+            dp[i, j] = grid[i, j] + min(dp[i-1, j] if i > 0 else float('inf'),
+                                        dp[i, j-1] if j > 0 else float('inf'))
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and dp[i-1, j] <= dp[i, j-1]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[n-1, m-1], path"
+9,"def turtle_dp_early_exit(costs):
+    n = len(costs)
+    if n == 0: return 0, """"
+    m = len(costs[0])
+    if m == 0: return 0, """"
+    dp = [[float('inf')] * m for _ in range(n)]
+    dp[0][0] = costs[0][0]
+    for i in range(n):
+        for j in range(m):
+            if dp[i][j] == float('inf'): continue
+            if i + 1 < n:
+                dp[i+1][j] = min(dp[i+1][j], dp[i][j] + costs[i+1][j])
+            if j + 1 < m:
+                dp[i][j+1] = min(dp[i][j+1], dp[i][j] + costs[i][j+1])
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[i-1][j] <= dp[i][j-1]):
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[n-1][m-1], path"
+10,"import multiprocessing
+def turtle_dp_parallel(grid):
+    n = len(grid)
+    if n == 0: return 0, """"
+    m = len(grid[0])
+    if m == 0: return 0, """"
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = grid[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i-1][0] + grid[i][0]
+    def process_row(i):
+        for j in range(1, m):
+            dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
+    with multiprocessing.Pool() as pool:
+        pool.map(process_row, range(1, n))
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[i-1][j] <= dp[i][j-1]):
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[n-1][m-1], path"
+11,"def solve_turtle_dp1(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    if n == 0 or m == 0: return 0, """"
+    dp[0][0] = grid[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0: continue
+            up = dp[i - 1][j] if i > 0 else float('inf')
+            left = dp[i][j - 1] if j > 0 else float('inf')
+            if up <= left:
+                dp[i][j] = up + grid[i][j]
+                path[i][j] = path[i - 1][j] + 'D'
+            else:
+                dp[i][j] = left + grid[i][j]
+                path[i][j] = path[i][j - 1] + 'R'
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+12,"def solve_turtle_dp2(costs):
+    rows = len(costs)
+    cols = len(costs[0]) if rows else 0
+    if rows == 0 or cols == 0: return 0, """"
+    cost_matrix = [[0] * cols for _ in range(rows)]
+    cost_matrix[0][0] = costs[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0: continue
+            cost_matrix[i][j] = costs[i][j] + min(cost_matrix[i - 1][j] if i > 0 else float('inf'), cost_matrix[i][j - 1] if j > 0 else float('inf'))
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or cost_matrix[i - 1][j] <= cost_matrix[i][j - 1]):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return cost_matrix[rows - 1][cols - 1], path"
+13,"def solve_turtle_dp3(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    prev_row = [0] * m
+    curr_row = [0] * m
+    prev_row[0] = matrix[0][0]
+    for j in range(1, m):
+        prev_row[j] = prev_row[j - 1] + matrix[0][j]
+    for i in range(1, n):
+        curr_row[0] = prev_row[0] + matrix[i][0]
+        for j in range(1, m):
+            curr_row[j] = matrix[i][j] + min(prev_row[j], curr_row[j - 1])
+        prev_row = curr_row[:]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or prev_row[j] <= curr_row[j - 1]):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return prev_row[m - 1], path"
+14,"def solve_turtle_dp4(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    dp = [0] * m
+    for i in range(n):
+        new_dp = [0] * m
+        new_dp[0] = dp[0] + grid[i][0]
+        for j in range(1, m):
+            new_dp[j] = grid[i][j] + min(dp[j], new_dp[j - 1])
+        dp = new_dp
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[j] <= dp[j-1]):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp[m - 1], path"
+15,"def solve_turtle_dp5(arr):
+    n = len(arr)
+    m = len(arr[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    dp = [[(float('inf'), '') for _ in range(m)] for _ in range(n)]
+    dp[0][0] = (arr[0][0], '')
+    for i in range(n):
+        for j in range(m):
+            if i > 0:
+                cost, path = dp[i - 1][j]
+                if cost + arr[i][j] < dp[i][j][0]:
+                    dp[i][j] = (cost + arr[i][j], path + 'D')
+            if j > 0:
+                cost, path = dp[i][j - 1]
+                if cost + arr[i][j] < dp[i][j][0]:
+                    dp[i][j] = (cost + arr[i][j], path + 'R')
+    return dp[n - 1][m - 1]"
+16,"def solve_turtle_dp6(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    def find_path(row, col):
+        if row == 0 and col == 0:
+            return matrix[0][0], """"
+        if row == 0:
+            cost, path = find_path(row, col - 1)
+            return cost + matrix[row][col], path + 'R'
+        if col == 0:
+            cost, path = find_path(row - 1, col)
+            return cost + matrix[row][col], path + 'D'
+        cost_down, path_down = find_path(row - 1, col)
+        cost_right, path_right = find_path(row, col - 1)
+        if cost_down <= cost_right:
+            return cost_down + matrix[row][col], path_down + 'D'
+        else:
+            return cost_right + matrix[row][col], path_right + 'R'
+    return find_path(n - 1, m - 1)"
+17,"import functools
+def solve_turtle_dp7(costs):
+    n = len(costs)
+    m = len(costs[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    @functools.lru_cache(maxsize=None)
+    def min_cost(r, c):
+        if r == 0 and c == 0: return costs[0][0], """"
+        if r < 0 or c < 0: return float('inf'), """"
+        down_cost, down_path = min_cost(r - 1, c)
+        right_cost, right_path = min_cost(r, c - 1)
+        if down_cost <= right_cost:
+            return down_cost + costs[r][c], down_path + 'D'
+        else:
+            return right_cost + costs[r][c], right_path + 'R'
+    return min_cost(n - 1, m - 1)"
+18,"import numpy as np
+def solve_turtle_dp8(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    dp = np.zeros((n, m), dtype=np.int64)
+    parent = np.empty((n, m), dtype=object)
+    dp[0, 0] = grid[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i - 1, j] if i > 0 else np.inf
+            left = dp[i, j - 1] if j > 0 else np.inf
+            if up <= left:
+                dp[i, j] = up + grid[i][j]
+                parent[i, j] = (i - 1, j)
+            else:
+                dp[i, j] = left + grid[i][j]
+                parent[i, j] = (i, j - 1)
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        prev_i, prev_j = parent[i, j]
+        if prev_i == i - 1:
+            path = 'D' + path
+        else:
+            path = 'R' + path
+        i, j = prev_i, prev_j
+    return dp[n - 1, m - 1], path"
+19,"def solve_turtle_dp9(costs):
+    n = len(costs)
+    m = len(costs[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    dp = [[(float('inf'), '') for _ in range(m)] for _ in range(n)]
+    dp[0][0] = (costs[0][0], '')
+    for i in range(n):
+      for j in range(m):
+        if i > 0 and dp[i-1][j][0] + costs[i][j] < dp[i][j][0]:
+            dp[i][j] = (dp[i-1][j][0] + costs[i][j], dp[i-1][j][1] + 'D')
+        if j > 0 and dp[i][j-1][0] + costs[i][j] < dp[i][j][0]:
+            dp[i][j] = (dp[i][j-1][0] + costs[i][j], dp[i][j-1][1] + 'R')
+    return dp[n-1][m-1]"
+20,"import multiprocessing
+def solve_turtle_dp10(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    if n == 0 or m == 0: return 0, """"
+    def calculate_row(row_index):
+        row_costs = [0] * m
+        row_costs[0] = grid[row_index][0] + (dp_prev[0] if row_index > 0 else 0)
+        for j in range(1, m):
+            row_costs[j] = grid[row_index][j] + min(row_costs[j - 1], dp_prev[j])
+        return row_costs
+    with multiprocessing.Pool() as pool:
+        dp_prev = [0] * m
+        for i in range(n):
+            dp_current = pool.apply_async(calculate_row, (i,))
+            dp_prev = dp_current.get()
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp_prev[j] <= dp_current[j-1] if i >0 else True):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp_prev[m - 1], path"
+21,"def turtle_dp_recursive(grid):
+    rows, cols = len(grid), len(grid[0]) if grid else 0
+    memo = {}
+    def find_path(x, y):
+        if (x, y) in memo:
+            return memo[(x, y)]
+        if x == rows - 1 and y == cols - 1:
+            return grid[x][y], """"
+        if x >= rows or y >= cols:
+            return float('inf'), """"
+        down_cost, down_path = find_path(x + 1, y)
+        right_cost, right_path = find_path(x, y + 1)
+        cost = grid[x][y] + min(down_cost, right_cost)
+        path = (""D"" + down_path) if down_cost < right_cost else (""R"" + right_path)
+        memo[(x, y)] = cost, path
+        return cost, path
+    if not grid: return 0, """"
+    return find_path(0, 0)"
+22,"def turtle_dp_iterative(price_matrix):
+    n, m = len(price_matrix), len(price_matrix[0]) if price_matrix else 0
+    dp_table = [[0] * m for _ in range(n)]
+    dp_table[0][0] = price_matrix[0][0]
+    for i in range(1, n):
+        dp_table[i][0] = dp_table[i-1][0] + price_matrix[i][0]
+    for j in range(1, m):
+        dp_table[0][j] = dp_table[0][j-1] + price_matrix[0][j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp_table[i][j] = price_matrix[i][j] + min(dp_table[i-1][j], dp_table[i][j-1])
+    path = """"
+    x, y = n - 1, m - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and dp_table[x-1][y] < dp_table[x][y-1]:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return dp_table[n-1][m-1], path"
+23,"def turtle_dp_space_optimized(cost_grid):
+    if not cost_grid: return 0, """"
+    n, m = len(cost_grid), len(cost_grid[0])
+    prev_row = [0] * m
+    curr_row = [0] * m
+    prev_row[0] = cost_grid[0][0]
+    for j in range(1, m):
+        prev_row[j] = prev_row[j-1] + cost_grid[0][j]
+    for i in range(1, n):
+        curr_row[0] = prev_row[0] + cost_grid[i][0]
+        for j in range(1, m):
+            curr_row[j] = cost_grid[i][j] + min(prev_row[j], curr_row[j-1])
+        prev_row, curr_row = curr_row, prev_row
+    path = """"
+    x, y = n - 1, m - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and prev_row[y] - cost_grid[x][y] < curr_row[y-1] - cost_grid[x][y]:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return prev_row[m-1], path"
+24,"def turtle_dp_in_place(terrain):
+  if not terrain: return 0, """"
+  rows, cols = len(terrain), len(terrain[0])
+  for i in range(1, rows):
+    terrain[i][0] += terrain[i-1][0]
+  for j in range(1, cols):
+    terrain[0][j] += terrain[0][j-1]
+  for i in range(1, rows):
+    for j in range(1, cols):
+      terrain[i][j] += min(terrain[i-1][j], terrain[i][j-1])
+  path = """"
+  x, y = rows - 1, cols - 1
+  while x > 0 or y > 0:
+    if x > 0 and y > 0 and terrain[x-1][y] < terrain[x][y-1]:
+      path = ""D"" + path
+      x -= 1
+    else:
+      path = ""R"" + path
+      y -= 1
+  return terrain[rows-1][cols-1], path"
+25,"def turtle_dp_parent_pointers(matrix):
+    n, m = len(matrix), len(matrix[0]) if matrix else 0
+    dp = [[0] * m for _ in range(n)]
+    parent = [[None] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i > 0 and j > 0:
+                if dp[i-1][j] < dp[i][j-1]:
+                    dp[i][j] = matrix[i][j] + dp[i-1][j]
+                    parent[i][j] = (i-1, j)
+                else:
+                    dp[i][j] = matrix[i][j] + dp[i][j-1]
+                    parent[i][j] = (i, j-1)
+            elif i == 0 and j > 0:
+                dp[i][j] = matrix[i][j] + dp[i][j-1]
+                parent[i][j] = (i, j-1)
+            elif i > 0 and j == 0:
+                dp[i][j] = matrix[i][j] + dp[i-1][j]
+                parent[i][j] = (i-1, j)
+    path = """"
+    x, y = n - 1, m - 1
+    while x != 0 or y != 0:
+        if parent[x][y] is None: break
+        px, py = parent[x][y]
+        if px == x - 1:
+            path = ""D"" + path
+        else:
+            path = ""R"" + path
+        x, y = px, py
+    return dp[n-1][m-1], path"
+26,"def turtle_dp_generator(grid_val):
+    n, m = len(grid_val), len(grid_val[0]) if grid_val else 0
+    dp_gen = ((grid_val[i][j] + min(dp_gen_row[j], dp_gen[i-1][j]) if i > 0 and j > 0 else
+               grid_val[i][j] + dp_gen_row[j] if i == 0 and j > 0 else
+               grid_val[i][j] + dp_gen[i-1][j] if i > 0 and j == 0 else
+               grid_val[i][j]) for i in range(n) for j in range(m))
+    dp_gen_list = list(dp_gen)
+    dp_matrix = [dp_gen_list[i*m:(i+1)*m] for i in range(n)]
+    path = """"
+    x, y = n - 1, m - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and dp_matrix[x-1][y] < dp_matrix[x][y-1]:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return dp_matrix[n-1][m-1], path"
+27,"from functools import reduce
+def turtle_dp_reduce(arena):
+    n, m = len(arena), len(arena[0]) if arena else 0
+    if not arena: return 0, """"
+    dp_row = reduce(lambda acc, j: acc + [arena[0][j] + acc[-1] if j > 0 else arena[0][j]], range(m), [0])
+    for i in range(1, n):
+        dp_row = reduce(lambda acc, j: acc + [arena[i][j] + min(dp_row[j], acc[-1]) if j > 0 else arena[i][j]], range(m), [dp_row[0] + arena[i][0]])
+    path = """"
+    x, y = n - 1, m - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and (dp_row[y] - arena[x][y]) - 1 < (dp_row[y-1] - arena[x][y]) -1:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return dp_row[m-1], path"
+28,"import numpy as np
+def turtle_dp_numpy(cost_map):
+    grid = np.array(cost_map)
+    n, m = grid.shape
+    dp = np.zeros((n, m), dtype=int)
+    dp[0,0] = grid[0,0]
+    for i in range(1, n):
+        dp[i,0] = dp[i-1,0] + grid[i,0]
+    for j in range(1, m):
+        dp[0,j] = dp[0,j-1] + grid[0,j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i,j] = grid[i,j] + min(dp[i-1,j], dp[i,j-1])
+    path = """"
+    x, y = n - 1, m - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and dp[x-1,y] < dp[x,y-1]:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return dp[n-1,m-1], path"
+29,"def turtle_dp_early_exit(prices):
+    rows, cols = len(prices), len(prices[0]) if prices else 0
+    dp = [[0] * cols for _ in range(rows)]
+    dp[0][0] = prices[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0: continue
+            up = dp[i-1][j] if i > 0 else float('inf')
+            left = dp[i][j-1] if j > 0 else float('inf')
+            dp[i][j] = prices[i][j] + min(up, left)
+            if dp[i][j] >= 10**6: break
+    path = """"
+    x, y = rows - 1, cols - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and dp[x-1][y] < dp[x][y-1]:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return dp[rows-1][cols-1], path"
+30,"import multiprocessing
+def turtle_dp_parallel(costs):
+    if not costs: return 0, """"
+    n, m = len(costs), len(costs[0])
+    def compute_row(i):
+        row_dp = [0] * m
+        row_dp[0] = costs[i][0] + (dp_prev[0] if i>0 else 0)
+        for j in range(1, m):
+            row_dp[j] = costs[i][j] + min(row_dp[j-1], dp_prev[j])
+        return row_dp
+    with multiprocessing.Pool() as pool:
+        dp_list = pool.map(compute_row, range(n))
+    dp_prev = dp_list[0]
+    for i in range(1, len(dp_list)):
+        dp_prev = dp_list[i]
+    path = """"
+    x, y = n - 1, m - 1
+    while x > 0 or y > 0:
+        if x > 0 and y > 0 and dp_list[x-1][y] < dp_list[x][y-1]:
+            path = ""D"" + path
+            x -= 1
+        else:
+            path = ""R"" + path
+            y -= 1
+    return dp_prev[m-1], path"
+31,"def turtle_dp_recursive(grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
+    memo = {}
+    def solve(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == rows - 1 and j == cols - 1:
+            return grid[i][j], """"
+        if i >= rows or j >= cols:
+            return float('inf'), """"
+        down_cost, down_path = solve(i + 1, j)
+        right_cost, right_path = solve(i, j + 1)
+        if down_cost < right_cost:
+            memo[(i, j)] = grid[i][j] + down_cost, ""D"" + down_path
+        else:
+            memo[(i, j)] = grid[i][j] + right_cost, ""R"" + right_path
+        return memo[(i, j)]
+    if not grid:
+        return 0, """"
+    return solve(0, 0)"
+32,"def turtle_dp_iterative(cost_matrix):
+    n = len(cost_matrix)
+    m = len(cost_matrix[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + cost_matrix[i][0]
+        path[i][0] = 'D' + path[i - 1][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + cost_matrix[0][j]
+        path[0][j] = 'R' + path[0][j - 1]
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = dp[i - 1][j] + cost_matrix[i][j]
+                path[i][j] = 'D' + path[i - 1][j]
+            else:
+                dp[i][j] = dp[i][j - 1] + cost_matrix[i][j]
+                path[i][j] = 'R' + path[i][j - 1]
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+33,"def turtle_dp_rolling_array(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    dp = [0] * m
+    path = [''] * m
+    dp[0] = matrix[0][0]
+    path[0] = """"
+    for j in range(1, m):
+        dp[j] = dp[j - 1] + matrix[0][j]
+        path[j] = 'R' + path[j - 1]
+    for i in range(1, n):
+        new_dp = [0] * m
+        new_path = [''] * m
+        new_dp[0] = dp[0] + matrix[i][0]
+        new_path[0] = 'D' + path[0]
+        for j in range(1, m):
+            if dp[j] < new_dp[j - 1]:
+                new_dp[j] = dp[j] + matrix[i][j]
+                new_path[j] = 'D' + path[j]
+            else:
+                new_dp[j] = new_dp[j - 1] + matrix[i][j]
+                new_path[j] = 'R' + new_path[j - 1]
+        dp = new_dp
+        path = new_path
+    return dp[m - 1], path[m - 1]"
+34,"def turtle_dp_in_place(costs):
+    n = len(costs)
+    m = len(costs[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    for i in range(n):
+        for j in range(m):
+            if i > 0 and j > 0:
+                costs[i][j] += min(costs[i - 1][j], costs[i][j - 1])
+            elif i > 0:
+                costs[i][j] += costs[i - 1][j]
+            elif j > 0:
+                costs[i][j] += costs[i][j - 1]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and costs[i - 1][j] <= costs[i][j - 1]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return costs[n - 1][m - 1], path"
+35,"def turtle_dp_parent_pointers(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    parent = [[None] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            if i > 0 and j > 0:
+                if dp[i - 1][j] < dp[i][j - 1]:
+                    dp[i][j] = dp[i - 1][j] + matrix[i][j]
+                    parent[i][j] = (i - 1, j)
+                else:
+                    dp[i][j] = dp[i][j - 1] + matrix[i][j]
+                    parent[i][j] = (i, j - 1)
+            elif i > 0:
+                dp[i][j] = dp[i - 1][j] + matrix[i][j]
+                parent[i][j] = (i - 1, j)
+            else:
+                dp[i][j] = dp[i][j - 1] + matrix[i][j]
+                parent[i][j] = (i, j - 1)
+    path = """"
+    i, j = n - 1, m - 1
+    while i != 0 or j != 0:
+        if parent[i][j] is None:
+            break
+        pi, pj = parent[i][j]
+        if pi == i - 1:
+            path = ""D"" + path
+        else:
+            path = ""R"" + path
+        i, j = pi, pj
+    return dp[n - 1][m - 1], path"
+36,"def turtle_dp_generator(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    dp = [[float('inf')] * m for _ in range(n)]
+    dp[0][0] = grid[0][0]
+    def path_generator(i, j):
+        if i == 0 and j == 0:
+            yield """"
+        else:
+            if i > 0 and dp[i - 1][j] < dp[i][j - 1] if j > 0 else True:
+                for p in path_generator(i - 1, j):
+                    yield ""D"" + p
+            elif j > 0:
+                for p in path_generator(i, j - 1):
+                    yield ""R"" + p
+    for i in range(n):
+        for j in range(m):
+            if i > 0:
+                dp[i][j] = min(dp[i][j], dp[i - 1][j] + grid[i][j])
+            if j > 0:
+                dp[i][j] = min(dp[i][j], dp[i][j - 1] + grid[i][j])
+    return dp[n - 1][m - 1], next(path_generator(n - 1, m - 1))"
+37,"from functools import reduce
+def turtle_dp_reduce(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    dp = reduce(lambda acc, i: acc + [reduce(lambda row_acc, j: row_acc + [row_acc[-1] + matrix[i][j] if j > 0 else matrix[i][j], []), range(m))], range(n), [[]])
+    cost = dp[-1][-1]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and dp[i - 1][-1] <= dp[i][j - 1]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return cost, path"
+38,"import numpy as np
+def turtle_dp_numpy(cost_matrix):
+    matrix = np.array(cost_matrix)
+    n, m = matrix.shape
+    dp = np.zeros((n, m), dtype=int)
+    dp[0, 0] = matrix[0, 0]
+    for i in range(n):
+        for j in range(m):
+            if i > 0 and j > 0:
+                dp[i, j] = matrix[i, j] + min(dp[i - 1, j], dp[i, j - 1])
+            elif i > 0:
+                dp[i, j] = matrix[i, j] + dp[i - 1, j]
+            elif j > 0:
+                dp[i, j] = matrix[i, j] + dp[i, j - 1]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and dp[i - 1, j] <= dp[i, j - 1]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[n - 1, m - 1], path"
+39,"def turtle_dp_early_exit(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = grid[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + grid[i][0]
+        path[i][0] = 'D' + path[i - 1][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + grid[0][j]
+        path[0][j] = 'R' + path[0][j - 1]
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = dp[i - 1][j] + grid[i][j]
+                path[i][j] = 'D' + path[i - 1][j]
+            else:
+                dp[i][j] = dp[i][j - 1] + grid[i][j]
+                path[i][j] = 'R' + path[i][j - 1]
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+40,"import multiprocessing
+def turtle_dp_parallel(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    def process_row(row_index):
+        for j in range(m):
+            if row_index > 0:
+                dp[row_index][j] = dp[row_index - 1][j] + matrix[row_index][j]
+            elif j > 0:
+                dp[row_index][j] = dp[row_index][j - 1] + matrix[row_index][j]
+    with multiprocessing.Pool() as pool:
+        pool.map(process_row, range(1, n))
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]) + matrix[i][j]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and dp[i - 1][j] <= dp[i][j - 1]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[n - 1][m - 1], path"
+41,"def turtle_dp_recursive_memo(grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
+    memo = {}
+    def solve(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == rows - 1 and j == cols - 1:
+            return grid[i][j], """"
+        if i >= rows or j >= cols:
+            return float('inf'), """"
+        down_cost, down_path = solve(i + 1, j)
+        right_cost, right_path = solve(i, j + 1)
+        if down_cost < right_cost:
+            cost = grid[i][j] + down_cost
+            path = ""D"" + down_path
+        else:
+            cost = grid[i][j] + right_cost
+            path = ""R"" + right_path
+        memo[(i, j)] = (cost, path)
+        return cost, path
+    if not grid:
+        return 0, """"
+    return solve(0, 0)"
+42,"def turtle_dp_iterative(cost_matrix):
+    n = len(cost_matrix)
+    m = len(cost_matrix[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + cost_matrix[i][0]
+        path[i][0] = ""D"" + path[i - 1][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + cost_matrix[0][j]
+        path[0][j] = ""R"" + path[0][j - 1]
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = cost_matrix[i][j] + dp[i - 1][j]
+                path[i][j] = ""D"" + path[i - 1][j]
+            else:
+                dp[i][j] = cost_matrix[i][j] + dp[i][j - 1]
+                path[i][j] = ""R"" + path[i][j - 1]
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+43,"def turtle_dp_rolling_array(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, """"
+    prev_row = [0] * m
+    curr_row = [0] * m
+    path_prev_row = [''] * m
+    path_curr_row = [''] * m
+    prev_row[0] = matrix[0][0]
+    path_prev_row[0] = """"
+    for j in range(1, m):
+        prev_row[j] = prev_row[j - 1] + matrix[0][j]
+        path_prev_row[j] = ""R"" + path_prev_row[j-1]
+    for i in range(1, n):
+        curr_row[0] = prev_row[0] + matrix[i][0]
+        path_curr_row[0] = ""D"" + path_prev_row[0]
+        for j in range(1, m):
+            if prev_row[j] < curr_row[j - 1]:
+                curr_row[j] = matrix[i][j] + prev_row[j]
+                path_curr_row[j] = ""D"" + path_prev_row[j]
+            else:
+                curr_row[j] = matrix[i][j] + curr_row[j - 1]
+                path_curr_row[j] = ""R"" + path_curr_row[j - 1]
+        prev_row = curr_row[:]
+        path_prev_row = path_curr_row[:]
+    return prev_row[m - 1], path_prev_row[m-1]"
+44,"def turtle_dp_in_place(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0]) if rows > 0 else 0
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0:
+                continue
+            up = matrix[i - 1][j] if i > 0 else float('inf')
+            left = matrix[i][j - 1] if j > 0 else float('inf')
+            matrix[i][j] += min(up, left)
+    return matrix[rows - 1][cols - 1], """""
+45,"def turtle_dp_parent(cost_grid):
+    n = len(cost_grid)
+    m = len(cost_grid[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    parent = [[None] * m for _ in range(n)]
+    dp[0][0] = cost_grid[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + cost_grid[i][0]
+        parent[i][0] = (i - 1, 0)
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + cost_grid[0][j]
+        parent[0][j] = (0, j - 1)
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = cost_grid[i][j] + dp[i - 1][j]
+                parent[i][j] = (i - 1, j)
+            else:
+                dp[i][j] = cost_grid[i][j] + dp[i][j - 1]
+                parent[i][j] = (i, j - 1)
+    path = """"
+    curr = (n - 1, m - 1)
+    while curr != (0, 0):
+        prev = parent[curr[0]][curr[1]]
+        if prev[0] < curr[0]:
+            path = ""D"" + path
+        else:
+            path = ""R"" + path
+        curr = prev
+    return dp[n - 1][m - 1], path"
+46,"def turtle_dp_generator(grid):
+    n = len(grid)
+    m = len(grid[0]) if n > 0 else 0
+    dp = [[float('inf')] * m for _ in range(n)]
+    dp[0][0] = grid[0][0]
+    def path_generator(i, j, current_path):
+        if i == n - 1 and j == m - 1:
+            yield dp[i][j], current_path
+        else:
+            if i + 1 < n:
+                dp[i + 1][j] = min(dp[i + 1][j], dp[i][j] + grid[i + 1][j])
+                yield from path_generator(i + 1, j, current_path + ""D"")
+            if j + 1 < m:
+                dp[i][j + 1] = min(dp[i][j + 1], dp[i][j] + grid[i][j + 1])
+                yield from path_generator(i, j + 1, current_path + ""R"")
+    if n == 0 or m == 0:
+        return 0, """"
+    best_cost = float('inf')
+    best_path = """"
+    for cost, path in path_generator(0, 0, """"):
+        if cost < best_cost:
+            best_cost, best_path = cost, path
+    return best_cost, best_path"
+47,"from functools import reduce
+def turtle_dp_reduce(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, """"
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            dp[i][j] = matrix[i][j] + min(dp[i - 1][j] if i > 0 else float('inf'), dp[i][j - 1] if j > 0 else float('inf'))
+    return dp[n - 1][m - 1], """""
+48,"import numpy as np
+def turtle_dp_numpy(grid):
+    grid = np.array(grid)
+    n, m = grid.shape
+    dp = np.zeros((n, m))
+    dp[0, 0] = grid[0, 0]
+    for i in range(1, n):
+        dp[i, 0] = dp[i - 1, 0] + grid[i, 0]
+    for j in range(1, m):
+        dp[0, j] = dp[0, j - 1] + grid[0, j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i, j] = grid[i, j] + min(dp[i - 1, j], dp[i, j - 1])
+    return int(dp[n - 1, m - 1]), """""
+49,"def turtle_dp_early_exit(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i - 1][j] if i > 0 else float('inf')
+            left = dp[i][j - 1] if j > 0 else float('inf')
+            dp[i][j] = matrix[i][j] + min(up, left)
+            if dp[i][j] > 100000:
+                return float('inf'), """"
+    return dp[n - 1][m - 1], """""
+50,"def turtle_dp_parallel_rows(cost_matrix):
+    n = len(cost_matrix)
+    m = len(cost_matrix[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, """"
+    dp = [ [0] * m for _ in range(n)]
+    path = [ [''] * m for _ in range(n)]
+    dp[0] = list(np.cumsum(cost_matrix[0]))
+    path[0] = ['R' * j for j in range(m)]
+    for i in range(1, n):
+        dp[i][0] = dp[i-1][0] + cost_matrix[i][0]
+        path[i][0] = ""D"" + path[i-1][0]
+        for j in range(1, m):
+            if dp[i-1][j] < dp[i][j-1]:
+                dp[i][j] = cost_matrix[i][j] + dp[i-1][j]
+                path[i][j] = ""D"" + path[i-1][j]
+            else:
+                dp[i][j] = cost_matrix[i][j] + dp[i][j-1]
+                path[i][j] = ""R"" + path[i][j-1]
+    return dp[n-1][m-1], path[n-1][m-1]"
+51,"def turtle_dp_memo(grid):
+    if not grid or not grid[0]:
+        return 0, """"
+    n, m = len(grid), len(grid[0])
+    memo = {}
+    def solve(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == n - 1 and j == m - 1:
+            return grid[i][j], """"
+        if i >= n or j >= m:
+            return float('inf'), """"
+        right_cost, right_path = solve(i, j + 1)
+        down_cost, down_path = solve(i + 1, j)
+        cost = grid[i][j] + min(right_cost, down_cost)
+        path = ""R"" + right_path if right_cost <= down_cost else ""D"" + down_path
+        memo[(i, j)] = cost, path
+        return cost, path
+    return solve(0, 0)"
+52,"def turtle_dp_iterative(cost_matrix):
+    if not cost_matrix or not cost_matrix[0]:
+        return 0, """"
+    rows, cols = len(cost_matrix), len(cost_matrix[0])
+    dp = [[0] * cols for _ in range(rows)]
+    path = [[''] * cols for _ in range(rows)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i - 1][j] if i > 0 else float('inf')
+            left = dp[i][j - 1] if j > 0 else float('inf')
+            if up <= left:
+                dp[i][j] = cost_matrix[i][j] + up
+                path[i][j] = ""D"" + path[i - 1][j]
+            else:
+                dp[i][j] = cost_matrix[i][j] + left
+                path[i][j] = ""R"" + path[i][j - 1]
+    return dp[rows - 1][cols - 1], path[rows - 1][cols - 1]"
+53,"def turtle_dp_rolling_array(price_grid):
+    if not price_grid or not price_grid[0]:
+        return 0, """"
+    n, m = len(price_grid), len(price_grid[0])
+    prev_row = [0] * m
+    curr_row = [0] * m
+    prev_row[0] = price_grid[0][0]
+    for j in range(1, m):
+        prev_row[j] = prev_row[j - 1] + price_grid[0][j]
+    for i in range(1, n):
+        curr_row[0] = prev_row[0] + price_grid[i][0]
+        for j in range(1, m):
+            curr_row[j] = price_grid[i][j] + min(prev_row[j], curr_row[j - 1])
+        prev_row = curr_row[:]
+    return prev_row[m - 1], """""
+54,"def turtle_dp_in_place(matrix):
+    if not matrix or not matrix[0]:
+        return 0, """"
+    n, m = len(matrix), len(matrix[0])
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = matrix[i - 1][j] if i > 0 else float('inf')
+            left = matrix[i][j - 1] if j > 0 else float('inf')
+            matrix[i][j] += min(up, left)
+    return matrix[n - 1][m - 1], """""
+55,"def turtle_dp_parent(terrain):
+    if not terrain or not terrain[0]:
+        return 0, """"
+    n, m = len(terrain), len(terrain[0])
+    dp = [[0] * m for _ in range(n)]
+    parent = [[None] * m for _ in range(n)]
+    dp[0][0] = terrain[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i - 1][j] if i > 0 else float('inf')
+            left = dp[i][j - 1] if j > 0 else float('inf')
+            if up <= left:
+                dp[i][j] = terrain[i][j] + up
+                parent[i][j] = (i - 1, j)
+            else:
+                dp[i][j] = terrain[i][j] + left
+                parent[i][j] = (i, j - 1)
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if parent[i][j] == (i - 1, j):
+            path = ""D"" + path
+        else:
+            path = ""R"" + path
+        i, j = parent[i][j]
+    return dp[n - 1][m - 1], path"
+56,"def turtle_dp_generator(costs):
+    def solve(row, col):
+        if row == 0 and col == 0:
+            yield costs[0][0], """"
+        elif row == 0:
+            sub_path_cost, sub_path = yield from solve(row, col - 1)
+            yield costs[row][col] + sub_path_cost, ""R"" + sub_path
+        elif col == 0:
+            sub_path_cost, sub_path = yield from solve(row - 1, col)
+            yield costs[row][col] + sub_path_cost, ""D"" + sub_path
+        else:
+            up_cost, up_path = yield from solve(row - 1, col)
+            right_cost, right_path = yield from solve(row, col - 1)
+            if up_cost <= right_cost:
+                yield costs[row][col] + up_cost, ""D"" + up_path
+            else:
+                yield costs[row][col] + right_cost, ""R"" + right_path
+    if not costs or not costs[0]:
+        return 0, """"
+    else:
+        cost, path = next(solve(len(costs) - 1, len(costs[0]) - 1))
+        return cost, path"
+57,"from functools import reduce
+def turtle_dp_reduce(matrix):
+    if not matrix or not matrix[0]:
+        return 0, """"
+    n, m = len(matrix), len(matrix[0])
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            dp[i][j] = matrix[i][j] + min(dp[i - 1][j] if i > 0 else float('inf'),
+                                          dp[i][j - 1] if j > 0 else float('inf'))
+    path_map = [[''] * m for _ in range(n)]
+    def reconstruct_path(row, col):
+        if row == 0 and col == 0:
+            return """"
+        elif row == 0:
+            return ""R"" + reconstruct_path(row, col - 1)
+        elif col == 0:
+            return ""D"" + reconstruct_path(row - 1, col)
+        else:
+            if dp[row-1][col] <= dp[row][col-1]:
+                return ""D"" + reconstruct_path(row - 1, col)
+            else:
+                return ""R"" + reconstruct_path(row, col - 1)
+    return dp[n - 1][m - 1], reconstruct_path(n - 1, m - 1)"
+58,"import numpy as np
+def turtle_dp_numpy(grid):
+    if not grid or not grid[0]:
+        return 0, """"
+    grid_np = np.array(grid)
+    n, m = grid_np.shape
+    dp = np.zeros((n, m))
+    dp[0, 0] = grid_np[0, 0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            dp[i, j] = grid_np[i, j] + np.min([dp[i - 1, j] if i > 0 else np.inf,
+                                              dp[i, j - 1] if j > 0 else np.inf])
+    return dp[n - 1, m - 1], """""
+59,"def turtle_dp_shortcut(prices):
+    if not prices or not prices[0]:
+        return 0, """"
+    n, m = len(prices), len(prices[0])
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = prices[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i - 1][j] if i > 0 else float('inf')
+            left = dp[i][j - 1] if j > 0 else float('inf')
+            if up < left:
+                dp[i][j] = prices[i][j] + up
+            else:
+                dp[i][j] = prices[i][j] + left
+    return dp[n - 1][m - 1], """""
+60,"import multiprocessing
+def turtle_dp_parallel(matrix):
+    if not matrix or not matrix[0]:
+        return 0, """"
+    n, m = len(matrix), len(matrix[0])
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i - 1][j] if i > 0 else float('inf')
+            left = dp[i][j - 1] if j > 0 else float('inf')
+            dp[i][j] = matrix[i][j] + min(up, left)
+    return dp[n - 1][m - 1], """""
+61,"def turtle_dp_recursive_memo(grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
+    memo = {}
+    def solve(x, y):
+        if (x, y) in memo:
+            return memo[(x, y)]
+        if x == rows - 1 and y == cols - 1:
+            return grid[x][y], ''
+        if x >= rows or y >= cols:
+            return float('inf'), ''
+        down_cost, down_path = solve(x + 1, y)
+        right_cost, right_path = solve(x, y + 1)
+        if down_cost < right_cost:
+            result = grid[x][y] + down_cost, 'D' + down_path
+        else:
+            result = grid[x][y] + right_cost, 'R' + right_path
+        memo[(x, y)] = result
+        return result
+    if rows == 0 or cols == 0:
+        return 0, ''
+    return solve(0, 0)"
+62,"def turtle_dp_iterative(cost_matrix):
+    n = len(cost_matrix)
+    m = len(cost_matrix[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i-1][0] + cost_matrix[i][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j-1] + cost_matrix[0][j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i][j] = cost_matrix[i][j] + min(dp[i-1][j], dp[i][j-1])
+    path = ''
+    row, col = n - 1, m - 1
+    while row > 0 or col > 0:
+        if row > 0 and dp[row-1][col] <= dp[row][col-1] if col > 0 else True:
+            path = 'D' + path
+            row -= 1
+        else:
+            path = 'R' + path
+            col -= 1
+    return dp[n-1][m-1], path"
+63,"def turtle_dp_rolling_array(price_grid):
+    n = len(price_grid)
+    m = len(price_grid[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, ''
+    dp = [0] * m
+    dp[0] = price_grid[0][0]
+    for j in range(1, m):
+        dp[j] = dp[j-1] + price_grid[0][j]
+    for i in range(1, n):
+        new_dp = [0] * m
+        new_dp[0] = dp[0] + price_grid[i][0]
+        for j in range(1, m):
+            new_dp[j] = price_grid[i][j] + min(dp[j], new_dp[j-1])
+        dp = new_dp
+    path = ''
+    row, col = n - 1, m - 1
+    while row > 0 or col > 0:
+        if row > 0 and (col == 0 or dp[col-1] >= dp[col]):
+            path = 'D' + path
+            row -= 1
+        else:
+            path = 'R' + path
+            col -= 1
+    return dp[m-1], path"
+64,"def turtle_dp_in_place(weights):
+    n = len(weights)
+    m = len(weights[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, ''
+    for i in range(1, n):
+        weights[i][0] += weights[i-1][0]
+    for j in range(1, m):
+        weights[0][j] += weights[0][j-1]
+    for i in range(1, n):
+        for j in range(1, m):
+            weights[i][j] += min(weights[i-1][j], weights[i][j-1])
+    path = ''
+    row, col = n - 1, m - 1
+    while row > 0 or col > 0:
+        if row > 0 and weights[row-1][col] <= weights[row][col-1] if col > 0 else True:
+            path = 'D' + path
+            row -= 1
+        else:
+            path = 'R' + path
+            col -= 1
+    return weights[n-1][m-1], path"
+65,"def turtle_dp_parent_pointers(value_grid):
+    n = len(value_grid)
+    m = len(value_grid[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    parent = [[None] * m for _ in range(n)]
+    dp[0][0] = value_grid[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = dp[i-1][j] if i > 0 else float('inf')
+            left = dp[i][j-1] if j > 0 else float('inf')
+            if up < left:
+                dp[i][j] = value_grid[i][j] + up
+                parent[i][j] = (i-1, j)
+            else:
+                dp[i][j] = value_grid[i][j] + left
+                parent[i][j] = (i, j-1)
+    path = ''
+    row, col = n - 1, m - 1
+    while row != 0 or col != 0:
+        prev_row, prev_col = parent[row][col]
+        if prev_row == row - 1:
+            path = 'D' + path
+        else:
+            path = 'R' + path
+        row, col = prev_row, prev_col
+    return dp[n-1][m-1], path"
+66,"def turtle_dp_generator(matrix):
+    def solve(row, col):
+        if row == len(matrix) - 1 and col == len(matrix[0]) - 1:
+            yield matrix[row][col], ''
+        elif row >= len(matrix) or col >= len(matrix[0]):
+            yield float('inf'), ''
+        else:
+            down_cost, down_path = next(solve(row + 1, col))
+            right_cost, right_path = next(solve(row, col + 1))
+            if down_cost < right_cost:
+                yield matrix[row][col] + down_cost, 'D' + down_path
+            else:
+                yield matrix[row][col] + right_cost, 'R' + right_path
+    if not matrix or matrix[0] == []:
+        return 0, ''
+    return next(solve(0, 0))"
+67,"from functools import reduce
+def turtle_dp_functional(grid_data):
+    n = len(grid_data)
+    m = len(grid_data[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, ''
+    dp = reduce(lambda acc, i: acc + [[0] * m] , range(n), [])
+    dp[0][0] = grid_data[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i > 0 and j > 0:
+                dp[i][j] = grid_data[i][j] + min(dp[i - 1][j], dp[i][j-1])
+            elif i > 0:
+                dp[i][j] = grid_data[i][j] + dp[i - 1][j]
+            elif j > 0:
+                dp[i][j] = grid_data[i][j] + dp[i][j - 1]
+    path = ''
+    row, col = n-1, m-1
+    while row > 0 or col > 0:
+      if row > 0 and (col == 0 or dp[row -1][col] <= dp[row][col-1]):
+        path = 'D' + path
+        row -= 1
+      else:
+        path = 'R' + path
+        col -= 1
+    return dp[n-1][m-1], path"
+68,"import numpy as np
+def turtle_dp_numpy(cost_array):
+    cost_array = np.array(cost_array)
+    n, m = cost_array.shape
+    if n == 0 or m == 0:
+        return 0, ''
+    dp = np.zeros((n, m), dtype=int)
+    dp[0, 0] = cost_array[0, 0]
+    for i in range(1, n):
+        dp[i, 0] = dp[i - 1, 0] + cost_array[i, 0]
+    for j in range(1, m):
+        dp[0, j] = dp[0, j - 1] + cost_array[0, j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i, j] = cost_array[i, j] + np.min([dp[i - 1, j], dp[i, j - 1]])
+    path = ''
+    row, col = n-1, m-1
+    while row > 0 or col > 0:
+      if row > 0 and (col == 0 or dp[row-1, col] <= dp[row, col-1]):
+        path = 'D' + path
+        row -= 1
+      else:
+        path = 'R' + path
+        col -= 1
+    return int(dp[n-1, m-1]), path"
+69,"def turtle_dp_early_exit(matrix_input):
+    n = len(matrix_input)
+    m = len(matrix_input[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, ''
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix_input[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + matrix_input[i][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + matrix_input[0][j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i][j] = matrix_input[i][j] + min(dp[i - 1][j], dp[i][j - 1])
+    path = ''
+    row, col = n - 1, m - 1
+    while row > 0 or col > 0:
+        if row > 0 and dp[row - 1][col] <= dp[row][col - 1] if col > 0 else True:
+            path = 'D' + path
+            row -= 1
+        else:
+            path = 'R' + path
+            col -= 1
+    return dp[n-1][m-1], path"
+70,"import multiprocessing
+def turtle_dp_parallel(matrix_in):
+    n = len(matrix_in)
+    m = len(matrix_in[0]) if n > 0 else 0
+    if n == 0 or m == 0:
+        return 0, ''
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = matrix_in[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + matrix_in[i][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + matrix_in[0][j]
+    def calculate_row(i):
+      row_dp = [0] * m
+      row_dp[0] = dp[i][0] + matrix_in[i][0]
+      for j in range(1, m):
+        row_dp[j] = matrix_in[i][j] + min(dp[i][j-1], dp[i-1][j] if i > 0 else float('inf'))
+      return row_dp
+    with multiprocessing.Pool() as pool:
+      results = pool.map(calculate_row, range(1, n))
+    for i, row in enumerate(results):
+        dp[i+1] = row
+    path = ''
+    row, col = n - 1, m - 1
+    while row > 0 or col > 0:
+      if row > 0 and (col == 0 or dp[row-1][col] <= dp[row][col-1]):
+        path = 'D' + path
+        row -= 1
+      else:
+        path = 'R' + path
+        col -= 1
+    return dp[n-1][m-1], path"
+71,"def turtle_dp_1(grid):
+    if not grid or not grid[0]:
+        return 0, """"
+    n, m = len(grid), len(grid[0])
+    dp = {}
+    def solve(row, col):
+        if (row, col) == (n - 1, m - 1):
+            return grid[row][col], """"
+        if (row, col) in dp:
+            return dp[(row, col)]
+        min_cost = float('inf')
+        best_path = """"
+        if row + 1 < n:
+            cost_down, path_down = solve(row + 1, col)
+            if grid[row][col] + cost_down < min_cost:
+                min_cost = grid[row][col] + cost_down
+                best_path = ""D"" + path_down
+        if col + 1 < m:
+            cost_right, path_right = solve(row, col + 1)
+            if grid[row][col] + cost_right < min_cost:
+                min_cost = grid[row][col] + cost_right
+                best_path = ""R"" + path_right
+        dp[(row, col)] = (min_cost, best_path)
+        return min_cost, best_path
+    return solve(0, 0)"
+72,"def turtle_dp_2(matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    dist = [[0] * cols for _ in range(rows)]
+    dist[0][0] = matrix[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0:
+                continue
+            up = dist[i-1][j] if i > 0 else float('inf')
+            left = dist[i][j-1] if j > 0 else float('inf')
+            dist[i][j] = matrix[i][j] + min(up, left)
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dist[i-1][j] <= dist[i][j-1]):
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dist[rows-1][cols-1], path"
+73,"def turtle_dp_3(terrain):
+    n, m = len(terrain), len(terrain[0])
+    dp = [0] * m
+    for i in range(n):
+        new_dp = [0] * m
+        for j in range(m):
+            if i == 0 and j == 0:
+                new_dp[j] = terrain[i][j]
+            elif i == 0:
+                new_dp[j] = terrain[i][j] + dp[j-1] if j > 0 else terrain[i][j]
+            elif j == 0:
+                new_dp[j] = terrain[i][j] + new_dp[j] if i > 0 else terrain[i][j]
+            else:
+                new_dp[j] = terrain[i][j] + min(dp[j], new_dp[j-1])
+        dp = new_dp
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[j] <= dp[j-1] if j > 0 else True):
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[m-1], path"
+74,"def turtle_dp_4(costs):
+    rows, cols = len(costs), len(costs[0])
+    dp = [[(float('inf'), """") for _ in range(cols)] for _ in range(rows)]
+    dp[0][0] = (costs[0][0], """")
+    for i in range(rows):
+        for j in range(cols):
+            if i + 1 < rows:
+                new_cost = dp[i][j][0] + costs[i+1][j]
+                if new_cost < dp[i+1][j][0]:
+                    dp[i+1][j] = (new_cost, dp[i][j][1] + ""D"")
+            if j + 1 < cols:
+                new_cost = dp[i][j][0] + costs[i][j+1]
+                if new_cost < dp[i][j+1][0]:
+                    dp[i][j+1] = (new_cost, dp[i][j][1] + ""R"")
+    return dp[rows-1][cols-1]"
+75,"def turtle_dp_5(values):
+    n = len(values)
+    m = len(values[0])
+    cost = [[0] * m for _ in range(n)]
+    path = [[None] * m for _ in range(n)]
+    cost[0][0] = values[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            if i > 0 and j > 0:
+                if cost[i-1][j] <= cost[i][j-1]:
+                    cost[i][j] = cost[i-1][j] + values[i][j]
+                    path[i][j] = ""D""
+                else:
+                    cost[i][j] = cost[i][j-1] + values[i][j]
+                    path[i][j] = ""R""
+            elif i > 0:
+                cost[i][j] = cost[i-1][j] + values[i][j]
+                path[i][j] = ""D""
+            elif j > 0:
+                cost[i][j] = cost[i][j-1] + values[i][j]
+                path[i][j] = ""R""
+    route = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        route = path[i][j] + route
+        if path[i][j] == ""D"":
+            i -= 1
+        else:
+            j -= 1
+    return cost[n-1][m-1], route"
+76,"def turtle_dp_6(terrain_costs):
+    n = len(terrain_costs)
+    m = len(terrain_costs[0])
+    dp = [[0] * m for _ in range(n)]
+    dp[0][0] = terrain_costs[0][0]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            dp[i][j] = float('inf')
+            if i > 0:
+                dp[i][j] = min(dp[i][j], dp[i-1][j] + terrain_costs[i][j])
+            if j > 0:
+                dp[i][j] = min(dp[i][j], dp[i][j-1] + terrain_costs[i][j])
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and dp[i][j] == dp[i-1][j] + terrain_costs[i][j]:
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp[n-1][m-1], path"
+77,"def turtle_dp_7(matrix):
+    n, m = len(matrix), len(matrix[0])
+    if n == 0 or m == 0: return 0, """"
+    dp = [float('inf')] * m
+    dp[0] = matrix[0][0]
+    for i in range(1, n):
+        new_dp = [float('inf')] * m
+        for j in range(m):
+            new_dp[j] = matrix[i][j] + min(dp[j] if j == 0 else dp[j - 1], dp[j])
+        dp = new_dp
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and dp[j] == matrix[i][j] + dp[j]:
+            path = ""D"" + path
+            i -= 1
+        else:
+            path = ""R"" + path
+            j -= 1
+    return dp[m-1], path"
+78,"def turtle_dp_8(grid_values):
+    rows = len(grid_values)
+    cols = len(grid_values[0])
+    if rows == 0 or cols == 0:
+        return 0, """"
+    dp = [(0, """") for _ in range(cols)]
+    dp[0] = (grid_values[0][0], """")
+    for i in range(1, rows):
+        new_dp = [(0, """") for _ in range(cols)]
+        new_dp[0] = (grid_values[i][0] + dp[0][0], ""D"" + dp[0][1])
+        for j in range(1, cols):
+            cost_down, path_down = dp[j]
+            cost_right, path_right = grid_values[i][j] + new_dp[j-1][0], ""R"" + new_dp[j-1][1]
+            if cost_down <= cost_right:
+                new_dp[j] = (cost_down, ""D"" + dp[j][1])
+            else:
+                new_dp[j] = (cost_right, path_right)
+        dp = new_dp
+    return dp[cols-1]"
+79,"def turtle_dp_9(costs):
+    n = len(costs)
+    m = len(costs[0])
+    dp = [[0 for _ in range(m)] for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                dp[i][j] = costs[i][j]
+            elif i == 0:
+                dp[i][j] = dp[i][j-1] + costs[i][j]
+            elif j == 0:
+                dp[i][j] = dp[i-1][j] + costs[i][j]
+            else:
+                dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + costs[i][j]
+    directions = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and dp[i-1][j] <= dp[i][j-1]:
+            directions = ""D"" + directions
+            i -= 1
+        else:
+            directions = ""R"" + directions
+            j -= 1
+    return dp[n-1][m-1], directions"
+80,"def turtle_dp_10(grid):
+    n, m = len(grid), len(grid[0])
+    dp = [[(float('inf'), '') for _ in range(m)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], '')
+    for i in range(n):
+        for j in range(m):
+            if i + 1 < n:
+                if dp[i+1][j][0] > dp[i][j][0] + grid[i+1][j]:
+                    dp[i+1][j] = (dp[i][j][0] + grid[i+1][j], dp[i][j][1] + 'D')
+            if j + 1 < m:
+                if dp[i][j+1][0] > dp[i][j][0] + grid[i][j+1]:
+                    dp[i][j+1] = (dp[i][j][0] + grid[i][j+1], dp[i][j][1] + 'R')
+    return dp[n-1][m-1]"
+81,"def turtle_dp_recursive(grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows else 0
+    memo = {}
+    def solve(x, y):
+        if (x, y) in memo:
+            return memo[(x, y)]
+        if x == rows - 1 and y == cols - 1:
+            return grid[x][y], """"
+        if x >= rows or y >= cols:
+            return float('inf'), """"
+        down_cost, down_path = solve(x + 1, y)
+        right_cost, right_path = solve(x, y + 1)
+        if down_cost < right_cost:
+            memo[(x, y)] = grid[x][y] + down_cost, 'D' + down_path
+            return grid[x][y] + down_cost, 'D' + down_path
+        else:
+            memo[(x, y)] = grid[x][y] + right_cost, 'R' + right_path
+            return grid[x][y] + right_cost, 'R' + right_path
+    if not grid or not grid[0]:
+        return 0, """"
+    return solve(0, 0)"
+82,"def turtle_dp_iterative(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = matrix[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i-1][0] + matrix[i][0]
+        path[i][0] = ""D"" + path[i-1][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j-1] + matrix[0][j]
+        path[0][j] = ""R"" + path[0][j-1]
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i-1][j] < dp[i][j-1]:
+                dp[i][j] = dp[i-1][j] + matrix[i][j]
+                path[i][j] = ""D"" + path[i-1][j]
+            else:
+                dp[i][j] = dp[i][j-1] + matrix[i][j]
+                path[i][j] = ""R"" + path[i][j-1]
+    return dp[n-1][m-1], path[n-1][m-1]"
+83,"def turtle_dp_rolling_array(cost_grid):
+    rows = len(cost_grid)
+    cols = len(cost_grid[0]) if rows else 0
+    if rows == 0 or cols == 0:
+        return 0, """"
+    dp = [0] * cols
+    path = [''] * cols
+    for j in range(cols):
+        dp[j] = cost_grid[0][j]
+        path[j] = 'R' * j
+    for i in range(1, rows):
+        new_dp = [0] * cols
+        new_path = [''] * cols
+        new_dp[0] = dp[0] + cost_grid[i][0]
+        new_path[0] = 'D' + path[0]
+        for j in range(1, cols):
+            if dp[j] < new_dp[j-1]:
+                new_dp[j] = dp[j] + cost_grid[i][j]
+                new_path[j] = 'D' + path[j]
+            else:
+                new_dp[j] = new_dp[j-1] + cost_grid[i][j]
+                new_path[j] = 'R' + new_path[j-1]
+        dp = new_dp
+        path = new_path
+    return dp[cols-1], path[cols-1]"
+84,"def turtle_dp_in_place(mat):
+    n = len(mat)
+    m = len(mat[0]) if n else 0
+    if n == 0 or m == 0:
+        return 0, """"
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = mat[i-1][j] if i > 0 else float('inf')
+            left = mat[i][j-1] if j > 0 else float('inf')
+            mat[i][j] += min(up, left)
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or mat[i-1][j] <= mat[i][j-1]):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return mat[n-1][m-1], path"
+85,"def turtle_dp_parent_pointers(cost_matrix):
+    rows = len(cost_matrix)
+    cols = len(cost_matrix[0]) if rows else 0
+    dp = [[0] * cols for _ in range(rows)]
+    parent = [[(None, None)] * cols for _ in range(rows)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(1, rows):
+        dp[i][0] = dp[i-1][0] + cost_matrix[i][0]
+        parent[i][0] = (i-1, 0)
+    for j in range(1, cols):
+        dp[0][j] = dp[0][j-1] + cost_matrix[0][j]
+        parent[0][j] = (0, j-1)
+    for i in range(1, rows):
+        for j in range(1, cols):
+            if dp[i-1][j] < dp[i][j-1]:
+                dp[i][j] = dp[i-1][j] + cost_matrix[i][j]
+                parent[i][j] = (i-1, j)
+            else:
+                dp[i][j] = dp[i][j-1] + cost_matrix[i][j]
+                parent[i][j] = (i, j-1)
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i != 0 or j != 0:
+        prev_i, prev_j = parent[i][j]
+        if prev_i == i - 1:
+            path = 'D' + path
+        else:
+            path = 'R' + path
+        i, j = prev_i, prev_j
+    return dp[rows-1][cols-1], path"
+86,"def turtle_dp_generator(matrix):
+    def path_generator(row, col):
+        if row == len(matrix) - 1 and col == len(matrix[0]) - 1:
+            yield """"
+        elif row >= len(matrix) or col >= len(matrix[0]):
+            return
+        else:
+            if row + 1 < len(matrix) and (col == len(matrix[0])-1 or matrix[row+1][col] <= matrix[row][col+1]):
+                for part in path_generator(row+1, col):
+                    yield ""D"" + part
+            if col + 1 < len(matrix[0]):
+                for part in path_generator(row, col+1):
+                    yield ""R"" + part
+    def min_cost_path(matrix):
+        min_cost = float('inf')
+        best_path = None
+        for path in path_generator(0, 0):
+            cost = sum(matrix[i][j] for i,j in zip(range(len(matrix)),[0]*len(matrix)) if 'R' not in path and 'D' not in path)
+            cost = 0
+            r, c = 0, 0
+            for move in path:
+                cost += matrix[r][c]
+                if move == 'D':
+                    r += 1
+                else:
+                    c += 1
+            cost += matrix[len(matrix)-1][len(matrix[0])-1]
+            if cost < min_cost:
+                min_cost = cost
+                best_path = path
+        return min_cost, best_path
+    if not matrix or not matrix[0]:
+        return 0, """"
+    return min_cost_path(matrix)"
+87,"from functools import reduce
+def turtle_dp_reduce(grid):
+    if not grid or not grid[0]:
+        return 0, """"
+    rows, cols = len(grid), len(grid[0])
+    dp = reduce(lambda acc, i: acc + [[0] * cols] , range(rows), [])
+    dp[0][0] = grid[0][0]
+    for i in range(rows):
+        for j in range(cols):
+            if i == 0 and j == 0:
+                continue
+            dp[i][j] = grid[i][j] + min(dp[i-1][j] if i > 0 else float('inf'), dp[i][j-1] if j > 0 else float('inf'))
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[i-1][j] <= dp[i][j-1]):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp[rows-1][cols-1], path"
+88,"import numpy as np
+def turtle_dp_numpy(matrix):
+    grid = np.array(matrix)
+    rows, cols = grid.shape
+    dp = np.zeros((rows, cols), dtype=int)
+    dp[0, 0] = grid[0, 0]
+    for i in range(1, rows):
+        dp[i, 0] = dp[i-1, 0] + grid[i, 0]
+    for j in range(1, cols):
+        dp[0, j] = dp[0, j-1] + grid[0, j]
+    for i in range(1, rows):
+        for j in range(1, cols):
+            dp[i, j] = grid[i, j] + min(dp[i-1, j], dp[i, j-1])
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+        if i > 0 and (j == 0 or dp[i-1, j] <= dp[i, j-1]):
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp[rows-1, cols-1], path"
+89,"def turtle_dp_early_exit(grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows else 0
+    if rows == 0 or cols == 0:
+        return 0, """"
+    dp = [[0] * cols for _ in range(rows)]
+    dp[0][0] = grid[0][0]
+    for i in range(1, rows):
+        dp[i][0] = dp[i-1][0] + grid[i][0]
+    for j in range(1, cols):
+        dp[0][j] = dp[0][j-1] + grid[0][j]
+    for i in range(1, rows):
+        for j in range(1, cols):
+            dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + grid[i][j]
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+        if i > 0 and dp[i-1][j] <= dp[i][j-1]:
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp[rows-1][cols-1], path"
+90,"import concurrent.futures
+def turtle_dp_parallel(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0]) if rows else 0
+    if rows == 0 or cols == 0:
+        return 0, """"
+    dp = [[0] * cols for _ in range(rows)]
+    dp[0][0] = matrix[0][0]
+    for i in range(1, rows):
+        dp[i][0] = dp[i-1][0] + matrix[i][0]
+    for j in range(1, cols):
+        dp[0][j] = dp[0][j-1] + matrix[0][j]
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+         futures = []
+         for i in range(1, rows):
+               for j in range(1, cols):
+                    futures.append(executor.submit(calculate_dp, matrix, dp, i, j))
+         concurrent.futures.wait(futures)
+    path = """"
+    i, j = rows - 1, cols - 1
+    while i > 0 or j > 0:
+      if i > 0 and (j == 0 or dp[i-1][j] <= dp[i][j-1]):
+          path = 'D' + path
+          i -= 1
+      else:
+          path = 'R' + path
+          j -= 1
+    return dp[rows-1][cols-1], path
+def calculate_dp(matrix, dp, i, j):
+    dp[i][j] = min(dp[i-1][j], dp[i][j-1]) + matrix[i][j]"
+91,"def turtle_dp_recursive(grid):
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
+    memo = {}
+    def solve(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == rows - 1 and j == cols - 1:
+            return grid[i][j], """"
+        if i >= rows or j >= cols:
+            return float('inf'), """"
+        down_cost, down_path = solve(i + 1, j)
+        right_cost, right_path = solve(i, j + 1)
+        if down_cost < right_cost:
+            memo[(i, j)] = grid[i][j] + down_cost, ""D"" + down_path
+        else:
+            memo[(i, j)] = grid[i][j] + right_cost, ""R"" + right_path
+        return memo[(i, j)]
+    if not grid:
+        return 0, """"
+    return solve(0, 0)"
+92,"def turtle_dp_iterative(cost_matrix):
+    n = len(cost_matrix)
+    m = len(cost_matrix[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = cost_matrix[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + cost_matrix[i][0]
+        path[i][0] = 'D' + path[i - 1][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + cost_matrix[0][j]
+        path[0][j] = 'R' + path[0][j - 1]
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = dp[i - 1][j] + cost_matrix[i][j]
+                path[i][j] = 'D' + path[i - 1][j]
+            else:
+                dp[i][j] = dp[i][j - 1] + cost_matrix[i][j]
+                path[i][j] = 'R' + path[i][j - 1]
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+93,"def turtle_dp_rolling_array(matrix):
+    n = len(matrix)
+    m = len(matrix[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    dp = [0] * m
+    path = [''] * m
+    dp[0] = matrix[0][0]
+    for j in range(1, m):
+        dp[j] = dp[j - 1] + matrix[0][j]
+        path[j] = 'R' + path[j - 1]
+    for i in range(1, n):
+        new_dp = [0] * m
+        new_path = [''] * m
+        new_dp[0] = dp[0] + matrix[i][0]
+        new_path[0] = 'D' + path[0]
+        for j in range(1, m):
+            if dp[j] < new_dp[j - 1]:
+                new_dp[j] = dp[j] + matrix[i][j]
+                new_path[j] = 'D' + path[j]
+            else:
+                new_dp[j] = new_dp[j - 1] + matrix[i][j]
+                new_path[j] = 'R' + new_path[j - 1]
+        dp = new_dp
+        path = new_path
+    return dp[m - 1], path[m - 1]"
+94,"def turtle_dp_in_place(grid_data):
+    n = len(grid_data)
+    m = len(grid_data[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up = grid_data[i - 1][j] if i > 0 else float('inf')
+            left = grid_data[i][j - 1] if j > 0 else float('inf')
+            grid_data[i][j] += min(up, left)
+    cost = grid_data[n - 1][m - 1]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0:
+            if grid_data[i - 1][j] < grid_data[i][j - 1]:
+                path = 'D' + path
+                i -= 1
+            else:
+                path = 'R' + path
+                j -= 1
+        elif i > 0:
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return cost, path"
+95,"def turtle_dp_parent_pointers(matrix_data):
+    n = len(matrix_data)
+    m = len(matrix_data[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    parent = [[None] * m for _ in range(n)]
+    for i in range(n):
+        for j in range(m):
+            if i == 0 and j == 0:
+                continue
+            up_cost = dp[i - 1][j] if i > 0 else float('inf')
+            left_cost = dp[i][j - 1] if j > 0 else float('inf')
+            if up_cost < left_cost:
+                dp[i][j] = up_cost + matrix_data[i][j]
+                parent[i][j] = (i - 1, j)
+            else:
+                dp[i][j] = left_cost + matrix_data[i][j]
+                parent[i][j] = (i, j - 1)
+    path = """"
+    i, j = n - 1, m - 1
+    while i != 0 or j != 0:
+        if parent[i][j] is None:
+            break
+        prev_i, prev_j = parent[i][j]
+        if prev_i == i - 1:
+            path = 'D' + path
+        else:
+            path = 'R' + path
+        i, j = prev_i, prev_j
+    return dp[n - 1][m - 1], path"
+96,"def turtle_dp_generator(grid_input):
+    n = len(grid_input)
+    m = len(grid_input[0]) if n > 0 else 0
+    def path_generator(i, j):
+        if i == n - 1 and j == m - 1:
+            yield """"
+        elif i + 1 < n and j + 1 < m:
+            if grid_input[i + 1][j] < grid_input[i][j + 1]:
+                yield ""D""
+                for p in path_generator(i + 1, j):
+                    yield ""D"" + p
+            else:
+                yield ""R""
+                for p in path_generator(i, j + 1):
+                    yield ""R"" + p
+        elif i + 1 < n:
+            yield ""D""
+            for p in path_generator(i + 1, j):
+                yield ""D"" + p
+        elif j + 1 < m:
+            yield ""R""
+            for p in path_generator(i, j + 1):
+                yield ""R"" + p
+    if not grid_input:
+        return 0, """"
+    min_cost = float('inf')
+    best_path = """"
+    for path in path_generator(0, 0):
+        cost = 0
+        curr_i, curr_j = 0, 0
+        for move in path:
+            cost += grid_input[curr_i][curr_j]
+            if move == 'D':
+                curr_i += 1
+            else:
+                curr_j += 1
+        cost += grid_input[n - 1][m - 1]
+        if cost < min_cost:
+            min_cost = cost
+            best_path = path
+    return min_cost, best_path"
+97,"from functools import reduce
+def turtle_dp_reduce(matrix_data):
+    n = len(matrix_data)
+    m = len(matrix_data[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    dp = reduce(lambda row, i: row + [reduce(lambda col, j: col + [matrix_data[i][j] + (row[j-1] if j > 0 else 0) if i == 0 else matrix_data[i][j] + min(row[j] if j > 0 else float('inf'), row[j-1] if j > 0 else float('inf'))], [], range(m))], [], range(n))
+    cost = dp[-1][-1]
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0:
+            if matrix_data[i-1][j] < matrix_data[i][j-1]:
+                path = 'D' + path
+                i -= 1
+            else:
+                path = 'R' + path
+                j -= 1
+        elif i > 0:
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return cost, path"
+98,"import numpy as np
+def turtle_dp_numpy(grid_matrix):
+    grid = np.array(grid_matrix)
+    n, m = grid.shape
+    dp = np.zeros((n, m), dtype=int)
+    dp[0, 0] = grid[0, 0]
+    for i in range(1, n):
+        dp[i, 0] = dp[i - 1, 0] + grid[i, 0]
+    for j in range(1, m):
+        dp[0, j] = dp[0, j - 1] + grid[0, j]
+    for i in range(1, n):
+        for j in range(1, m):
+            dp[i, j] = grid[i, j] + min(dp[i - 1, j], dp[i, j - 1])
+    path = """"
+    i, j = n - 1, m - 1
+    while i > 0 or j > 0:
+        if i > 0 and j > 0:
+            if dp[i - 1, j] < dp[i, j - 1]:
+                path = 'D' + path
+                i -= 1
+            else:
+                path = 'R' + path
+                j -= 1
+        elif i > 0:
+            path = 'D' + path
+            i -= 1
+        else:
+            path = 'R' + path
+            j -= 1
+    return dp[n - 1, m - 1], path"
+99,"def turtle_dp_early_exit(matrix_data):
+    n = len(matrix_data)
+    m = len(matrix_data[0]) if n > 0 else 0
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = matrix_data[0][0]
+    for i in range(1, n):
+        dp[i][0] = dp[i - 1][0] + matrix_data[i][0]
+        path[i][0] = 'D' + path[i - 1][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + matrix_data[0][j]
+        path[0][j] = 'R' + path[0][j - 1]
+    for i in range(1, n):
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = dp[i - 1][j] + matrix_data[i][j]
+                path[i][j] = 'D' + path[i - 1][j]
+            else:
+                dp[i][j] = dp[i][j - 1] + matrix_data[i][j]
+                path[i][j] = 'R' + path[i][j - 1]
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+100,"import multiprocessing
+def turtle_dp_parallel(matrix_data):
+    n = len(matrix_data)
+    m = len(matrix_data[0]) if n > 0 else 0
+    if n == 0:
+        return 0, """"
+    dp = [[0] * m for _ in range(n)]
+    path = [[''] * m for _ in range(n)]
+    dp[0][0] = matrix_data[0][0]
+    for j in range(1, m):
+        dp[0][j] = dp[0][j - 1] + matrix_data[0][j]
+        path[0][j] = 'R' + path[0][j - 1]
+    def process_row(i):
+        dp[i][0] = dp[i - 1][0] + matrix_data[i][0]
+        path[i][0] = 'D' + path[i - 1][0]
+        for j in range(1, m):
+            if dp[i - 1][j] < dp[i][j - 1]:
+                dp[i][j] = dp[i - 1][j] + matrix_data[i][j]
+                path[i][j] = 'D' + path[i - 1][j]
+            else:
+                dp[i][j] = dp[i][j - 1] + matrix_data[i][j]
+                path[i][j] = 'R' + path[i][j - 1]
+    with multiprocessing.Pool() as pool:
+        pool.map(process_row, range(1, n))
+    return dp[n - 1][m - 1], path[n - 1][m - 1]"
+101,"r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(r)]
+dp = [[0] * c for _ in range(r)]
+path = [[''] * c for _ in range(r)]
+dp[0][0] = grid[0][0]
+for i in range(1, r):
+    dp[i][0] = dp[i - 1][0] + grid[i][0]
+    path[i][0] = path[i - 1][0] + 'D'
+for j in range(1, c):
+    dp[0][j] = dp[0][j - 1] + grid[0][j]
+    path[0][j] = path[0][j - 1] + 'R'
+for i in range(1, r):
+    for j in range(1, c):
+        if dp[i - 1][j] > dp[i][j - 1]:
+            dp[i][j] = dp[i - 1][j] + grid[i][j]
+            path[i][j] = path[i - 1][j] + 'D'
+        else:
+            dp[i][j] = dp[i][j - 1] + grid[i][j]
+            path[i][j] = path[i][j - 1] + 'R'
+print(dp[r - 1][c - 1])
+print(path[r - 1][c - 1])"
+102,"rows, cols = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(rows)]
+memo = {}
+route = {}
+def solve(x, y):
+    if (x, y) in memo:
+        return memo[(x, y)]
+    if x == 0 and y == 0:
+        return matrix[0][0]
+    if x < 0 or y < 0:
+        return float('-inf')
+    up = solve(x - 1, y)
+    left = solve(x, y - 1)
+    if up > left:
+        memo[(x, y)] = up + matrix[x][y]
+        route[(x, y)] = 'D'
+    else:
+        memo[(x, y)] = left + matrix[x][y]
+        route[(x, y)] = 'R'
+    return memo[(x, y)]
+result = solve(rows - 1, cols - 1)
+path = """"
+curr_x, curr_y = rows - 1, cols - 1
+while curr_x > 0 or curr_y > 0:
+    path = route[(curr_x, curr_y)] + path
+    if route[(curr_x, curr_y)] == 'D':
+        curr_x -= 1
+    else:
+        curr_y -= 1
+print(result)
+print(path)"
+103,"n, m = map(int, input().split())
+val = [list(map(int, input().split())) for _ in range(n)]
+dp_table = [[0] * m for _ in range(n)]
+trace = [[''] * m for _ in range(n)]
+dp_table[0][0] = val[0][0]
+for i in range(n):
+    for j in range(m):
+        if i == 0 and j == 0:
+            continue
+        up = dp_table[i - 1][j] if i > 0 else float('-inf')
+        left = dp_table[i][j - 1] if j > 0 else float('-inf')
+        if up > left:
+            dp_table[i][j] = up + val[i][j]
+            trace[i][j] = 'D'
+        else:
+            dp_table[i][j] = left + val[i][j]
+            trace[i][j] = 'R'
+print(dp_table[n - 1][m - 1])
+path = ''
+i, j = n - 1, m - 1
+while i > 0 or j > 0:
+    path = trace[i][j] + path
+    if trace[i][j] == 'D':
+        i -= 1
+    else:
+        j -= 1
+print(path)"
+104,"width, height = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(height)]
+dp_array = [[0] * width for _ in range(height)]
+path_string = [[''] * width for _ in range(height)]
+dp_array[0][0] = matrix[0][0]
+for i in range(1, height):
+    dp_array[i][0] = dp_array[i - 1][0] + matrix[i][0]
+    path_string[i][0] = path_string[i - 1][0] + 'D'
+for j in range(1, width):
+    dp_array[0][j] = dp_array[0][j - 1] + matrix[0][j]
+    path_string[0][j] = path_string[0][j - 1] + 'R'
+for i in range(1, height):
+    for j in range(1, width):
+        if dp_array[i - 1][j] >= dp_array[i][j - 1]:
+            dp_array[i][j] = dp_array[i - 1][j] + matrix[i][j]
+            path_string[i][j] = path_string[i - 1][j] + 'D'
+        else:
+            dp_array[i][j] = dp_array[i][j - 1] + matrix[i][j]
+            path_string[i][j] = path_string[i][j - 1] + 'R'
+print(dp_array[height - 1][width - 1])
+print(path_string[height - 1][width - 1])"
+105,"rows, cols = map(int, input().split())
+grid_values = [list(map(int, input().split())) for _ in range(rows)]
+max_sum = [[0] * cols for _ in range(rows)]
+direction = [[''] * cols for _ in range(rows)]
+max_sum[0][0] = grid_values[0][0]
+for i in range(1, rows):
+    max_sum[i][0] = max_sum[i - 1][0] + grid_values[i][0]
+    direction[i][0] = 'D'
+for j in range(1, cols):
+    max_sum[0][j] = max_sum[0][j - 1] + grid_values[0][j]
+    direction[0][j] = 'R'
+for i in range(1, rows):
+    for j in range(1, cols):
+        if max_sum[i - 1][j] > max_sum[i][j - 1]:
+            max_sum[i][j] = max_sum[i - 1][j] + grid_values[i][j]
+            direction[i][j] = 'D'
+        else:
+            max_sum[i][j] = max_sum[i][j - 1] + grid_values[i][j]
+            direction[i][j] = 'R'
+print(max_sum[rows - 1][cols - 1])
+path = ''
+i, j = rows - 1, cols - 1
+while i > 0 or j > 0:
+    path = direction[i][j] + path
+    if direction[i][j] == 'D':
+        i -= 1
+    else:
+        j -= 1
+print(path)"
+106,"height, width = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(height)]
+d = [[0] * width for _ in range(height)]
+p = [[''] * width for _ in range(height)]
+d[0][0] = matrix[0][0]
+for i in range(1, height):
+  d[i][0] = d[i-1][0] + matrix[i][0]
+  p[i][0] = p[i-1][0] + 'D'
+for j in range(1, width):
+  d[0][j] = d[0][j-1] + matrix[0][j]
+  p[0][j] = p[0][j-1] + 'R'
+for i in range(1, height):
+  for j in range(1, width):
+    if d[i-1][j] > d[i][j-1]:
+      d[i][j] = d[i-1][j] + matrix[i][j]
+      p[i][j] = p[i-1][j] + 'D'
+    else:
+      d[i][j] = d[i][j-1] + matrix[i][j]
+      p[i][j] = p[i][j-1] + 'R'
+print(d[height-1][width-1])
+print(p[height-1][width-1])"
+107,"a, b = map(int, input().split())
+grid_data = [list(map(int, input().split())) for _ in range(a)]
+dp_values = [[0] * b for _ in range(a)]
+optimal_path = [[''] * b for _ in range(a)]
+dp_values[0][0] = grid_data[0][0]
+for i in range(1, a):
+    dp_values[i][0] = dp_values[i - 1][0] + grid_data[i][0]
+    optimal_path[i][0] = optimal_path[i - 1][0] + ""D""
+for j in range(1, b):
+    dp_values[0][j] = dp_values[0][j - 1] + grid_data[0][j]
+    optimal_path[0][j] = optimal_path[0][j - 1] + ""R""
+for i in range(1, a):
+    for j in range(1, b):
+        if dp_values[i - 1][j] > dp_values[i][j - 1]:
+            dp_values[i][j] = dp_values[i - 1][j] + grid_data[i][j]
+            optimal_path[i][j] = optimal_path[i - 1][j] + ""D""
+        else:
+            dp_values[i][j] = dp_values[i][j - 1] + grid_data[i][j]
+            optimal_path[i][j] = optimal_path[i][j - 1] + ""R""
+print(dp_values[a - 1][b - 1])
+print(optimal_path[a - 1][b - 1])"
+108,"rows, cols = map(int, input().split())
+vals = [list(map(int, input().split())) for _ in range(rows)]
+table = [[0] * cols for _ in range(rows)]
+moves = [[''] * cols for _ in range(rows)]
+table[0][0] = vals[0][0]
+for i in range(1, rows):
+  table[i][0] = table[i-1][0] + vals[i][0]
+  moves[i][0] = moves[i-1][0] + 'D'
+for j in range(1, cols):
+  table[0][j] = table[0][j-1] + vals[0][j]
+  moves[0][j] = moves[0][j-1] + 'R'
+for i in range(1, rows):
+  for j in range(1, cols):
+    if table[i-1][j] > table[i][j-1]:
+      table[i][j] = table[i-1][j] + vals[i][j]
+      moves[i][j] = moves[i-1][j] + 'D'
+    else:
+      table[i][j] = table[i][j-1] + vals[i][j]
+      moves[i][j] = moves[i][j-1] + 'R'
+print(table[rows-1][cols-1])
+print(moves[rows-1][cols-1])"
+109,"num_rows, num_cols = map(int, input().split())
+cell_values = [list(map(int, input().split())) for _ in range(num_rows)]
+dp_matrix = [[0] * num_cols for _ in range(num_rows)]
+route_taken = [[''] * num_cols for _ in range(num_rows)]
+dp_matrix[0][0] = cell_values[0][0]
+for i in range(1, num_rows):
+    dp_matrix[i][0] = dp_matrix[i - 1][0] + cell_values[i][0]
+    route_taken[i][0] = route_taken[i - 1][0] + 'D'
+for j in range(1, num_cols):
+    dp_matrix[0][j] = dp_matrix[0][j - 1] + cell_values[0][j]
+    route_taken[0][j] = route_taken[0][j - 1] + 'R'
+for i in range(1, num_rows):
+    for j in range(1, num_cols):
+        if dp_matrix[i - 1][j] > dp_matrix[i][j - 1]:
+            dp_matrix[i][j] = dp_matrix[i - 1][j] + cell_values[i][j]
+            route_taken[i][j] = route_taken[i - 1][j] + 'D'
+        else:
+            dp_matrix[i][j] = dp_matrix[i][j - 1] + cell_values[i][j]
+            route_taken[i][j] = route_taken[i][j - 1] + 'R'
+print(dp_matrix[num_rows - 1][num_cols - 1])
+print(route_taken[num_rows - 1][num_cols - 1])"
+110,"n, m = map(int, input().split())
+grid_vals = [list(map(int, input().split())) for _ in range(n)]
+sums = [[0] * m for _ in range(n)]
+paths = [[''] * m for _ in range(n)]
+sums[0][0] = grid_vals[0][0]
+for i in range(1, n):
+  sums[i][0] = sums[i-1][0] + grid_vals[i][0]
+  paths[i][0] = paths[i-1][0] + 'D'
+for j in range(1, m):
+  sums[0][j] = sums[0][j-1] + grid_vals[0][j]
+  paths[0][j] = paths[0][j-1] + 'R'
+for i in range(1, n):
+  for j in range(1, m):
+    if sums[i-1][j] > sums[i][j-1]:
+      sums[i][j] = sums[i-1][j] + grid_vals[i][j]
+      paths[i][j] = paths[i-1][j] + 'D'
+    else:
+      sums[i][j] = sums[i][j-1] + grid_vals[i][j]
+      paths[i][j] = paths[i][j-1] + 'R'
+print(sums[n-1][m-1])
+print(paths[n-1][m-1])"
+111,"r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(r)]
+dp = [[0] * c for _ in range(r)]
+path = [[''] * c for _ in range(r)]
+dp[0][0] = grid[0][0]
+path[0][0] = '0,0'
+for i in range(r):
+    for j in range(c):
+        if i == 0 and j == 0:
+            continue
+        up = dp[i - 1][j] if i > 0 else float('-inf')
+        left = dp[i][j - 1] if j > 0 else float('-inf')
+        if up > left:
+            dp[i][j] = up + grid[i][j]
+            path[i][j] = path[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            dp[i][j] = left + grid[i][j]
+            path[i][j] = path[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(dp[r - 1][c - 1])
+print(path[r - 1][c - 1])"
+112,"rows, cols = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(rows)]
+memo = {}
+def solve(x, y):
+    if (x, y) in memo:
+        return memo[(x, y)]
+    if x == 0 and y == 0:
+        return matrix[x][y]
+    if x < 0 or y < 0:
+        return float('-inf')
+    up = solve(x - 1, y)
+    left = solve(x, y - 1)
+    memo[(x, y)] = matrix[x][y] + max(up, left)
+    return memo[(x, y)]
+result = solve(rows - 1, cols - 1)
+print(result)"
+113,"n, m = map(int, input().split())
+table = [list(map(int, input().split())) for _ in range(n)]
+dp_table = [[0] * m for _ in range(n)]
+dp_table[0][0] = table[0][0]
+for i in range(n):
+  for j in range(m):
+    if i == 0 and j == 0:
+      continue
+    max_val = float('-inf')
+    if i > 0:
+      max_val = max(max_val, dp_table[i-1][j])
+    if j > 0:
+      max_val = max(max_val, dp_table[i][j-1])
+    dp_table[i][j] = table[i][j] + max_val
+print(dp_table[n-1][m-1])"
+114,"row_count, col_count = map(int, input().split())
+values = [list(map(int, input().split())) for _ in range(row_count)]
+dp = [[0 for _ in range(col_count)] for _ in range(row_count)]
+dp[0][0] = values[0][0]
+for i in range(row_count):
+    for j in range(col_count):
+        if i == 0 and j == 0:
+            continue
+        from_top = dp[i - 1][j] if i > 0 else float('-inf')
+        from_left = dp[i][j - 1] if j > 0 else float('-inf')
+        dp[i][j] = values[i][j] + max(from_top, from_left)
+print(dp[row_count - 1][col_count - 1])"
+115,"r_num, c_num = map(int, input().split())
+grid_data = [list(map(int, input().split())) for _ in range(r_num)]
+d = [[0 for _ in range(c_num)] for _ in range(r_num)]
+d[0][0] = grid_data[0][0]
+for i in range(r_num):
+    for j in range(c_num):
+        if i == 0 and j == 0:
+            continue
+        val1 = d[i-1][j] if i > 0 else float('-inf')
+        val2 = d[i][j-1] if j > 0 else float('-inf')
+        d[i][j] = grid_data[i][j] + max(val1, val2)
+print(d[r_num - 1][c_num - 1])"
+116,"rows, cols = map(int, input().split())
+matrix_data = [list(map(int, input().split())) for _ in range(rows)]
+dp_matrix = [[0] * cols for _ in range(rows)]
+dp_matrix[0][0] = matrix_data[0][0]
+for i in range(rows):
+    for j in range(cols):
+        if i == 0 and j == 0:
+            continue
+        top = dp_matrix[i - 1][j] if i > 0 else float('-inf')
+        left = dp_matrix[i][j - 1] if j > 0 else float('-inf')
+        dp_matrix[i][j] = matrix_data[i][j] + max(top, left)
+print(dp_matrix[rows - 1][cols - 1])"
+117,"row_size, col_size = map(int, input().split())
+vals = [list(map(int, input().split())) for _ in range(row_size)]
+dp_table = [[0] * col_size for _ in range(row_size)]
+dp_table[0][0] = vals[0][0]
+for i in range(row_size):
+    for j in range(col_size):
+        if i == 0 and j == 0:
+            continue
+        prev1 = dp_table[i - 1][j] if i > 0 else float('-inf')
+        prev2 = dp_table[i][j - 1] if j > 0 else float('-inf')
+        dp_table[i][j] = vals[i][j] + max(prev1, prev2)
+print(dp_table[row_size - 1][col_size - 1])"
+118,"num_rows, num_cols = map(int, input().split())
+data = [list(map(int, input().split())) for _ in range(num_rows)]
+memo = {}
+def find_max_sum(row, col):
+  if (row, col) in memo:
+    return memo[(row, col)]
+  if row == 0 and col == 0:
+    return data[row][col]
+  if row < 0 or col < 0:
+    return float('-inf')
+  up = find_max_sum(row - 1, col)
+  left = find_max_sum(row, col - 1)
+  memo[(row, col)] = data[row][col] + max(up, left)
+  return memo[(row, col)]
+result = find_max_sum(num_rows - 1, num_cols - 1)
+print(result)"
+119,"n_rows, n_cols = map(int, input().split())
+the_grid = [list(map(int, input().split())) for _ in range(n_rows)]
+dp = [[0 for _ in range(n_cols)] for _ in range(n_rows)]
+dp[0][0] = the_grid[0][0]
+for row in range(n_rows):
+    for col in range(n_cols):
+        if row == 0 and col == 0:
+            continue
+        prev_max = float('-inf')
+        if row > 0:
+            prev_max = max(prev_max, dp[row-1][col])
+        if col > 0:
+            prev_max = max(prev_max, dp[row][col-1])
+        dp[row][col] = the_grid[row][col] + prev_max
+print(dp[n_rows-1][n_cols-1])"
+120,"r_count, c_count = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(r_count)]
+dp_table = [[0] * c_count for _ in range(r_count)]
+dp_table[0][0] = matrix[0][0]
+for i in range(r_count):
+    for j in range(c_count):
+        if i == 0 and j == 0:
+            continue
+        val_from_up = dp_table[i - 1][j] if i > 0 else float('-inf')
+        val_from_left = dp_table[i][j - 1] if j > 0 else float('-inf')
+        dp_table[i][j] = matrix[i][j] + max(val_from_up, val_from_left)
+print(dp_table[r_count - 1][c_count - 1])"
+121,"r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(r)]
+dp = [[0] * c for _ in range(r)]
+path = [[''] * c for _ in range(r)]
+dp[0][0] = grid[0][0]
+path[0][0] = '0,0'
+for i in range(r):
+    for j in range(c):
+        if i == 0 and j == 0:
+            continue
+        up = dp[i - 1][j] if i > 0 else float('-inf')
+        left = dp[i][j - 1] if j > 0 else float('-inf')
+        if up > left:
+            dp[i][j] = up + grid[i][j]
+            path[i][j] = path[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            dp[i][j] = left + grid[i][j]
+            path[i][j] = path[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(dp[r - 1][c - 1])
+print(path[r - 1][c - 1])"
+122,"rows, cols = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(rows)]
+memo = [[0] * cols for _ in range(rows)]
+trace = [[''] * cols for _ in range(rows)]
+memo[0][0] = matrix[0][0]
+trace[0][0] = '0,0'
+for i in range(rows):
+    for j in range(cols):
+        if i == 0 and j == 0:
+            continue
+        above = memo[i - 1][j] if i > 0 else float('-inf')
+        before = memo[i][j - 1] if j > 0 else float('-inf')
+        if above >= before:
+            memo[i][j] = above + matrix[i][j]
+            trace[i][j] = trace[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            memo[i][j] = before + matrix[i][j]
+            trace[i][j] = trace[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(memo[rows - 1][cols - 1])
+print(trace[rows - 1][cols - 1])"
+123,"n, m = map(int, input().split())
+arr = [list(map(int, input().split())) for _ in range(n)]
+val = [[0] * m for _ in range(n)]
+route = [[''] * m for _ in range(n)]
+val[0][0] = arr[0][0]
+route[0][0] = '0,0'
+for i in range(n):
+    for j in range(m):
+        if i == 0 and j == 0:
+            continue
+        from_top = val[i - 1][j] if i > 0 else -float('inf')
+        from_left = val[i][j - 1] if j > 0 else -float('inf')
+        if from_top > from_left:
+            val[i][j] = from_top + arr[i][j]
+            route[i][j] = route[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            val[i][j] = from_left + arr[i][j]
+            route[i][j] = route[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(val[n - 1][m - 1])
+print(route[n - 1][m - 1])"
+124,"a, b = map(int, input().split())
+matrix_data = [list(map(int, input().split())) for _ in range(a)]
+dp_table = [[0] * b for _ in range(a)]
+track = [[''] * b for _ in range(a)]
+dp_table[0][0] = matrix_data[0][0]
+track[0][0] = '0,0'
+for row in range(a):
+    for col in range(b):
+        if row == 0 and col == 0:
+            continue
+        up_val = dp_table[row - 1][col] if row > 0 else float('-inf')
+        left_val = dp_table[row][col - 1] if col > 0 else float('-inf')
+        if up_val >= left_val:
+            dp_table[row][col] = up_val + matrix_data[row][col]
+            track[row][col] = track[row - 1][col] + '->' + str(row) + ',' + str(col)
+        else:
+            dp_table[row][col] = left_val + matrix_data[row][col]
+            track[row][col] = track[row][col - 1] + '->' + str(row) + ',' + str(col)
+print(dp_table[a - 1][b - 1])
+print(track[a - 1][b - 1])"
+125,"rows, cols = map(int, input().split())
+grid_data = [list(map(int, input().split())) for _ in range(rows)]
+cache = [[0] * cols for _ in range(rows)]
+location = [[''] * cols for _ in range(rows)]
+cache[0][0] = grid_data[0][0]
+location[0][0] = '0,0'
+for i in range(rows):
+    for j in range(cols):
+        if i == 0 and j == 0:
+            continue
+        from_above = cache[i - 1][j] if i > 0 else float('-inf')
+        from_left = cache[i][j - 1] if j > 0 else float('-inf')
+        if from_above > from_left:
+            cache[i][j] = from_above + grid_data[i][j]
+            location[i][j] = location[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            cache[i][j] = from_left + grid_data[i][j]
+            location[i][j] = location[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(cache[rows - 1][cols - 1])
+print(location[rows - 1][cols - 1])"
+126,"num_rows, num_cols = map(int, input().split())
+data = [list(map(int, input().split())) for _ in range(num_rows)]
+dp_arr = [[0] * num_cols for _ in range(num_rows)]
+path_arr = [[''] * num_cols for _ in range(num_rows)]
+dp_arr[0][0] = data[0][0]
+path_arr[0][0] = '0,0'
+for i in range(num_rows):
+    for j in range(num_cols):
+        if i == 0 and j == 0:
+            continue
+        top_val = dp_arr[i - 1][j] if i > 0 else float('-inf')
+        left_val = dp_arr[i][j - 1] if j > 0 else float('-inf')
+        if top_val > left_val:
+            dp_arr[i][j] = top_val + data[i][j]
+            path_arr[i][j] = path_arr[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            dp_arr[i][j] = left_val + data[i][j]
+            path_arr[i][j] = path_arr[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(dp_arr[num_rows - 1][num_cols - 1])
+print(path_arr[num_rows - 1][num_cols - 1])"
+127,"r_count, c_count = map(int, input().split())
+grid_vals = [list(map(int, input().split())) for _ in range(r_count)]
+dp_table = [[0] * c_count for _ in range(r_count)]
+path_str = [[''] * c_count for _ in range(r_count)]
+dp_table[0][0] = grid_vals[0][0]
+path_str[0][0] = '0,0'
+for i in range(r_count):
+    for j in range(c_count):
+        if i == 0 and j == 0:
+            continue
+        from_up = dp_table[i - 1][j] if i > 0 else float('-inf')
+        from_left = dp_table[i][j - 1] if j > 0 else float('-inf')
+        if from_up >= from_left:
+            dp_table[i][j] = from_up + grid_vals[i][j]
+            path_str[i][j] = path_str[i - 1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            dp_table[i][j] = from_left + grid_vals[i][j]
+            path_str[i][j] = path_str[i][j - 1] + '->' + str(i) + ',' + str(j)
+print(dp_table[r_count - 1][c_count - 1])
+print(path_str[r_count - 1][c_count - 1])"
+128,"n_rows, n_cols = map(int, input().split())
+values = [list(map(int, input().split())) for _ in range(n_rows)]
+d = [[0] * n_cols for _ in range(n_rows)]
+p = [[''] * n_cols for _ in range(n_rows)]
+d[0][0] = values[0][0]
+p[0][0] = '0,0'
+for i in range(n_rows):
+    for j in range(n_cols):
+        if i == 0 and j == 0:
+            continue
+        up = d[i-1][j] if i > 0 else -float('inf')
+        left = d[i][j-1] if j > 0 else -float('inf')
+        if up > left:
+            d[i][j] = up + values[i][j]
+            p[i][j] = p[i-1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            d[i][j] = left + values[i][j]
+            p[i][j] = p[i][j-1] + '->' + str(i) + ',' + str(j)
+print(d[n_rows-1][n_cols-1])
+print(p[n_rows-1][n_cols-1])"
+129,"row_count, col_count = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(row_count)]
+dp_matrix = [[0] * col_count for _ in range(row_count)]
+path_string = [[''] * col_count for _ in range(row_count)]
+dp_matrix[0][0] = matrix[0][0]
+path_string[0][0] = '0,0'
+for i in range(row_count):
+    for j in range(col_count):
+        if i == 0 and j == 0:
+            continue
+        from_top = dp_matrix[i-1][j] if i > 0 else float('-inf')
+        from_left = dp_matrix[i][j-1] if j > 0 else float('-inf')
+        if from_top > from_left:
+            dp_matrix[i][j] = from_top + matrix[i][j]
+            path_string[i][j] = path_string[i-1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            dp_matrix[i][j] = from_left + matrix[i][j]
+            path_string[i][j] = path_string[i][j-1] + '->' + str(i) + ',' + str(j)
+print(dp_matrix[row_count-1][col_count-1])
+print(path_string[row_count-1][col_count-1])"
+130,"m, n = map(int, input().split())
+grid_vals = [list(map(int, input().split())) for _ in range(m)]
+dp_array = [[0] * n for _ in range(m)]
+path_history = [[''] * n for _ in range(m)]
+dp_array[0][0] = grid_vals[0][0]
+path_history[0][0] = '0,0'
+for i in range(m):
+    for j in range(n):
+        if i == 0 and j == 0:
+            continue
+        up_val = dp_array[i-1][j] if i > 0 else float('-inf')
+        left_val = dp_array[i][j-1] if j > 0 else float('-inf')
+        if up_val > left_val:
+            dp_array[i][j] = up_val + grid_vals[i][j]
+            path_history[i][j] = path_history[i-1][j] + '->' + str(i) + ',' + str(j)
+        else:
+            dp_array[i][j] = left_val + grid_vals[i][j]
+            path_history[i][j] = path_history[i][j-1] + '->' + str(i) + ',' + str(j)
+print(dp_array[m-1][n-1])
+print(path_history[m-1][n-1])"
+131,"r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(r)]
+dp = [[0] * c for _ in range(r)]
+path = [[''] * c for _ in range(r)]
+dp[0][0] = grid[0][0]
+for i in range(1, r):
+    dp[i][0] = dp[i - 1][0] + grid[i][0]
+    path[i][0] = path[i - 1][0] + 'D'
+for j in range(1, c):
+    dp[0][j] = dp[0][j - 1] + grid[0][j]
+    path[0][j] = path[0][j - 1] + 'R'
+for i in range(1, r):
+    for j in range(1, c):
+        if dp[i - 1][j] > dp[i][j - 1]:
+            dp[i][j] = dp[i - 1][j] + grid[i][j]
+            path[i][j] = path[i - 1][j] + 'D'
+        else:
+            dp[i][j] = dp[i][j - 1] + grid[i][j]
+            path[i][j] = path[i][j - 1] + 'R'
+print(dp[r - 1][c - 1])
+print(path[r - 1][c - 1])"
+132,"rows, cols = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(rows)]
+memo = {}
+route = {}
+def solve(x, y):
+    if (x, y) in memo:
+        return memo[(x, y)]
+    if x == 0 and y == 0:
+        return matrix[x][y]
+    up = 0
+    left = 0
+    if x > 0:
+        up = solve(x - 1, y)
+    if y > 0:
+        left = solve(x, y - 1)
+    if up > left:
+        memo[(x, y)] = matrix[x][y] + up
+        route[(x, y)] = 'D'
+    else:
+        memo[(x, y)] = matrix[x][y] + left
+        route[(x, y)] = 'R'
+    return memo[(x, y)]
+result = solve(rows - 1, cols - 1)
+path = ''
+x, y = rows - 1, cols - 1
+while x > 0 or y > 0:
+    path = route[(x, y)] + path
+    if route[(x, y)] == 'D':
+        x -= 1
+    else:
+        y -= 1
+print(result)
+print(path)"
+133,"a, b = map(int, input().split())
+square = [list(map(int, input().split())) for _ in range(a)]
+dp_table = [[0] * b for _ in range(a)]
+track = [[''] * b for _ in range(a)]
+dp_table[0][0] = square[0][0]
+for i in range(1, a):
+    dp_table[i][0] = dp_table[i - 1][0] + square[i][0]
+    track[i][0] = track[i - 1][0] + 'D'
+for j in range(1, b):
+    dp_table[0][j] = dp_table[0][j - 1] + square[0][j]
+    track[0][j] = track[0][j - 1] + 'R'
+for i in range(1, a):
+    for j in range(1, b):
+        if dp_table[i - 1][j] >= dp_table[i][j - 1]:
+            dp_table[i][j] = dp_table[i - 1][j] + square[i][j]
+            track[i][j] = track[i - 1][j] + 'D'
+        else:
+            dp_table[i][j] = dp_table[i][j - 1] + square[i][j]
+            track[i][j] = track[i][j - 1] + 'R'
+print(dp_table[a - 1][b - 1])
+print(track[a - 1][b - 1])"
+134,"n, m = map(int, input().split())
+nums = [list(map(int, input().split())) for _ in range(n)]
+dp_arr = [[0] * m for _ in range(n)]
+moves = [[''] * m for _ in range(n)]
+dp_arr[0][0] = nums[0][0]
+for i in range(1, n):
+    dp_arr[i][0] = dp_arr[i - 1][0] + nums[i][0]
+    moves[i][0] = moves[i - 1][0] + 'D'
+for j in range(1, m):
+    dp_arr[0][j] = dp_arr[0][j - 1] + nums[0][j]
+    moves[0][j] = moves[0][j - 1] + 'R'
+for i in range(1, n):
+    for j in range(1, m):
+        if dp_arr[i - 1][j] > dp_arr[i][j - 1]:
+            dp_arr[i][j] = dp_arr[i - 1][j] + nums[i][j]
+            moves[i][j] = moves[i - 1][j] + 'D'
+        else:
+            dp_arr[i][j] = dp_arr[i][j - 1] + nums[i][j]
+            moves[i][j] = moves[i][j - 1] + 'R'
+print(dp_arr[n - 1][m - 1])
+print(moves[n - 1][m - 1])"
+135,"rows, cols = map(int, input().split())
+values = [list(map(int, input().split())) for _ in range(rows)]
+table = [[0 for _ in range(cols)] for _ in range(rows)]
+directions = [['' for _ in range(cols)] for _ in range(rows)]
+table[0][0] = values[0][0]
+for i in range(1, rows):
+    table[i][0] = table[i-1][0] + values[i][0]
+    directions[i][0] = directions[i-1][0] + 'D'
+for j in range(1, cols):
+    table[0][j] = table[0][j-1] + values[0][j]
+    directions[0][j] = directions[0][j-1] + 'R'
+for i in range(1, rows):
+    for j in range(1, cols):
+        if table[i-1][j] >= table[i][j-1]:
+            table[i][j] = table[i-1][j] + values[i][j]
+            directions[i][j] = directions[i-1][j] + 'D'
+        else:
+            table[i][j] = table[i][j-1] + values[i][j]
+            directions[i][j] = directions[i][j-1] + 'R'
+print(table[rows-1][cols-1])
+print(directions[rows-1][cols-1])"
+136,"x_dim, y_dim = map(int, input().split())
+matrix = [[int(x) for x in input().split()] for _ in range(x_dim)]
+dp = [[0] * y_dim for _ in range(x_dim)]
+path_str = [[''] * y_dim for _ in range(x_dim)]
+dp[0][0] = matrix[0][0]
+for i in range(1, x_dim):
+    dp[i][0] = dp[i - 1][0] + matrix[i][0]
+    path_str[i][0] = path_str[i - 1][0] + 'D'
+for j in range(1, y_dim):
+    dp[0][j] = dp[0][j - 1] + matrix[0][j]
+    path_str[0][j] = path_str[0][j - 1] + 'R'
+for i in range(1, x_dim):
+    for j in range(1, y_dim):
+        if dp[i - 1][j] > dp[i][j - 1]:
+            dp[i][j] = dp[i - 1][j] + matrix[i][j]
+            path_str[i][j] = path_str[i - 1][j] + 'D'
+        else:
+            dp[i][j] = dp[i][j - 1] + matrix[i][j]
+            path_str[i][j] = path_str[i][j - 1] + 'R'
+print(dp[x_dim - 1][y_dim - 1])
+print(path_str[x_dim - 1][y_dim - 1])"
+137,"n_rows, n_cols = map(int, input().split())
+arr = [list(map(int, input().split())) for _ in range(n_rows)]
+max_sum = [[0] * n_cols for _ in range(n_rows)]
+direction = [[''] * n_cols for _ in range(n_rows)]
+max_sum[0][0] = arr[0][0]
+for i in range(1, n_rows):
+    max_sum[i][0] = max_sum[i - 1][0] + arr[i][0]
+    direction[i][0] = direction[i - 1][0] + 'D'
+for j in range(1, n_cols):
+    max_sum[0][j] = max_sum[0][j - 1] + arr[0][j]
+    direction[0][j] = direction[0][j - 1] + 'R'
+for i in range(1, n_rows):
+    for j in range(1, n_cols):
+        if max_sum[i - 1][j] > max_sum[i][j - 1]:
+            max_sum[i][j] = max_sum[i - 1][j] + arr[i][j]
+            direction[i][j] = direction[i - 1][j] + 'D'
+        else:
+            max_sum[i][j] = max_sum[i][j - 1] + arr[i][j]
+            direction[i][j] = direction[i][j - 1] + 'R'
+print(max_sum[n_rows - 1][n_cols - 1])
+print(direction[n_rows - 1][n_cols - 1])"
+138,"row_size, col_size = map(int, input().split())
+data = [list(map(int, input().split())) for _ in range(row_size)]
+dp_table = [[0] * col_size for _ in range(row_size)]
+path_taken = [[''] * col_size for _ in range(row_size)]
+dp_table[0][0] = data[0][0]
+for i in range(1, row_size):
+    dp_table[i][0] = dp_table[i - 1][0] + data[i][0]
+    path_taken[i][0] = path_taken[i - 1][0] + 'D'
+for j in range(1, col_size):
+    dp_table[0][j] = dp_table[0][j - 1] + data[0][j]
+    path_taken[0][j] = path_taken[0][j - 1] + 'R'
+for i in range(1, row_size):
+    for j in range(1, col_size):
+        if dp_table[i - 1][j] >= dp_table[i][j - 1]:
+            dp_table[i][j] = dp_table[i - 1][j] + data[i][j]
+            path_taken[i][j] = path_taken[i - 1][j] + 'D'
+        else:
+            dp_table[i][j] = dp_table[i][j - 1] + data[i][j]
+            path_taken[i][j] = path_taken[i][j - 1] + 'R'
+print(dp_table[row_size - 1][col_size - 1])
+print(path_taken[row_size - 1][col_size - 1])"
+139,"m, n = map(int, input().split())
+grid_data = [list(map(int, input().split())) for _ in range(m)]
+dp_values = [[0] * n for _ in range(m)]
+path_str = [[''] * n for _ in range(m)]
+dp_values[0][0] = grid_data[0][0]
+for i in range(1, m):
+    dp_values[i][0] = dp_values[i - 1][0] + grid_data[i][0]
+    path_str[i][0] = path_str[i - 1][0] + 'D'
+for j in range(1, n):
+    dp_values[0][j] = dp_values[0][j - 1] + grid_data[0][j]
+    path_str[0][j] = path_str[0][j - 1] + 'R'
+for i in range(1, m):
+    for j in range(1, n):
+        if dp_values[i - 1][j] > dp_values[i][j - 1]:
+            dp_values[i][j] = dp_values[i - 1][j] + grid_data[i][j]
+            path_str[i][j] = path_str[i - 1][j] + 'D'
+        else:
+            dp_values[i][j] = dp_values[i][j - 1] + grid_data[i][j]
+            path_str[i][j] = path_str[i][j - 1] + 'R'
+print(dp_values[m - 1][n - 1])
+print(path_str[m - 1][n - 1])"
+140,"height, width = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(height)]
+dynamic_table = [[0] * width for _ in range(height)]
+route_path = [[''] * width for _ in range(height)]
+dynamic_table[0][0] = matrix[0][0]
+for i in range(1, height):
+    dynamic_table[i][0] = dynamic_table[i - 1][0] + matrix[i][0]
+    route_path[i][0] = route_path[i - 1][0] + 'D'
+for j in range(1, width):
+    dynamic_table[0][j] = dynamic_table[0][j - 1] + matrix[0][j]
+    route_path[0][j] = route_path[0][j - 1] + 'R'
+for i in range(1, height):
+    for j in range(1, width):
+        if dynamic_table[i - 1][j] >= dynamic_table[i][j - 1]:
+            dynamic_table[i][j] = dynamic_table[i - 1][j] + matrix[i][j]
+            route_path[i][j] = route_path[i - 1][j] + 'D'
+        else:
+            dynamic_table[i][j] = dynamic_table[i][j - 1] + matrix[i][j]
+            route_path[i][j] = route_path[i][j - 1] + 'R'
+print(dynamic_table[height - 1][width - 1])
+print(route_path[height - 1][width - 1])"
+141,"r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(r)]
+dp = [[0] * c for _ in range(r)]
+path = [[''] * c for _ in range(r)]
+dp[0][0] = grid[0][0]
+path[0][0] = 'A00'
+for i in range(r):
+    for j in range(c):
+        if i == 0 and j == 0:
+            continue
+        up = dp[i - 1][j] if i > 0 else float('-inf')
+        left = dp[i][j - 1] if j > 0 else float('-inf')
+        if up > left:
+            dp[i][j] = up + grid[i][j]
+            path[i][j] = path[i - 1][j] + f'D{i}{j}'
+        else:
+            dp[i][j] = left + grid[i][j]
+            path[i][j] = path[i][j - 1] + f'R{i}{j}'
+print(dp[r - 1][c - 1])
+print(path[r - 1][c - 1])"
+142,"rows, cols = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(rows)]
+memo = {}
+def solve(i, j):
+    if (i, j) in memo:
+        return memo[(i, j)]
+    if i == 0 and j == 0:
+        return matrix[i][j], 'A00'
+    max_sum = float('-inf')
+    best_path = ''
+    if i > 0:
+        up_sum, up_path = solve(i - 1, j)
+        if up_sum + matrix[i][j] > max_sum:
+            max_sum = up_sum + matrix[i][j]
+            best_path = up_path + f'D{i}{j}'
+    if j > 0:
+        left_sum, left_path = solve(i, j - 1)
+        if left_sum + matrix[i][j] > max_sum:
+            max_sum = left_sum + matrix[i][j]
+            best_path = left_path + f'R{i}{j}'
+    memo[(i, j)] = (max_sum, best_path)
+    return max_sum, best_path
+result, route = solve(rows - 1, cols - 1)
+print(result)
+print(route)"
+143,"n, m = map(int, input().split())
+board = [list(map(int, input().split())) for _ in range(n)]
+dp_table = [[0 for _ in range(m)] for _ in range(n)]
+path_tracker = [['' for _ in range(m)] for _ in range(n)]
+dp_table[0][0] = board[0][0]
+path_tracker[0][0] = 'A00'
+for i in range(n):
+    for j in range(m):
+        if i == 0 and j == 0:
+            continue
+        val1 = float('-inf')
+        val2 = float('-inf')
+        path1 = ''
+        path2 = ''
+        if i > 0:
+            val1 = dp_table[i - 1][j]
+            path1 = path_tracker[i - 1][j]
+        if j > 0:
+            val2 = dp_table[i][j - 1]
+            path2 = path_tracker[i][j - 1]
+        if val1 >= val2:
+            dp_table[i][j] = val1 + board[i][j]
+            path_tracker[i][j] = path1 + f'D{i}{j}'
+        else:
+            dp_table[i][j] = val2 + board[i][j]
+            path_tracker[i][j] = path2 + f'R{i}{j}'
+print(dp_table[n - 1][m - 1])
+print(path_tracker[n - 1][m - 1])"
+144,"rows, cols = map(int, input().split())
+matrix = [list(map(int, input().split())) for _ in range(rows)]
+dp = [[0] * cols for _ in range(rows)]
+path = [[''] * cols for _ in range(rows)]
+for i in range(rows):
+    for j in range(cols):
+        if i == 0 and j == 0:
+            dp[i][j] = matrix[i][j]
+            path[i][j] = 'A00'
+        else:
+            up = dp[i-1][j] if i > 0 else float('-inf')
+            left = dp[i][j-1] if j > 0 else float('-inf')
+            if up > left:
+                dp[i][j] = up + matrix[i][j]
+                path[i][j] = path[i-1][j] + f'D{i}{j}'
+            else:
+                dp[i][j] = left + matrix[i][j]
+                path[i][j] = path[i][j-1] + f'R{i}{j}'
+print(dp[rows-1][cols-1])
+print(path[rows-1][cols-1])"
+145,"n, m = map(int, input().split())
+grid_data = [list(map(int, input().split())) for _ in range(n)]
+dp_values = [[0] * m for _ in range(n)]
+dp_paths = [[''] * m for _ in range(n)]
+dp_values[0][0] = grid_data[0][0]
+dp_paths[0][0] = 'A00'
+for row in range(n):
+    for col in range(m):
+        if row == 0 and col == 0:
+            continue
+        max_val = float('-inf')
+        best_path = ''
+        if row > 0:
+            if dp_values[row - 1][col] + grid_data[row][col] > max_val:
+                max_val = dp_values[row - 1][col] + grid_data[row][col]
+                best_path = dp_paths[row - 1][col] + f'D{row}{col}'
+        if col > 0:
+            if dp_values[row][col - 1] + grid_data[row][col] > max_val:
+                max_val = dp_values[row][col - 1] + grid_data[row][col]
+                best_path = dp_paths[row][col - 1] + f'R{row}{col}'
+        dp_values[row][col] = max_val
+        dp_paths[row][col] = best_path
+print(dp_values[n - 1][m - 1])
+print(dp_paths[n - 1][m - 1])"
+146,"r_count, c_count = map(int, input().split())
+grid_data = [list(map(int, input().split())) for _ in range(r_count)]
+dp_table = [[0] * c_count for _ in range(r_count)]
+path_string = [[''] * c_count for _ in range(r_count)]
+dp_table[0][0] = grid_data[0][0]
+path_string[0][0] = 'A00'
+for i in range(r_count):
+    for j in range(c_count):
+        if i == 0 and j == 0:
+            continue
+        upper = float('-inf')
+        left = float('-inf')
+        upper_path = """"
+        left_path = """"
+        if i > 0:
+            upper = dp_table[i - 1][j]
+            upper_path = path_string[i - 1][j]
+        if j > 0:
+            left = dp_table[i][j - 1]
+            left_path = path_string[i][j - 1]
+        if upper > left:
+            dp_table[i][j] = upper + grid_data[i][j]
+            path_string[i][j] = upper_path + f""D{i}{j}""
+        else:
+            dp_table[i][j] = left + grid_data[i][j]
+            path_string[i][j] = left_path + f""R{i}{j}""
+print(dp_table[r_count - 1][c_count - 1])
+print(path_string[r_count - 1][c_count - 1])"
+147,"rows, cols = map(int, input().split())
+arr = [list(map(int, input().split())) for _ in range(rows)]
+dp = [[0 for _ in range(cols)] for _ in range(rows)]
+path_str = [['' for _ in range(cols)] for _ in range(rows)]
+dp[0][0] = arr[0][0]
+path_str[0][0] = 'A00'
+for i in range(rows):
+    for j in range(cols):
+        if i == 0 and j == 0:
+            continue
+        max_sum = float('-inf')
+        move_path = ''
+        if i > 0:
+            if dp[i-1][j] + arr[i][j] > max_sum:
+                max_sum = dp[i-1][j] + arr[i][j]
+                move_path = path_str[i-1][j] + f'D{i}{j}'
+        if j > 0:
+            if dp[i][j-1] + arr[i][j] > max_sum:
+                max_sum = dp[i][j-1] + arr[i][j]
+                move_path = path_str[i][j-1] + f'R{i}{j}'
+        dp[i][j] = max_sum
+        path_str[i][j] = move_path
+print(dp[rows-1][cols-1])
+print(path_str[rows-1][cols-1])"
+148,"row_num, col_num = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(row_num)]
+dp_table = [[0] * col_num for _ in range(row_num)]
+path_str = [[''] * col_num for _ in range(row_num)]
+dp_table[0][0] = grid[0][0]
+path_str[0][0] = 'A00'
+for i in range(row_num):
+    for j in range(col_num):
+        if i == 0 and j == 0:
+            continue
+        val_from_up = float('-inf')
+        val_from_left = float('-inf')
+        path_from_up = ''
+        path_from_left = ''
+        if i > 0:
+            val_from_up = dp_table[i - 1][j]
+            path_from_up = path_str[i - 1][j]
+        if j > 0:
+            val_from_left = dp_table[i][j - 1]
+            path_from_left = path_str[i][j - 1]
+        if val_from_up > val_from_left:
+            dp_table[i][j] = val_from_up + grid[i][j]
+            path_str[i][j] = path_from_up + f""D{i}{j}""
+        else:
+            dp_table[i][j] = val_from_left + grid[i][j]
+            path_str[i][j] = path_from_left + f""R{i}{j}""
+print(dp_table[row_num - 1][col_num - 1])
+print(path_str[row_num - 1][col_num - 1])"
+149,"row_count, col_count = map(int, input().split())
+grid_matrix = [list(map(int, input().split())) for _ in range(row_count)]
+dp_array = [[0 for _ in range(col_count)] for _ in range(row_count)]
+path_string = [['' for _ in range(col_count)] for _ in range(row_count)]
+dp_array[0][0] = grid_matrix[0][0]
+path_string[0][0] = 'A00'
+for i in range(row_count):
+    for j in range(col_count):
+        if i == 0 and j == 0:
+            continue
+        up_val = float('-inf')
+        left_val = float('-inf')
+        up_path = ''
+        left_path = ''
+        if i > 0:
+            up_val = dp_array[i-1][j]
+            up_path = path_string[i-1][j]
+        if j > 0:
+            left_val = dp_array[i][j-1]
+            left_path = path_string[i][j-1]
+        if up_val > left_val:
+            dp_array[i][j] = up_val + grid_matrix[i][j]
+            path_string[i][j] = up_path + f""D{i}{j}""
+        else:
+            dp_array[i][j] = left_val + grid_matrix[i][j]
+            path_string[i][j] = left_path + f""R{i}{j}""
+print(dp_array[row_count-1][col_count-1])
+print(path_string[row_count-1][col_count-1])"
+150,"r_size, c_size = map(int, input().split())
+grid_values = [list(map(int, input().split())) for _ in range(r_size)]
+dp_values = [[0] * c_size for _ in range(r_size)]
+str_path = [[''] * c_size for _ in range(r_size)]
+dp_values[0][0] = grid_values[0][0]
+str_path[0][0] = 'A00'
+for i in range(r_size):
+    for j in range(c_size):
+        if i == 0 and j == 0:
+            continue
+        top_val = float('-inf')
+        left_val = float('-inf')
+        top_path = ''
+        left_path = ''
+        if i > 0:
+            top_val = dp_values[i - 1][j]
+            top_path = str_path[i - 1][j]
+        if j > 0:
+            left_val = dp_values[i][j - 1]
+            left_path = str_path[i][j - 1]
+        if top_val > left_val:
+            dp_values[i][j] = top_val + grid_values[i][j]
+            str_path[i][j] = top_path + f'D{i}{j}'
+        else:
+            dp_values[i][j] = left_val + grid_values[i][j]
+            str_path[i][j] = left_path + f'R{i}{j}'
+print(dp_values[r_size - 1][c_size - 1])
+print(str_path[r_size - 1][c_size - 1])"

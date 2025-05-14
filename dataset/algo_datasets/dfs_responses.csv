@@ -1,0 +1,2070 @@
+number,code
+1,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+2,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+3,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            yield from dfs_generator_adj_list(graph, neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+4,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+5,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+6,"from functools import reduce
+def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = graph[start]
+    unvisited_neighbors = [n for n in neighbors if n not in visited]
+    return reduce(lambda acc, n: dfs_functional_adj_list(graph, n, acc), unvisited_neighbors, visited)"
+7,"def dfs_recursive_adj_list_edgecase(graph, start, visited=None):
+    if not graph or start not in graph: return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited and neighbor in graph:
+            dfs_recursive_adj_list_edgecase(graph, neighbor, visited)"
+8,"def dfs_iterative_adj_matrix_edgecase(graph, start):
+    if not graph or start < 0 or start >= len(graph): return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+9,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+10,"def dfs_recursive_adj_list_reverse(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in reversed(graph[start]):
+        if neighbor not in visited:
+            dfs_recursive_adj_list_reverse(graph, neighbor, visited)"
+11,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+12,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+13,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+14,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    if start in visited:
+        return
+    visited.add(start)
+    for neighbor in graph[start]:
+        dfs_functional_adj_list(graph, neighbor, visited)"
+15,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+16,"def dfs_iterative_adj_matrix(graph, start):
+    num_vertices = len(graph)
+    visited = [False] * num_vertices
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(num_vertices):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+17,"def dfs_adj_list_edge_case(graph, start):
+    if not graph or start not in graph:
+        return []
+    visited = set()
+    stack = [start]
+    result = []
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            result.append(vertex)
+            if vertex in graph:
+                stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)
+    return result"
+18,"def dfs_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return []
+    num_vertices = len(graph)
+    visited = [False] * num_vertices
+    stack = [start]
+    result = []
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            result.append(vertex)
+            for neighbor in range(num_vertices):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)
+    return result"
+19,"def dfs_recursive_adj_list_order(graph, start, order=None):
+    if order is None:
+        order = []
+    if start in order:
+        return
+    order.append(start)
+    if start in graph:
+      for neighbor in graph[start]:
+          dfs_recursive_adj_list_order(graph, neighbor, order)
+    return order"
+20,"def dfs_iterative_adj_matrix_order(graph, start):
+    num_vertices = len(graph)
+    visited = [False] * num_vertices
+    stack = [start]
+    order = []
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            order.append(vertex)
+            for neighbor in range(num_vertices):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)
+    return order"
+21,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+22,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+23,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+24,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = [n for n in graph[start] if n not in visited]
+    return [start] + sum([dfs_functional_adj_list(graph, n, visited) for n in neighbors], [])"
+25,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+26,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+27,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+28,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+29,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+30,"def dfs_functional_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    neighbors = [i for i in range(len(graph)) if graph[start][i] == 1 and not visited[i]]
+    return [start] + sum([dfs_functional_adj_matrix(graph, n, visited) for n in neighbors], [])"
+31,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+32,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+33,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+34,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = [n for n in graph[start] if n not in visited]
+    return start, [dfs_functional_adj_list(graph, n, visited)[0] for n in neighbors]"
+35,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+36,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+37,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+38,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+39,"def dfs_functional_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    neighbors = [i for i in range(len(graph)) if graph[start][i] == 1 and not visited[i]]
+    return start, [dfs_functional_adj_matrix(graph, n, visited)[0] for n in neighbors]"
+40,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+41,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+42,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+43,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+44,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = [n for n in graph[start] if n not in visited]
+    return [start] + sum([dfs_functional_adj_list(graph, n, visited) for n in neighbors], [])"
+45,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+46,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+47,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+48,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+49,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+50,"def dfs_functional_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    neighbors = [i for i in range(len(graph)) if graph[start][i] == 1 and not visited[i]]
+    return [start] + sum([dfs_functional_adj_matrix(graph, n, visited) for n in neighbors], [])"
+51,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+52,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            for neighbor in reversed(graph[vertex]):
+                stack.append(neighbor)"
+53,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            for neighbor in reversed(graph[vertex]):
+                stack.append(neighbor)"
+54,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    if start not in visited:
+        visited.add(start)
+        return [start] + sum([dfs_functional_adj_list(graph, neighbor, visited) for neighbor in graph[start]], [])
+    return []"
+55,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+56,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+57,"def dfs_recursive_error_handling(graph, start, visited=None):
+    if not graph: return
+    if visited is None:
+        visited = set()
+    if start not in graph: return
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_error_handling(graph, neighbor, visited)"
+58,"def dfs_iterative_empty_graph(graph, start):
+  visited = set()
+  stack = [start] if graph else []
+  while stack:
+    vertex = stack.pop()
+    if vertex not in visited and vertex in graph:
+      visited.add(vertex)
+      for neighbor in reversed(graph[vertex]):
+        stack.append(neighbor)
+  return visited"
+59,"def dfs_functional_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    if not visited[start]:
+        visited[start] = True
+        return [start] + [node for neighbor in range(len(graph))
+                         if graph[start][neighbor] == 1 and not visited[neighbor]
+                         for node in dfs_functional_adj_matrix(graph, neighbor, visited)]
+    return []"
+60,"def dfs_generator_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+61,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+62,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+63,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+64,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = [n for n in graph[start] if n not in visited]
+    return start, *sum((dfs_functional_adj_list(graph, n, visited) for n in neighbors), ())"
+65,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+66,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+67,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+68,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+69,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+70,"def dfs_functional_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    if visited[start]:
+        return ()
+    visited[start] = True
+    neighbors = [n for n in range(len(graph)) if graph[start][n] == 1 and not visited[n]]
+    return start, *sum((dfs_functional_adj_matrix(graph, n, visited) for n in neighbors), ())"
+71,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+72,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+73,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+74,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for neighbor in range(len(graph)):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+75,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+76,"from functools import reduce
+def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = graph[start]
+    unvisited_neighbors = [n for n in neighbors if n not in visited]
+    return reduce(lambda acc, n: dfs_functional_adj_list(graph, n, acc), unvisited_neighbors, visited)"
+77,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+78,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+79,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            yield vertex
+            for neighbor in range(len(graph)):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+80,"def dfs_recursive_adj_list_return_path(graph, start, end, path=None):
+    if path is None:
+        path = []
+    path = path + [start]
+    if start == end:
+        return path
+    if start not in graph:
+        return None
+    for neighbor in graph[start]:
+        if neighbor not in path:
+            new_path = dfs_recursive_adj_list_return_path(graph, neighbor, end, path)
+            if new_path:
+                return new_path
+    return None"
+81,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+82,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+83,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            yield vertex
+            stack.extend(neighbor for neighbor in graph[vertex] if neighbor not in visited)"
+84,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    n = len(graph)
+    if visited is None:
+        visited = [False] * n
+    visited[start] = True
+    for neighbor in range(n):
+        if graph[start][neighbor] == 1 and not visited[neighbor]:
+            dfs_recursive_adj_matrix(graph, neighbor, visited)"
+85,"def dfs_iterative_adj_matrix(graph, start):
+    n = len(graph)
+    visited = [False] * n
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(n):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+86,"from functools import reduce
+def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    neighbors = graph[start]
+    unvisited_neighbors = [n for n in neighbors if n not in visited]
+    return reduce(lambda acc, n: dfs_functional_adj_list(graph, n, acc) or acc, unvisited_neighbors, visited)"
+87,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph.get(start, []):
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+88,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    n = len(graph)
+    visited = [False] * n
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for neighbor in range(n):
+                if graph[vertex][neighbor] == 1 and not visited[neighbor]:
+                    stack.append(neighbor)"
+89,"def dfs_recursive_adj_list_return_path(graph, start, path=None):
+    if path is None:
+        path = []
+    path.append(start)
+    for neighbor in graph.get(start, []):
+        if neighbor not in path:
+            dfs_recursive_adj_list_return_path(graph, neighbor, path)
+    return path"
+90,"def dfs_iterative_adj_list_path(graph, start):
+    visited = set()
+    stack = [(start, [start])]
+    path = []
+    while stack:
+        (node, current_path) = stack.pop()
+        if node not in visited:
+            visited.add(node)
+            path = current_path
+            for neighbor in graph.get(node, []):
+                if neighbor not in visited:
+                    stack.append((neighbor, current_path + [neighbor]))
+    return path"
+91,"def dfs_recursive_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph[start]:
+        if neighbor not in visited:
+            dfs_recursive_adj_list(graph, neighbor, visited)"
+92,"def dfs_iterative_adj_list(graph, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            for neighbor in graph[vertex]:
+                stack.append(neighbor)"
+93,"def dfs_generator_adj_list(graph, start):
+    visited = set()
+    def dfs_gen(vertex):
+        visited.add(vertex)
+        yield vertex
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                yield from dfs_gen(neighbor)
+    return dfs_gen(start)"
+94,"def dfs_functional_adj_list(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    if start in visited:
+        return []
+    visited.add(start)
+    neighbors = graph[start]
+    return [start] + sum([dfs_functional_adj_list(graph, neighbor, visited) for neighbor in neighbors], [])"
+95,"def dfs_recursive_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    visited[start] = True
+    for i in range(len(graph)):
+        if graph[start][i] == 1 and not visited[i]:
+            dfs_recursive_adj_matrix(graph, i, visited)"
+96,"def dfs_iterative_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for i in range(len(graph)):
+                if graph[vertex][i] == 1 and not visited[i]:
+                    stack.append(i)"
+97,"def dfs_recursive_adj_list_edge_case(graph, start, visited=None):
+    if not graph or start not in graph:
+        return
+    if visited is None:
+        visited = set()
+    visited.add(start)
+    for neighbor in graph.get(start, []):
+        if neighbor not in visited:
+            dfs_recursive_adj_list_edge_case(graph, neighbor, visited)"
+98,"def dfs_iterative_adj_matrix_edge_case(graph, start):
+    if not graph or start < 0 or start >= len(graph):
+        return
+    visited = [False] * len(graph)
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if not visited[vertex]:
+            visited[vertex] = True
+            for i in range(len(graph)):
+                if graph[vertex][i] == 1 and not visited[i]:
+                    stack.append(i)"
+99,"def dfs_generator_adj_matrix(graph, start):
+    visited = [False] * len(graph)
+    def dfs_gen(vertex):
+        visited[vertex] = True
+        yield vertex
+        for i in range(len(graph)):
+            if graph[vertex][i] == 1 and not visited[i]:
+                yield from dfs_gen(i)
+    return dfs_gen(start)"
+100,"def dfs_functional_adj_matrix(graph, start, visited=None):
+    if visited is None:
+        visited = [False] * len(graph)
+    if visited[start]:
+        return []
+    visited[start] = True
+    neighbors = [i for i in range(len(graph)) if graph[start][i] == 1 and not visited[i]]
+    return [start] + sum([dfs_functional_adj_matrix(graph, neighbor, visited) for neighbor in neighbors], [])"
+101,"n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges[u - 1].append(v - 1)
+s, t = map(int, input().split())
+s -= 1
+t -= 1
+visited = [False] * n
+path = []
+def traverse(node):
+    visited[node] = True
+    path.append(node + 1)
+    if node == t:
+        return True
+    for neighbor in edges[node]:
+        if not visited[neighbor]:
+            if traverse(neighbor):
+                return True
+    path.pop()
+    return False
+if traverse(s):
+    print(*path)
+else:
+    print(-1)"
+102,"num_nodes, num_arcs = map(int, input().split())
+adj = [[] for _ in range(num_nodes)]
+for _ in range(num_arcs):
+    x, y = map(int, input().split())
+    adj[x - 1].append(y - 1)
+start_node, end_node = map(int, input().split())
+start_node -= 1
+end_node -= 1
+seen = [False] * num_nodes
+route = []
+def depth_search(current):
+    seen[current] = True
+    route.append(current + 1)
+    if current == end_node:
+        return True
+    for neighbor in adj[current]:
+        if not seen[neighbor]:
+            if depth_search(neighbor):
+                return True
+    route.pop()
+    return False
+if depth_search(start_node):
+    print(*route)
+else:
+    print(-1)"
+103,"n_nodes, n_edges = map(int, input().split())
+graph = [[] for _ in range(n_nodes)]
+for _ in range(n_edges):
+    a, b = map(int, input().split())
+    graph[a - 1].append(b - 1)
+start_vertex, target_vertex = map(int, input().split())
+start_vertex -= 1
+target_vertex -= 1
+explored = [False] * n_nodes
+discovered_path = []
+def path_find(vertex):
+    explored[vertex] = True
+    discovered_path.append(vertex + 1)
+    if vertex == target_vertex:
+        return True
+    for neighbor in graph[vertex]:
+        if not explored[neighbor]:
+            if path_find(neighbor):
+                return True
+    discovered_path.pop()
+    return False
+if path_find(start_vertex):
+    print(*discovered_path)
+else:
+    print(-1)"
+104,"node_count, edge_count = map(int, input().split())
+adjacency_list = [[] for _ in range(node_count)]
+for _ in range(edge_count):
+    from_node, to_node = map(int, input().split())
+    adjacency_list[from_node - 1].append(to_node - 1)
+source, destination = map(int, input().split())
+source -= 1
+destination -= 1
+visited_nodes = [False] * node_count
+current_path = []
+def dfs_recursive(node):
+    visited_nodes[node] = True
+    current_path.append(node + 1)
+    if node == destination:
+        return True
+    for neighbor in adjacency_list[node]:
+        if not visited_nodes[neighbor]:
+            if dfs_recursive(neighbor):
+                return True
+    current_path.pop()
+    return False
+if dfs_recursive(source):
+    print(*current_path)
+else:
+    print(-1)"
+105,"n, k = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(k):
+    u, v = map(int, input().split())
+    adj_list[u - 1].append(v - 1)
+start, end = map(int, input().split())
+start -= 1
+end -= 1
+seen = [False] * n
+trace = []
+def explore(curr):
+    seen[curr] = True
+    trace.append(curr + 1)
+    if curr == end:
+        return True
+    for neigh in adj_list[curr]:
+        if not seen[neigh]:
+            if explore(neigh):
+                return True
+    trace.pop()
+    return False
+if explore(start):
+    print(*trace)
+else:
+    print(-1)"
+106,"num_vertices, num_edges = map(int, input().split())
+graph_adj = [[] for _ in range(num_vertices)]
+for _ in range(num_edges):
+    u, v = map(int, input().split())
+    graph_adj[u - 1].append(v - 1)
+initial_node, final_node = map(int, input().split())
+initial_node -= 1
+final_node -= 1
+visited_status = [False] * num_vertices
+path_so_far = []
+def depth_first(node):
+    visited_status[node] = True
+    path_so_far.append(node + 1)
+    if node == final_node:
+        return True
+    for neighbour in graph_adj[node]:
+        if not visited_status[neighbour]:
+            if depth_first(neighbour):
+                return True
+    path_so_far.pop()
+    return False
+if depth_first(initial_node):
+    print(*path_so_far)
+else:
+    print(-1)"
+107,"n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u - 1].append(v - 1)
+start_node, end_node = map(int, input().split())
+start_node -= 1
+end_node -= 1
+is_visited = [False] * n
+solution = []
+def search(node):
+    is_visited[node] = True
+    solution.append(node + 1)
+    if node == end_node:
+        return True
+    for neighbour in adj[node]:
+        if not is_visited[neighbour]:
+            if search(neighbour):
+                return True
+    solution.pop()
+    return False
+if search(start_node):
+    print(*solution)
+else:
+    print(-1)"
+108,"v, e = map(int, input().split())
+network = [[] for _ in range(v)]
+for _ in range(e):
+    x, y = map(int, input().split())
+    network[x - 1].append(y - 1)
+origin, destination = map(int, input().split())
+origin -= 1
+destination -= 1
+already_seen = [False] * v
+route_found = []
+def recurse(vertex):
+    already_seen[vertex] = True
+    route_found.append(vertex + 1)
+    if vertex == destination:
+        return True
+    for neighbour in network[vertex]:
+        if not already_seen[neighbour]:
+            if recurse(neighbour):
+                return True
+    route_found.pop()
+    return False
+if recurse(origin):
+    print(*route_found)
+else:
+    print(-1)"
+109,"num_nodes, num_edges = map(int, input().split())
+graph_structure = [[] for _ in range(num_nodes)]
+for _ in range(num_edges):
+    from_vertex, to_vertex = map(int, input().split())
+    graph_structure[from_vertex - 1].append(to_vertex - 1)
+start_vertex, end_vertex = map(int, input().split())
+start_vertex -= 1
+end_vertex -= 1
+discovered = [False] * num_nodes
+path_taken = []
+def traverse_graph(u):
+    discovered[u] = True
+    path_taken.append(u + 1)
+    if u == end_vertex:
+        return True
+    for v in graph_structure[u]:
+        if not discovered[v]:
+            if traverse_graph(v):
+                return True
+    path_taken.pop()
+    return False
+if traverse_graph(start_vertex):
+    print(*path_taken)
+else:
+    print(-1)"
+110,"n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_list[u - 1].append(v - 1)
+start_node, end_node = map(int, input().split())
+start_node -= 1
+end_node -= 1
+visited_nodes = [False] * n
+path_found = []
+def dfs(node):
+    visited_nodes[node] = True
+    path_found.append(node + 1)
+    if node == end_node:
+        return True
+    for neighbor in adj_list[node]:
+        if not visited_nodes[neighbor]:
+            if dfs(neighbor):
+                return True
+    path_found.pop()
+    return False
+if dfs(start_node):
+    print(*path_found)
+else:
+    print(-1)"
+111,"n, m = map(int, input().split())
+edges = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges[u].append(v)
+s, t = map(int, input().split())
+visited = [False] * (n + 1)
+path = []
+def dsf_one(node, target):
+    visited[node] = True
+    path.append(node)
+    if node == target:
+        return True
+    for neighbor in edges[node]:
+        if not visited[neighbor]:
+            if dsf_one(neighbor, target):
+                return True
+    path.pop()
+    return False
+if dsf_one(s, t):
+    print(' '.join(map(str, path)))
+else:
+    print(-1)"
+112,"n, m = map(int, input().split())
+adj = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b = map(int, input().split())
+    adj[a].append(b)
+start, end = map(int, input().split())
+seen = [False] * (n + 1)
+route = []
+def dsf_two(current, goal):
+    seen[current] = True
+    route.append(current)
+    if current == goal:
+        return True
+    for next_node in adj[current]:
+        if not seen[next_node]:
+            if dsf_two(next_node, goal):
+                return True
+    route.pop()
+    return False
+if dsf_two(start, end):
+    print(' '.join(map(str, route)))
+else:
+    print(-1)"
+113,"n, m = map(int, input().split())
+graph = [[] for _ in range(n + 1)]
+for _ in range(m):
+    x, y = map(int, input().split())
+    graph[x].append(y)
+start_node, target_node = map(int, input().split())
+discovered = [False] * (n + 1)
+trace = []
+def dsf_three(node, destination):
+    discovered[node] = True
+    trace.append(node)
+    if node == destination:
+        return True
+    for neighbor in graph[node]:
+        if not discovered[neighbor]:
+            if dsf_three(neighbor, destination):
+                return True
+    trace.pop()
+    return False
+if dsf_three(start_node, target_node):
+    print(' '.join(map(str, trace)))
+else:
+    print(-1)"
+114,"n, m = map(int, input().split())
+network = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    network[u].append(v)
+source, sink = map(int, input().split())
+explored = [False] * (n + 1)
+path_found = []
+def dsf_four(current, endpoint):
+    explored[current] = True
+    path_found.append(current)
+    if current == endpoint:
+        return True
+    for neighbor in network[current]:
+        if not explored[neighbor]:
+            if dsf_four(neighbor, endpoint):
+                return True
+    path_found.pop()
+    return False
+if dsf_four(source, sink):
+    print(' '.join(map(str, path_found)))
+else:
+    print(-1)"
+115,"n, m = map(int, input().split())
+connections = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b = map(int, input().split())
+    connections[a].append(b)
+start_point, end_point = map(int, input().split())
+visited_nodes = [False] * (n + 1)
+solution_path = []
+def dsf_five(node, goal):
+    visited_nodes[node] = True
+    solution_path.append(node)
+    if node == goal:
+        return True
+    for neighbor in connections[node]:
+        if not visited_nodes[neighbor]:
+            if dsf_five(neighbor, goal):
+                return True
+    solution_path.pop()
+    return False
+if dsf_five(start_point, end_point):
+    print(' '.join(map(str, solution_path)))
+else:
+    print(-1)"
+116,"n, m = map(int, input().split())
+adjacency_list = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adjacency_list[u].append(v)
+origin, destination = map(int, input().split())
+marked = [False] * (n + 1)
+trail = []
+def dsf_six(curr, dest):
+    marked[curr] = True
+    trail.append(curr)
+    if curr == dest:
+        return True
+    for neighbor in adjacency_list[curr]:
+        if not marked[neighbor]:
+            if dsf_six(neighbor, dest):
+                return True
+    trail.pop()
+    return False
+if dsf_six(origin, destination):
+    print(' '.join(map(str, trail)))
+else:
+    print(-1)"
+117,"n, m = map(int, input().split())
+grid = [[] for _ in range(n + 1)]
+for _ in range(m):
+    x, y = map(int, input().split())
+    grid[x].append(y)
+start_node, end_node = map(int, input().split())
+explored_nodes = [False] * (n + 1)
+route_taken = []
+def dsf_seven(node_id, target_id):
+    explored_nodes[node_id] = True
+    route_taken.append(node_id)
+    if node_id == target_id:
+        return True
+    for neighbor in grid[node_id]:
+        if not explored_nodes[neighbor]:
+            if dsf_seven(neighbor, target_id):
+                return True
+    route_taken.pop()
+    return False
+if dsf_seven(start_node, end_node):
+    print(' '.join(map(str, route_taken)))
+else:
+    print(-1)"
+118,"n, m = map(int, input().split())
+graph_data = [[] for _ in range(n + 1)]
+for _ in range(m):
+    a, b = map(int, input().split())
+    graph_data[a].append(b)
+source_node, target_node = map(int, input().split())
+visited_set = [False] * (n + 1)
+current_path = []
+def dsf_eight(node, target):
+    visited_set[node] = True
+    current_path.append(node)
+    if node == target:
+        return True
+    for neighbor in graph_data[node]:
+        if not visited_set[neighbor]:
+            if dsf_eight(neighbor, target):
+                return True
+    current_path.pop()
+    return False
+if dsf_eight(source_node, target_node):
+    print(' '.join(map(str, current_path)))
+else:
+    print(-1)"
+119,"n, m = map(int, input().split())
+adj_matrix = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_matrix[u].append(v)
+start_vertex, end_vertex = map(int, input().split())
+checked = [False] * (n + 1)
+path_so_far = []
+def dsf_nine(node, goal):
+    checked[node] = True
+    path_so_far.append(node)
+    if node == goal:
+        return True
+    for neighbor in adj_matrix[node]:
+        if not checked[neighbor]:
+            if dsf_nine(neighbor, goal):
+                return True
+    path_so_far.pop()
+    return False
+if dsf_nine(start_vertex, end_vertex):
+    print(' '.join(map(str, path_so_far)))
+else:
+    print(-1)"
+120,"n, m = map(int, input().split())
+linked_list = [[] for _ in range(n + 1)]
+for _ in range(m):
+    x, y = map(int, input().split())
+    linked_list[x].append(y)
+initial_node, final_node = map(int, input().split())
+seen_nodes = [False] * (n + 1)
+complete_path = []
+def dsf_ten(current, end):
+    seen_nodes[current] = True
+    complete_path.append(current)
+    if current == end:
+        return True
+    for neighbor in linked_list[current]:
+        if not seen_nodes[neighbor]:
+            if dsf_ten(neighbor, end):
+                return True
+    complete_path.pop()
+    return False
+if dsf_ten(initial_node, final_node):
+    print(' '.join(map(str, complete_path)))
+else:
+    print(-1)"
+121,"n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges[u-1].append(v-1)
+s, t = map(int, input().split())
+path = []
+visited = [False] * n
+def depth_first_search(vertex):
+    visited[vertex] = True
+    path.append(vertex + 1)
+    if vertex == t - 1:
+        return True
+    for neighbor in edges[vertex]:
+        if not visited[neighbor]:
+            if depth_first_search(neighbor):
+                return True
+    path.pop()
+    return False
+if depth_first_search(s - 1):
+    print(*path)
+else:
+    print(-1)"
+122,"n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u-1].append(v-1)
+start, end = map(int, input().split())
+seen = [False] * n
+result = []
+def traverse(node):
+    seen[node] = True
+    result.append(node + 1)
+    if node == end - 1:
+        return True
+    for neighbour in adj[node]:
+        if not seen[neighbour]:
+            if traverse(neighbour):
+                return True
+    result.pop()
+    return False
+if traverse(start - 1):
+    print(*result)
+else:
+    print(-1)"
+123,"n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph[u-1].append(v-1)
+source, target = map(int, input().split())
+discovered = [False] * n
+trace = []
+def explore(vertex):
+    discovered[vertex] = True
+    trace.append(vertex + 1)
+    if vertex == target - 1:
+        return True
+    for adjacent in graph[vertex]:
+        if not discovered[adjacent]:
+            if explore(adjacent):
+                return True
+    trace.pop()
+    return False
+if explore(source - 1):
+    print(*trace)
+else:
+    print(-1)"
+124,"n, m = map(int, input().split())
+network = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    network[u-1].append(v-1)
+start_node, end_node = map(int, input().split())
+visited_nodes = [False] * n
+route = []
+def dfs_recursive(node):
+    visited_nodes[node] = True
+    route.append(node + 1)
+    if node == end_node - 1:
+        return True
+    for neighbor in network[node]:
+        if not visited_nodes[neighbor]:
+            if dfs_recursive(neighbor):
+                return True
+    route.pop()
+    return False
+if dfs_recursive(start_node - 1):
+    print(*route)
+else:
+    print(-1)"
+125,"n, m = map(int, input().split())
+adjacency_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adjacency_list[u-1].append(v-1)
+start_vertex, end_vertex = map(int, input().split())
+explored = [False] * n
+path_found = []
+def find_path(node):
+    explored[node] = True
+    path_found.append(node + 1)
+    if node == end_vertex - 1:
+        return True
+    for next_node in adjacency_list[node]:
+        if not explored[next_node]:
+            if find_path(next_node):
+                return True
+    path_found.pop()
+    return False
+if find_path(start_vertex - 1):
+    print(*path_found)
+else:
+    print(-1)"
+126,"n, m = map(int, input().split())
+graph_dict = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_dict[u-1].append(v-1)
+initial_node, final_node = map(int, input().split())
+checked = [False] * n
+current_path = []
+def depth_search(current_node):
+    checked[current_node] = True
+    current_path.append(current_node + 1)
+    if current_node == final_node - 1:
+        return True
+    for neighbor in graph_dict[current_node]:
+        if not checked[neighbor]:
+            if depth_search(neighbor):
+                return True
+    current_path.pop()
+    return False
+if depth_search(initial_node - 1):
+    print(*current_path)
+else:
+    print(-1)"
+127,"n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_list[u-1].append(v-1)
+s_node, e_node = map(int, input().split())
+visited_set = [False] * n
+trace_path = []
+def dfs_util(node):
+    visited_set[node] = True
+    trace_path.append(node + 1)
+    if node == e_node - 1:
+        return True
+    for neighbor in adj_list[node]:
+        if not visited_set[neighbor]:
+            if dfs_util(neighbor):
+                return True
+    trace_path.pop()
+    return False
+if dfs_util(s_node - 1):
+    print(*trace_path)
+else:
+    print(-1)"
+128,"n, m = map(int, input().split())
+g = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    g[u-1].append(v-1)
+start_v, end_v = map(int, input().split())
+vis = [False] * n
+res = []
+def rec_dfs(v):
+    vis[v] = True
+    res.append(v + 1)
+    if v == end_v - 1:
+        return True
+    for i in g[v]:
+        if not vis[i]:
+            if rec_dfs(i):
+                return True
+    res.pop()
+    return False
+if rec_dfs(start_v - 1):
+    print(*res)
+else:
+    print(-1)"
+129,"n, m = map(int, input().split())
+networkx = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    networkx[u-1].append(v-1)
+begin_node, finish_node = map(int, input().split())
+checked_nodes = [False] * n
+path_so_far = []
+def dfs_search(current_node):
+    checked_nodes[current_node] = True
+    path_so_far.append(current_node + 1)
+    if current_node == finish_node - 1:
+        return True
+    for next_node in networkx[current_node]:
+        if not checked_nodes[next_node]:
+            if dfs_search(next_node):
+                return True
+    path_so_far.pop()
+    return False
+if dfs_search(begin_node - 1):
+    print(*path_so_far)
+else:
+    print(-1)"
+130,"n, m = map(int, input().split())
+connections = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    connections[u-1].append(v-1)
+start_point, end_point = map(int, input().split())
+seen_nodes = [False] * n
+temp_path = []
+def perform_dfs(node):
+    seen_nodes[node] = True
+    temp_path.append(node + 1)
+    if node == end_point - 1:
+        return True
+    for neighbour in connections[node]:
+        if not seen_nodes[neighbour]:
+            if perform_dfs(neighbour):
+                return True
+    temp_path.pop()
+    return False
+if perform_dfs(start_point - 1):
+    print(*temp_path)
+else:
+    print(-1)"
+131,"n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges[u-1].append(v-1)
+s, t = map(int, input().split())
+def explore_graph(node, target, visited, path):
+    visited[node] = True
+    path.append(node + 1)
+    if node == target:
+        return True
+    for neighbor in edges[node]:
+        if not visited[neighbor]:
+            if explore_graph(neighbor, target, visited, path):
+                return True
+    path.pop()
+    return False
+visited = [False] * n
+path = []
+if explore_graph(s-1, t-1, visited, path):
+    print(*path)
+else:
+    print(-1)"
+132,"n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u-1].append(v-1)
+start_node, end_node = map(int, input().split())
+def recursive_dfs(current_node, goal, path, explored):
+    explored[current_node] = True
+    path.append(current_node + 1)
+    if current_node == goal:
+        return True
+    for neighbor in adj[current_node]:
+        if not explored[neighbor]:
+            if recursive_dfs(neighbor, goal, path, explored):
+                return True
+    path.pop()
+    return False
+explored = [False] * n
+path_found = []
+if recursive_dfs(start_node-1, end_node-1, path_found, explored):
+    print(*path_found)
+else:
+    print(-1)"
+133,"n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph[u-1].append(v-1)
+source, destination = map(int, input().split())
+def depth_first_search(vertex, finish, seen, route):
+    seen[vertex] = True
+    route.append(vertex + 1)
+    if vertex == finish:
+        return True
+    for neighbour in graph[vertex]:
+        if not seen[neighbour]:
+            if depth_first_search(neighbour, finish, seen, route):
+                return True
+    route.pop()
+    return False
+seen = [False] * n
+route = []
+if depth_first_search(source-1, destination-1, seen, route):
+    print(*route)
+else:
+    print(-1)"
+134,"n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_list[u-1].append(v-1)
+beg_node, end_node = map(int, input().split())
+def dfs_traversal(curr, end, visited_nodes, the_path):
+    visited_nodes[curr] = True
+    the_path.append(curr + 1)
+    if curr == end:
+        return True
+    for neighbor in adj_list[curr]:
+        if not visited_nodes[neighbor]:
+            if dfs_traversal(neighbor, end, visited_nodes, the_path):
+                return True
+    the_path.pop()
+    return False
+visited_nodes = [False] * n
+the_path = []
+if dfs_traversal(beg_node-1, end_node-1, visited_nodes, the_path):
+    print(*the_path)
+else:
+    print(-1)"
+135,"n, m = map(int, input().split())
+network = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    network[u-1].append(v-1)
+start, end = map(int, input().split())
+def find_path_dfs(current, target, explored_set, path_list):
+    explored_set[current] = True
+    path_list.append(current + 1)
+    if current == target:
+        return True
+    for next_node in network[current]:
+        if not explored_set[next_node]:
+            if find_path_dfs(next_node, target, explored_set, path_list):
+                return True
+    path_list.pop()
+    return False
+explored_set = [False] * n
+path_list = []
+if find_path_dfs(start-1, end-1, explored_set, path_list):
+    print(*path_list)
+else:
+    print(-1)"
+136,"n, m = map(int, input().split())
+g = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    g[u-1].append(v-1)
+s, e = map(int, input().split())
+def dfs_recursive(node, target, visited_nodes, current_path):
+    visited_nodes[node] = True
+    current_path.append(node + 1)
+    if node == target:
+        return True
+    for neighbor in g[node]:
+        if not visited_nodes[neighbor]:
+            if dfs_recursive(neighbor, target, visited_nodes, current_path):
+                return True
+    current_path.pop()
+    return False
+visited_nodes = [False] * n
+current_path = []
+if dfs_recursive(s-1, e-1, visited_nodes, current_path):
+    print(*current_path)
+else:
+    print(-1)"
+137,"n, m = map(int, input().split())
+adjacency_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adjacency_list[u-1].append(v-1)
+initial_node, final_node = map(int, input().split())
+def traverse_dfs(node, destination, visited, pathway):
+    visited[node] = True
+    pathway.append(node + 1)
+    if node == destination:
+        return True
+    for neighbor in adjacency_list[node]:
+        if not visited[neighbor]:
+            if traverse_dfs(neighbor, destination, visited, pathway):
+                return True
+    pathway.pop()
+    return False
+visited = [False] * n
+pathway = []
+if traverse_dfs(initial_node-1, final_node-1, visited, pathway):
+    print(*pathway)
+else:
+    print(-1)"
+138,"n, m = map(int, input().split())
+graph_adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_adj[u-1].append(v-1)
+start_point, end_point = map(int, input().split())
+def depth_first(curr_node, goal_node, checked, trace):
+    checked[curr_node] = True
+    trace.append(curr_node + 1)
+    if curr_node == goal_node:
+        return True
+    for next_node in graph_adj[curr_node]:
+        if not checked[next_node]:
+            if depth_first(next_node, goal_node, checked, trace):
+                return True
+    trace.pop()
+    return False
+checked = [False] * n
+trace = []
+if depth_first(start_point-1, end_point-1, checked, trace):
+    print(*trace)
+else:
+    print(-1)"
+139,"n, m = map(int, input().split())
+graph_dict = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_dict[u-1].append(v-1)
+beginning, ending = map(int, input().split())
+def do_dfs(node, target, seen, route_list):
+    seen[node] = True
+    route_list.append(node + 1)
+    if node == target:
+        return True
+    for neighbor in graph_dict[node]:
+        if not seen[neighbor]:
+            if do_dfs(neighbor, target, seen, route_list):
+                return True
+    route_list.pop()
+    return False
+seen = [False] * n
+route_list = []
+if do_dfs(beginning-1, ending-1, seen, route_list):
+    print(*route_list)
+else:
+    print(-1)"
+140,"n, m = map(int, input().split())
+adj_matrix = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_matrix[u-1].append(v-1)
+start_vertex, end_vertex = map(int, input().split())
+def depth_first_search_recursive(node, end, visited_nodes, path_nodes):
+    visited_nodes[node] = True
+    path_nodes.append(node + 1)
+    if node == end:
+        return True
+    for neighbor in adj_matrix[node]:
+        if not visited_nodes[neighbor]:
+            if depth_first_search_recursive(neighbor, end, visited_nodes, path_nodes):
+                return True
+    path_nodes.pop()
+    return False
+visited_nodes = [False] * n
+path_nodes = []
+if depth_first_search_recursive(start_vertex-1, end_vertex-1, visited_nodes, path_nodes):
+    print(*path_nodes)
+else:
+    print(-1)"
+141,"n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges[u - 1].append(v - 1)
+s, t = map(int, input().split())
+visited = [False] * n
+path = []
+def depth_first_search(node):
+    visited[node] = True
+    path.append(node + 1)
+    if node == t - 1:
+        return True
+    for neighbor in edges[node]:
+        if not visited[neighbor]:
+            if depth_first_search(neighbor):
+                return True
+    path.pop()
+    return False
+if depth_first_search(s - 1):
+    print(*path)
+else:
+    print(-1)"
+142,"n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph[u-1].append(v-1)
+start_node, end_node = map(int, input().split())
+def traverse(current_node, target_node, visited_nodes, current_path):
+    visited_nodes[current_node] = True
+    current_path.append(current_node + 1)
+    if current_node == target_node - 1:
+        return True
+    for neighbor in graph[current_node]:
+        if not visited_nodes[neighbor]:
+            if traverse(neighbor, target_node, visited_nodes, current_path):
+                return True
+    current_path.pop()
+    return False
+visited = [False] * n
+route = []
+if traverse(start_node - 1, end_node, visited, route):
+    print(*route)
+else:
+    print(-1)"
+143,"n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u-1].append(v-1)
+start, end = map(int, input().split())
+seen = [False] * n
+solution = []
+def find_path(curr, dest):
+    seen[curr] = True
+    solution.append(curr+1)
+    if curr == dest-1:
+        return True
+    for nei in adj[curr]:
+        if not seen[nei]:
+            if find_path(nei, dest):
+                return True
+    solution.pop()
+    return False
+if find_path(start-1, end):
+    print(*solution)
+else:
+    print(-1)"
+144,"n, m = map(int, input().split())
+neighbors = [[] for _ in range(n)]
+for _ in range(m):
+    a, b = map(int, input().split())
+    neighbors[a-1].append(b-1)
+origin, destination = map(int, input().split())
+def dfs_func(node, target, visited_nodes, discovered_path):
+    visited_nodes[node] = True
+    discovered_path.append(node+1)
+    if node == target-1:
+        return True
+    for next_node in neighbors[node]:
+        if not visited_nodes[next_node]:
+            if dfs_func(next_node, target, visited_nodes, discovered_path):
+                return True
+    discovered_path.pop()
+    return False
+visited = [False] * n
+path_found = []
+if dfs_func(origin-1, destination, visited, path_found):
+    print(*path_found)
+else:
+    print(-1)"
+145,"n, m = map(int, input().split())
+graph_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_list[u-1].append(v-1)
+start_node, end_node = map(int, input().split())
+explored = [False] * n
+trace = []
+def recursive_dfs(node, target):
+    explored[node] = True
+    trace.append(node+1)
+    if node == target-1:
+        return True
+    for neighbor in graph_list[node]:
+        if not explored[neighbor]:
+            if recursive_dfs(neighbor, target):
+                return True
+    trace.pop()
+    return False
+if recursive_dfs(start_node-1, end_node):
+    print(*trace)
+else:
+    print(-1)"
+146,"n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    x, y = map(int, input().split())
+    adj_list[x-1].append(y-1)
+start_pt, end_pt = map(int, input().split())
+visited_nodes = [False] * n
+path_so_far = []
+def depth_search(current):
+    visited_nodes[current] = True
+    path_so_far.append(current+1)
+    if current == end_pt-1:
+        return True
+    for neighbor in adj_list[current]:
+        if not visited_nodes[neighbor]:
+            if depth_search(neighbor):
+                return True
+    path_so_far.pop()
+    return False
+if depth_search(start_pt-1):
+    print(*path_so_far)
+else:
+    print(-1)"
+147,"n, m = map(int, input().split())
+edges_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges_list[u-1].append(v-1)
+start_vertex, end_vertex = map(int, input().split())
+explored_nodes = [False] * n
+result_path = []
+def search_depth_first(node_index):
+    explored_nodes[node_index] = True
+    result_path.append(node_index+1)
+    if node_index == end_vertex-1:
+        return True
+    for neighbor in edges_list[node_index]:
+        if not explored_nodes[neighbor]:
+            if search_depth_first(neighbor):
+                return True
+    result_path.pop()
+    return False
+if search_depth_first(start_vertex-1):
+    print(*result_path)
+else:
+    print(-1)"
+148,"n, m = map(int, input().split())
+graph_data = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_data[u-1].append(v-1)
+source, destination = map(int, input().split())
+visited_set = [False] * n
+path_list = []
+def dfs_algorithm(current_node):
+    visited_set[current_node] = True
+    path_list.append(current_node+1)
+    if current_node == destination-1:
+        return True
+    for adjacent in graph_data[current_node]:
+        if not visited_set[adjacent]:
+            if dfs_algorithm(adjacent):
+                return True
+    path_list.pop()
+    return False
+if dfs_algorithm(source-1):
+    print(*path_list)
+else:
+    print(-1)"
+149,"n, m = map(int, input().split())
+adjacencies = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adjacencies[u-1].append(v-1)
+start_node, target_node = map(int, input().split())
+seen_nodes = [False] * n
+current_path = []
+def explore_dfs(node):
+    seen_nodes[node] = True
+    current_path.append(node+1)
+    if node == target_node-1:
+        return True
+    for neighbor in adjacencies[node]:
+        if not seen_nodes[neighbor]:
+            if explore_dfs(neighbor):
+                return True
+    current_path.pop()
+    return False
+if explore_dfs(start_node-1):
+    print(*current_path)
+else:
+    print(-1)"
+150,"n, m = map(int, input().split())
+adjacency = [[] for _ in range(n)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adjacency[u-1].append(v-1)
+initial, final = map(int, input().split())
+visited_flag = [False] * n
+result = []
+def depth_first(node):
+    visited_flag[node] = True
+    result.append(node+1)
+    if node == final-1:
+        return True
+    for next_node in adjacency[node]:
+        if not visited_flag[next_node]:
+            if depth_first(next_node):
+                return True
+    result.pop()
+    return False
+if depth_first(initial-1):
+    print(*result)
+else:
+    print(-1)"

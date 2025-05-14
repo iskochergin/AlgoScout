@@ -1,0 +1,3235 @@
+number,code
+1,"import heapq
+def dijkstra_heapq(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > distances[node] + weight:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+2,"import heapq
+class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        heapq.heappush(self.heap, item)
+    def pop(self):
+        return heapq.heappop(self.heap)
+    def __len__(self):
+        return len(self.heap)
+def dijkstra_binary_heap(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while len(pq) > 0:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > distances[node] + weight:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+3,"def dijkstra_generator(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = min(pq)
+        pq.remove((dist, node))
+        if dist > distances[node]:
+            continue
+        yield from ((neighbor, distances[node] + weight) for neighbor, weight in graph[node].items() if distances[neighbor] > distances[node] + weight)
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > distances[node] + weight:
+                distances[neighbor] = distances[node] + weight
+                pq.append((distances[neighbor], neighbor))"
+4,"from functools import reduce
+def dijkstra_functional(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in nodes} , nodes, distances)"
+5,"def dijkstra_adj_matrix(graph, start):
+    n = len(graph)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    visited = [False] * n
+    for _ in range(n):
+        min_dist = float('inf')
+        min_node = -1
+        for v in range(n):
+            if not visited[v] and distances[v] < min_dist:
+                min_dist = distances[v]
+                min_node = v
+        if min_node == -1:
+            break
+        visited[min_node] = True
+        for v in range(n):
+            if graph[min_node][v] != 0 and distances[v] > distances[min_node] + graph[min_node][v]:
+                distances[v] = distances[min_node] + graph[min_node][v]
+    return distances"
+6,"def dijkstra_adj_list(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = list(graph.keys())
+    while unvisited:
+        current = min(unvisited, key=distances.get)
+        unvisited.remove(current)
+        for neighbor, weight in graph[current].items():
+            new_dist = distances[current] + weight
+            if new_dist < distances[neighbor]:
+                distances[neighbor] = new_dist
+    return distances"
+7,"import heapq
+def dijkstra_negative_check(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if weight < 0:
+                raise ValueError(""Negative edge weights found"")
+            if distances[neighbor] > distances[node] + weight:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+8,"def dijkstra_unreachable(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = min(pq)
+        pq.remove((dist, node))
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > distances[node] + weight:
+                distances[neighbor] = distances[node] + weight
+                pq.append((distances[neighbor], neighbor))
+    reachable = {node for node, dist in distances.items() if dist != float('inf')}
+    return distances"
+9,"import heapq
+def dijkstra_complex_pq(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start, 0)]
+    seen = set()
+    while pq:
+        dist, node, count = heapq.heappop(pq)
+        if (node, count) in seen:
+            continue
+        seen.add((node, count))
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > distances[node] + weight:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor, count+1))
+    return distances"
+10,"def dijkstra_lazy(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    while True:
+        min_dist = float('inf')
+        min_node = None
+        for node in nodes:
+            if distances[node] < min_dist:
+                min_dist = distances[node]
+                min_node = node
+        if min_node is None:
+            break
+        for neighbor, weight in graph[min_node].items():
+            if distances[neighbor] > distances[min_node] + weight:
+                distances[neighbor] = distances[min_node] + weight
+    return distances"
+11,"import heapq
+def dijkstra1(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+12,"import heapq
+def dijkstra2(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+13,"import heapq
+def dijkstra3(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        yield distances[node]
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))"
+14,"from functools import reduce
+def dijkstra4(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in nodes}, nodes, distances)"
+15,"import heapq
+def dijkstra5(adj_matrix, start):
+    n = len(adj_matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            weight = adj_matrix[node][neighbor]
+            if weight > 0 and distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+16,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up(len(self.heap) - 1)
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down(0)
+        return root
+    def _heapify_up(self, index):
+        while index > 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index][0] < self.heap[parent_index][0]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+    def _heapify_down(self, index):
+        while True:
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index < len(self.heap) and self.heap[left_child_index][0] < self.heap[smallest][0]:
+                smallest = left_child_index
+            if right_child_index < len(self.heap) and self.heap[right_child_index][0] < self.heap[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break
+def dijkstra6(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while not pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+17,"def dijkstra7(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = set(graph.keys())
+    while unvisited:
+        current_node = None
+        for node in unvisited:
+            if current_node is None or distances[node] < distances[current_node]:
+                current_node = node
+        if current_node is None:
+            break
+        unvisited.remove(current_node)
+        for neighbor, weight in graph[current_node].items():
+            if distances[current_node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[current_node] + weight
+    return distances"
+18,"def dijkstra8(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for _ in range(len(graph)):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] != float('inf') and distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    return distances"
+19,"def dijkstra9(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for node in graph:
+        if any(weight < 0 for weight in graph[node].values()):
+            raise ValueError(""Negative edge weights not allowed"")
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+20,"def dijkstra10(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    result = {}
+    for node in graph:
+        if distances[node] == float('inf'):
+            result[node] = None
+        else:
+            result[node] = distances[node]
+    return result"
+21,"import heapq
+def dijkstra1(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+22,"import heapq
+def dijkstra2(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+23,"import heapq
+def dijkstra3(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        yield distances[node]
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))"
+24,"from functools import reduce
+def dijkstra4(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in nodes}, nodes, distances)"
+25,"import heapq
+def dijkstra5(adj_matrix, start):
+    n = len(adj_matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            weight = adj_matrix[node][neighbor]
+            if weight > 0 and distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+26,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up(len(self.heap) - 1)
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down(0)
+        return root
+    def _heapify_up(self, index):
+        while index > 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index][0] < self.heap[parent_index][0]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+    def _heapify_down(self, index):
+        while True:
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index < len(self.heap) and self.heap[left_child_index][0] < self.heap[smallest][0]:
+                smallest = left_child_index
+            if right_child_index < len(self.heap) and self.heap[right_child_index][0] < self.heap[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break
+def dijkstra6(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while not pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+27,"def dijkstra7(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = set(graph.keys())
+    while unvisited:
+        current_node = None
+        for node in unvisited:
+            if current_node is None or distances[node] < distances[current_node]:
+                current_node = node
+        if current_node is None:
+            break
+        unvisited.remove(current_node)
+        for neighbor, weight in graph[current_node].items():
+            if distances[current_node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[current_node] + weight
+    return distances"
+28,"def dijkstra8(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for _ in range(len(graph)):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] != float('inf') and distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    return distances"
+29,"def dijkstra9(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for node in graph:
+        if any(weight < 0 for weight in graph[node].values()):
+            raise ValueError(""Negative edge weights not allowed"")
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+30,"def dijkstra10(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    result = {}
+    for node in graph:
+        if distances[node] == float('inf'):
+            result[node] = None
+        else:
+            result[node] = distances[node]
+    return result"
+31,"import heapq
+def dijkstra1(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+32,"import heapq
+def dijkstra2(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+33,"import heapq
+def dijkstra3(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        yield distances[node]
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))"
+34,"from functools import reduce
+def dijkstra4(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in nodes}, nodes, distances)"
+35,"import heapq
+def dijkstra5(adj_matrix, start):
+    n = len(adj_matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            weight = adj_matrix[node][neighbor]
+            if weight > 0 and distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+36,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up(len(self.heap) - 1)
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down(0)
+        return root
+    def _heapify_up(self, index):
+        while index > 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index][0] < self.heap[parent_index][0]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+    def _heapify_down(self, index):
+        while True:
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index < len(self.heap) and self.heap[left_child_index][0] < self.heap[smallest][0]:
+                smallest = left_child_index
+            if right_child_index < len(self.heap) and self.heap[right_child_index][0] < self.heap[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break
+def dijkstra6(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while not pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+37,"def dijkstra7(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = set(graph.keys())
+    while unvisited:
+        current_node = None
+        for node in unvisited:
+            if current_node is None or distances[node] < distances[current_node]:
+                current_node = node
+        if current_node is None:
+            break
+        unvisited.remove(current_node)
+        for neighbor, weight in graph[current_node].items():
+            if distances[current_node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[current_node] + weight
+    return distances"
+38,"def dijkstra8(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for _ in range(len(graph)):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] != float('inf') and distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    return distances"
+39,"def dijkstra9(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for node in graph:
+        if any(weight < 0 for weight in graph[node].values()):
+            raise ValueError(""Negative edge weights not allowed"")
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+40,"def dijkstra10(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    result = {}
+    for node in graph:
+        if distances[node] == float('inf'):
+            result[node] = None
+        else:
+            result[node] = distances[node]
+    return result"
+41,"import heapq
+def dijkstra1(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+42,"import heapq
+def dijkstra2(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+43,"import heapq
+def dijkstra3(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        yield distances[node]
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))"
+44,"from functools import reduce
+def dijkstra4(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in nodes}, nodes, distances)"
+45,"import heapq
+def dijkstra5(adj_matrix, start):
+    n = len(adj_matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            weight = adj_matrix[node][neighbor]
+            if weight > 0 and distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+46,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up(len(self.heap) - 1)
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down(0)
+        return root
+    def _heapify_up(self, index):
+        while index > 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index][0] < self.heap[parent_index][0]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+    def _heapify_down(self, index):
+        while True:
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index < len(self.heap) and self.heap[left_child_index][0] < self.heap[smallest][0]:
+                smallest = left_child_index
+            if right_child_index < len(self.heap) and self.heap[right_child_index][0] < self.heap[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break
+def dijkstra6(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while not pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+47,"def dijkstra7(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = set(graph.keys())
+    while unvisited:
+        current_node = None
+        for node in unvisited:
+            if current_node is None or distances[node] < distances[current_node]:
+                current_node = node
+        if current_node is None:
+            break
+        unvisited.remove(current_node)
+        for neighbor, weight in graph[current_node].items():
+            if distances[current_node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[current_node] + weight
+    return distances"
+48,"def dijkstra8(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for _ in range(len(graph)):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] != float('inf') and distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    return distances"
+49,"def dijkstra9(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for node in graph:
+        if any(weight < 0 for weight in graph[node].values()):
+            raise ValueError(""Negative edge weights not allowed"")
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+50,"def dijkstra10(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    result = {node: dist for node, dist in distances.items() if dist != float('inf')}
+    return result"
+51,"import heapq
+def dijkstra(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+52,"import heapq
+def dijkstra_matrix(matrix, start):
+    n = len(matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            if matrix[node][neighbor] != 0:
+                weight = matrix[node][neighbor]
+                if distances[neighbor] > dist + weight:
+                    distances[neighbor] = dist + weight
+                    heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+53,"def dijkstra_generator(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = min(pq)
+        pq.remove((dist, node))
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                pq.append((distances[neighbor], neighbor))
+        yield distances"
+54,"from functools import reduce
+def dijkstra_functional(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    def update_distances(acc, node):
+        for neighbor, weight in graph[node].items():
+            if acc[neighbor] > acc[node] + weight:
+                acc[neighbor] = acc[node] + weight
+        return acc
+    return reduce(update_distances, nodes, distances)"
+55,"import heapq
+def dijkstra_with_neg_check(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if weight < 0:
+                raise ValueError(""Negative edge weights not allowed"")
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+56,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up()
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down()
+        return root
+    def _heapify_up(self):
+        pass
+    def _heapify_down(self):
+        pass
+def dijkstra_binary_heap(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+57,"def dijkstra_unreachable(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    reachable = {node for node, dist in distances.items() if dist != float('inf')}
+    return distances, reachable"
+58,"def dijkstra_adj_list(adj_list, start):
+    distances = {node: float('inf') for node in adj_list}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, u = heapq.heappop(pq)
+        if dist > distances[u]:
+            continue
+        for v, weight in adj_list[u]:
+            if distances[v] > dist + weight:
+                distances[v] = dist + weight
+                heapq.heappush(pq, (distances[v], v))
+    return distances"
+59,"def dijkstra_empty_graph(graph, start):
+    if not graph:
+        return {}
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+60,"def dijkstra_start_not_in_graph(graph, start):
+    if start not in graph:
+        return {start: float('inf')}
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[neighbor] > dist + weight:
+                distances[neighbor] = dist + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+61,"import heapq
+def dijkstra(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, u = heapq.heappop(pq)
+        if dist > distances[u]:
+            continue
+        for v, weight in graph[u].items():
+            if distances[v] > distances[u] + weight:
+                distances[v] = distances[u] + weight
+                heapq.heappush(pq, (distances[v], v))
+    return distances"
+62,"import heapq
+def dijkstra_matrix(matrix, start):
+    n = len(matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, u = heapq.heappop(pq)
+        if dist > distances[u]:
+            continue
+        for v in range(n):
+            if matrix[u][v] != 0:
+                if distances[v] > distances[u] + matrix[u][v]:
+                    distances[v] = distances[u] + matrix[u][v]
+                    heapq.heappush(pq, (distances[v], v))
+    return distances"
+63,"def dijkstra_manual_heap(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    heap = []
+    for item in pq:
+        heap.append(item)
+        i = len(heap) - 1
+        while i > 0 and heap[i][0] < heap[(i - 1) // 2][0]:
+            heap[i], heap[(i - 1) // 2] = heap[(i - 1) // 2], heap[i]
+            i = (i - 1) // 2
+    while heap:
+        dist, u = heap[0]
+        heap[0] = heap[-1]
+        heap.pop()
+        heapify(heap, 0)
+        if dist > distances[u]:
+            continue
+        for v, weight in graph[u].items():
+            if distances[v] > distances[u] + weight:
+                distances[v] = distances[u] + weight
+                heap.append((distances[v], v))
+                i = len(heap) - 1
+                while i > 0 and heap[i][0] < heap[(i - 1) // 2][0]:
+                    heap[i], heap[(i - 1) // 2] = heap[(i - 1) // 2], heap[i]
+                    i = (i - 1) // 2
+    return distances
+def heapify(heap, i):
+    n = len(heap)
+    smallest = i
+    l = 2 * i + 1
+    r = 2 * i + 2
+    if l < n and heap[l][0] < heap[smallest][0]:
+        smallest = l
+    if r < n and heap[r][0] < heap[smallest][0]:
+        smallest = r
+    if smallest != i:
+        heap[i], heap[smallest] = heap[smallest], heap[i]
+        heapify(heap, smallest)"
+64,"def dijkstra_generator(graph, start):
+    def get_neighbors(node):
+        for neighbor, weight in graph[node].items():
+            yield neighbor, weight
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, u = heapq.heappop(pq)
+        if dist > distances[u]:
+            continue
+        for v, weight in get_neighbors(u):
+            if distances[v] > distances[u] + weight:
+                distances[v] = distances[u] + weight
+                heapq.heappush(pq, (distances[v], v))
+    return distances"
+65,"from functools import reduce
+def dijkstra_functional(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    pq = [(0, start)]
+    return reduce(lambda acc, (dist, u):
+                  {**acc, **{v: min(acc[v], acc[u] + weight)
+                                 for v, weight in graph[u].items()}}
+                  if dist <= acc[u] else acc, pq)"
+66,"def dijkstra_edge_cases(graph, start):
+    if any(weight < 0 for u in graph for weight in graph[u].values()):
+        return ""Negative edge weights detected""
+    return dijkstra(graph, start)"
+67,"def dijkstra_unreachable(graph, start):
+    distances = dijkstra(graph, start)
+    unreachable = [node for node, dist in distances.items() if dist == float('inf')]
+    return distances, unreachable"
+68,"def dijkstra_adjacency_list(adj_list, start):
+    distances = {node: float('inf') for node in adj_list}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, u = heapq.heappop(pq)
+        if dist > distances[u]:
+            continue
+        for v, weight in adj_list[u]:
+            if distances[v] > distances[u] + weight:
+                distances[v] = distances[u] + weight
+                heapq.heappush(pq, (distances[v], v))
+    return distances"
+69,"def dijkstra_empty_graph(graph, start):
+    if not graph:
+        return {}
+    return dijkstra(graph, start)"
+70,"def dijkstra_single_node(graph, start):
+    if start not in graph:
+        return {start: 0}
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    return distances"
+71,"import heapq
+def dijkstra1(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+72,"import heapq
+def dijkstra2(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+73,"import heapq
+def dijkstra3(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        yield distances[node]
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))"
+74,"from functools import reduce
+def dijkstra4(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in dists}, nodes, distances)"
+75,"import heapq
+def dijkstra5(adj_matrix, start):
+    n = len(adj_matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            weight = adj_matrix[node][neighbor]
+            if weight > 0 and distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+76,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up(len(self.heap) - 1)
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down(0)
+        return root
+    def _heapify_up(self, index):
+        while index > 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index][0] < self.heap[parent_index][0]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+    def _heapify_down(self, index):
+        while True:
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index < len(self.heap) and self.heap[left_child_index][0] < self.heap[smallest][0]:
+                smallest = left_child_index
+            if right_child_index < len(self.heap) and self.heap[right_child_index][0] < self.heap[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break
+def dijkstra6(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while not pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+77,"def dijkstra7(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = set(graph.keys())
+    while unvisited:
+        current_node = None
+        for node in unvisited:
+            if current_node is None or distances[node] < distances[current_node]:
+                current_node = node
+        if current_node is None:
+            break
+        unvisited.remove(current_node)
+        for neighbor, weight in graph[current_node].items():
+            if distances[current_node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[current_node] + weight
+    return distances"
+78,"def dijkstra8(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for _ in range(len(graph)):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] != float('inf') and distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    return distances"
+79,"def dijkstra9(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for node in graph:
+        if any(weight < 0 for weight in graph[node].values()):
+            raise ValueError(""Negative edge weights not allowed"")
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+80,"def dijkstra10(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    result = {}
+    for node in graph:
+        if distances[node] == float('inf'):
+            result[node] = None
+        else:
+            result[node] = distances[node]
+    return result"
+81,"import heapq
+def dijkstra1(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+82,"import heapq
+def dijkstra2(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    visited = set()
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if node in visited:
+            continue
+        visited.add(node)
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+83,"import heapq
+def dijkstra3(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        yield distances[node]
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))"
+84,"from functools import reduce
+def dijkstra4(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    nodes = list(graph.keys())
+    return reduce(lambda dists, node: {n: min(dists[n], dists[node] + graph[node].get(n, float('inf'))) for n in nodes}, nodes, distances)"
+85,"import heapq
+def dijkstra5(adj_matrix, start):
+    n = len(adj_matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            weight = adj_matrix[node][neighbor]
+            if weight > 0 and distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+86,"class BinaryHeap:
+    def __init__(self):
+        self.heap = []
+    def push(self, item):
+        self.heap.append(item)
+        self._heapify_up(len(self.heap) - 1)
+    def pop(self):
+        if not self.heap:
+            return None
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._heapify_down(0)
+        return root
+    def _heapify_up(self, index):
+        while index > 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index][0] < self.heap[parent_index][0]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+    def _heapify_down(self, index):
+        while True:
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index < len(self.heap) and self.heap[left_child_index][0] < self.heap[smallest][0]:
+                smallest = left_child_index
+            if right_child_index < len(self.heap) and self.heap[right_child_index][0] < self.heap[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break
+def dijkstra6(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = BinaryHeap()
+    pq.push((0, start))
+    while not pq.heap:
+        dist, node = pq.pop()
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                pq.push((distances[neighbor], neighbor))
+    return distances"
+87,"def dijkstra7(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    unvisited = set(graph.keys())
+    while unvisited:
+        current_node = None
+        for node in unvisited:
+            if current_node is None or distances[node] < distances[current_node]:
+                current_node = node
+        if current_node is None:
+            break
+        unvisited.remove(current_node)
+        for neighbor, weight in graph[current_node].items():
+            if distances[current_node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[current_node] + weight
+    return distances"
+88,"def dijkstra8(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for _ in range(len(graph)):
+        for node in graph:
+            for neighbor, weight in graph[node].items():
+                if distances[node] != float('inf') and distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+    return distances"
+89,"def dijkstra9(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    for node in graph:
+        if any(weight < 0 for weight in graph[node].values()):
+            raise ValueError(""Negative edge weights not allowed"")
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+90,"def dijkstra10(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    result = {}
+    for node in graph:
+        if distances[node] == float('inf'):
+            result[node] = None
+        else:
+            result[node] = distances[node]
+    return result"
+91,"import heapq
+def dijkstra(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+92,"import heapq
+def dijkstra_matrix(matrix, start):
+    n = len(matrix)
+    distances = [float('inf')] * n
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor in range(n):
+            if matrix[node][neighbor] != 0:
+                weight = matrix[node][neighbor]
+                if distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+                    heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+93,"def dijkstra_manual_heap(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    heap = []
+    heapq.heappush(heap, (0, start))
+    while heap:
+        dist, node = heapq.heappop(heap)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(heap, (distances[neighbor], neighbor))
+    return distances"
+94,"def dijkstra_generator(graph, start):
+    def get_neighbors(node):
+        for neighbor, weight in graph[node].items():
+            yield neighbor, weight
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    queue = [(0, start)]
+    while queue:
+        dist, node = heapq.heappop(queue)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in get_neighbors(node):
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(queue, (distances[neighbor], neighbor))
+    return distances"
+95,"from functools import reduce
+def dijkstra_functional(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    return reduce(lambda dists, (dist, node): dists if dist > dists[node] else (dists[node], dists[node] + weight) for neighbor, weight in graph[node].items() if distances[node] + weight < dists[neighbor] for _, dists in [(neighbor, dists)] if dists is not None, distances, pq)"
+96,"import heapq
+def dijkstra_neg_edge_check(graph, start):
+    for node in graph:
+        for neighbor, weight in graph[node].items():
+            if weight < 0:
+                raise ValueError(""Negative edge weights not allowed"")
+    return dijkstra(graph, start)"
+97,"import heapq
+def dijkstra_unreachable(graph, start):
+    distances = dijkstra(graph, start)
+    unreachable = [node for node, dist in distances.items() if dist == float('inf')]
+    return distances, unreachable"
+98,"def dijkstra_list_repr(adj_list, start):
+    distances = {node: float('inf') for node in adj_list}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in adj_list[node]:
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    return distances"
+99,"import heapq
+def dijkstra_with_path(graph, start, end):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    previous = {node: None for node in graph}
+    pq = [(0, start)]
+    while pq:
+        dist, node = heapq.heappop(pq)
+        if dist > distances[node]:
+            continue
+        for neighbor, weight in graph[node].items():
+            if distances[node] + weight < distances[neighbor]:
+                distances[neighbor] = distances[node] + weight
+                previous[neighbor] = node
+                heapq.heappush(pq, (distances[neighbor], neighbor))
+    path = []
+    current = end
+    while current is not None:
+        path.append(current)
+        current = previous[current]
+    return distances, path[::-1]"
+100,"import heapq
+def dijkstra_sparse(graph, start):
+    distances = {node: float('inf') for node in graph}
+    distances[start] = 0
+    pq = [(0, start)]
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d > distances[u]:
+            continue
+        if u in graph:
+            for v, w in graph[u].items():
+                if distances[u] + w < distances[v]:
+                    distances[v] = distances[u] + w
+                    heapq.heappush(pq, (distances[v], v))
+    return distances"
+101,"import heapq
+n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    edges.append((u, v, w))
+src = int(input())
+dist = {i: float('inf') for i in range(1, n + 1)}
+dist[src] = 0
+pq = [(0, src)]
+paths = {i: [] for i in range(1, n + 1)}
+paths[src] = [src]
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, w in [(e[1], e[2]) for e in edges if e[0] == u]:
+        if dist[u] + w < dist[v]:
+            dist[v] = dist[u] + w
+            paths[v] = paths[u] + [v]
+            heapq.heappush(pq, (dist[v], v))
+for i in range(1, n + 1):
+    print(dist[i], paths[i])"
+102,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+start_node = int(input())
+distances = [float('inf')] * (n + 1)
+distances[start_node] = 0
+previous = [None] * (n + 1)
+priority_queue = [(0, start_node)]
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > distances[u]:
+        continue
+    for neighbor, weight in adj[u]:
+        if distances[u] + weight < distances[neighbor]:
+            distances[neighbor] = distances[u] + weight
+            previous[neighbor] = u
+            heapq.heappush(priority_queue, (distances[neighbor], neighbor))
+for i in range(1, n + 1):
+    path = []
+    curr = i
+    while curr is not None:
+        path.insert(0, curr)
+        curr = previous[curr]
+    print(distances[i], path)"
+103,"import heapq
+n, m = map(int, input().split())
+graph = {}
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    if u not in graph:
+        graph[u] = []
+    if v not in graph:
+        graph[v] = []
+    graph[u].append((v, w))
+origin = int(input())
+dist_vals = {node: float('inf') for node in graph}
+dist_vals[origin] = 0
+predecessors = {node: None for node in graph}
+pq = [(0, origin)]
+while pq:
+    d, node = heapq.heappop(pq)
+    if d > dist_vals[node]:
+        continue
+    if node in graph:
+        for neighbor, weight in graph[node]:
+            if dist_vals[node] + weight < dist_vals[neighbor]:
+                dist_vals[neighbor] = dist_vals[node] + weight
+                predecessors[neighbor] = node
+                heapq.heappush(pq, (dist_vals[neighbor], neighbor))
+for node in graph:
+    path = []
+    curr = node
+    while curr is not None:
+        path.insert(0, curr)
+        curr = predecessors[curr]
+    print(dist_vals[node], path)"
+104,"import heapq
+n, m = map(int, input().split())
+edges_list = []
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    edges_list.append((u, v, w))
+source = int(input())
+distances = {i: float('inf') for i in range(1, n + 1)}
+distances[source] = 0
+previous_nodes = {i: None for i in range(1, n + 1)}
+priority_q = [(0, source)]
+while priority_q:
+    d, current = heapq.heappop(priority_q)
+    if d > distances[current]:
+        continue
+    for u, v, w in edges_list:
+        if u == current:
+            if distances[u] + w < distances[v]:
+                distances[v] = distances[u] + w
+                previous_nodes[v] = u
+                heapq.heappush(priority_q, (distances[v], v))
+for i in range(1, n + 1):
+    path = []
+    node = i
+    while node is not None:
+        path.insert(0, node)
+        node = previous_nodes[node]
+    print(distances[i], path)"
+105,"import heapq
+n, m = map(int, input().split())
+adj_matrix = [([0] * (n + 1)) for _ in range(n + 1)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_matrix[u][v] = w
+start = int(input())
+dist_values = [float('inf')] * (n + 1)
+dist_values[start] = 0
+visited = [False] * (n + 1)
+pq = [(0, start)]
+paths = {i: [start] if i == start else [] for i in range(1, n + 1)}
+while pq:
+    d, u = heapq.heappop(pq)
+    if visited[u]:
+        continue
+    visited[u] = True
+    for v in range(1, n + 1):
+        if adj_matrix[u][v] != 0:
+            if dist_values[u] + adj_matrix[u][v] < dist_values[v]:
+                dist_values[v] = dist_values[u] + adj_matrix[u][v]
+                paths[v] = paths[u] + [v]
+                heapq.heappush(pq, (dist_values[v], v))
+for i in range(1, n + 1):
+    print(dist_values[i], paths[i])"
+106,"import heapq
+n, m = map(int, input().split())
+connections = {}
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    if u not in connections:
+        connections[u] = []
+    connections[u].append((v, w))
+source_node = int(input())
+distance_map = {node: float('inf') for node in connections}
+distance_map[source_node] = 0
+preceding_nodes = {node: None for node in connections}
+priority_queue = [(0, source_node)]
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > distance_map[u]:
+        continue
+    if u in connections:
+        for v, weight in connections[u]:
+            if distance_map[u] + weight < distance_map[v]:
+                distance_map[v] = distance_map[u] + weight
+                preceding_nodes[v] = u
+                heapq.heappush(priority_queue, (distance_map[v], v))
+for node in connections:
+    path = []
+    current = node
+    while current is not None:
+        path.insert(0, current)
+        current = preceding_nodes[current]
+    print(distance_map[node], path)"
+107,"import heapq
+n, m = map(int, input().split())
+net = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    net[u].append((v, w))
+start = int(input())
+dists = [float('inf')] * (n + 1)
+dists[start] = 0
+prev = [None] * (n + 1)
+pq = [(0, start)]
+while pq:
+    dist, node = heapq.heappop(pq)
+    if dist > dists[node]:
+        continue
+    for neighbor, weight in net[node]:
+        if dists[node] + weight < dists[neighbor]:
+            dists[neighbor] = dists[node] + weight
+            prev[neighbor] = node
+            heapq.heappush(pq, (dists[neighbor], neighbor))
+for i in range(1, n + 1):
+    path = []
+    curr = i
+    while curr is not None:
+        path.insert(0, curr)
+        curr = prev[curr]
+    print(dists[i], path)"
+108,"import heapq
+n, m = map(int, input().split())
+graph_data = []
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph_data.append((u, v, w))
+source_vertex = int(input())
+distances_dict = {i: float('inf') for i in range(1, n + 1)}
+distances_dict[source_vertex] = 0
+predecessors_dict = {i: None for i in range(1, n + 1)}
+priority_queue = [(0, source_vertex)]
+while priority_queue:
+    dist, current_node = heapq.heappop(priority_queue)
+    if dist > distances_dict[current_node]:
+        continue
+    for u, v, w in graph_data:
+        if u == current_node:
+            if distances_dict[u] + w < distances_dict[v]:
+                distances_dict[v] = distances_dict[u] + w
+                predecessors_dict[v] = u
+                heapq.heappush(priority_queue, (distances_dict[v], v))
+for i in range(1, n + 1):
+    path = []
+    node = i
+    while node is not None:
+        path.insert(0, node)
+        node = predecessors_dict[node]
+    print(distances_dict[i], path)"
+109,"import heapq
+n, m = map(int, input().split())
+edge_list = []
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    edge_list.append((u, v, w))
+start_node = int(input())
+distance = {i: float('inf') for i in range(1, n + 1)}
+distance[start_node] = 0
+previous = {i: None for i in range(1, n + 1)}
+pq = [(0, start_node)]
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > distance[u]:
+        continue
+    for v, w in [(edge[1], edge[2]) for edge in edge_list if edge[0] == u]:
+        if distance[u] + w < distance[v]:
+            distance[v] = distance[u] + w
+            previous[v] = u
+            heapq.heappush(pq, (distance[v], v))
+for i in range(1, n + 1):
+    path = []
+    curr = i
+    while curr is not None:
+        path.insert(0, curr)
+        curr = previous[curr]
+    print(distance[i], path)"
+110,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
+start_node = int(input())
+dist = [float('inf')] * (n + 1)
+dist[start_node] = 0
+previous_node = [None] * (n + 1)
+pq = [(0, start_node)]
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, w in graph[u]:
+        if dist[u] + w < dist[v]:
+            dist[v] = dist[u] + w
+            previous_node[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(1, n + 1):
+    path = []
+    curr = i
+    while curr is not None:
+        path.insert(0, curr)
+        curr = previous_node[curr]
+    print(dist[i], path)"
+111,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+src = int(input())
+dist = [float('inf')] * n
+dist[src] = 0
+pq = [(0, src)]
+prev = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in adj[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            prev[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def reconstruct_path(dest):
+    path = []
+    curr = dest
+    while curr is not None:
+        path.append(curr)
+        curr = prev[curr]
+    return path[::-1]
+for i in range(n):
+    path = reconstruct_path(i)
+    print(f""Path to {i}: {path}"")"
+112,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    graph[a].append((b, c))
+start_node = int(input())
+distances = [float('inf')] * n
+distances[start_node] = 0
+priority_queue = [(0, start_node)]
+predecessors = [None] * n
+while priority_queue:
+    current_distance, current_node = heapq.heappop(priority_queue)
+    if current_distance > distances[current_node]:
+        continue
+    for neighbor, weight in graph[current_node]:
+        new_distance = distances[current_node] + weight
+        if new_distance < distances[neighbor]:
+            distances[neighbor] = new_distance
+            predecessors[neighbor] = current_node
+            heapq.heappush(priority_queue, (new_distance, neighbor))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def build_path(end_node):
+    path = []
+    at = end_node
+    while at is not None:
+        path.append(at)
+        at = predecessors[at]
+    return path[::-1]
+for i in range(n):
+    path = build_path(i)
+    print(f""Path to {i}: {path}"")"
+113,"import heapq
+n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_list[u].append((v, w))
+source = int(input())
+dist_values = [float('inf')] * n
+dist_values[source] = 0
+pq = [(0, source)]
+parents = [None] * n
+while pq:
+    d, node = heapq.heappop(pq)
+    if d > dist_values[node]:
+        continue
+    for neighbor, weight in adj_list[node]:
+        if dist_values[neighbor] > dist_values[node] + weight:
+            dist_values[neighbor] = dist_values[node] + weight
+            parents[neighbor] = node
+            heapq.heappush(pq, (dist_values[neighbor], neighbor))
+for i in range(n):
+    print(dist_values[i], end="" "")
+print()
+def get_path(target):
+    path = []
+    current = target
+    while current is not None:
+        path.append(current)
+        current = parents[current]
+    return path[::-1]
+for i in range(n):
+    path = get_path(i)
+    print(f""Path to {i}: {path}"")"
+114,"import heapq
+n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    edges[u].append((v, w))
+start = int(input())
+d = [float('inf')] * n
+d[start] = 0
+pq = [(0, start)]
+previous = [None] * n
+while pq:
+    dist, u = heapq.heappop(pq)
+    if dist > d[u]:
+        continue
+    for v, weight in edges[u]:
+        if d[v] > d[u] + weight:
+            d[v] = d[u] + weight
+            previous[v] = u
+            heapq.heappush(pq, (d[v], v))
+for i in range(n):
+    print(d[i], end="" "")
+print()
+def trace_path(end):
+    path = []
+    curr = end
+    while curr is not None:
+        path.append(curr)
+        curr = previous[curr]
+    return path[::-1]
+for i in range(n):
+    path = trace_path(i)
+    print(f""Path to {i}: {path}"")"
+115,"import heapq
+n, m = map(int, input().split())
+graph_adj = [[] for _ in range(n)]
+for _ in range(m):
+    x, y, z = map(int, input().split())
+    graph_adj[x].append((y, z))
+source_node = int(input())
+distance = [float('inf')] * n
+distance[source_node] = 0
+heap = [(0, source_node)]
+path = [None] * n
+while heap:
+    dist, node = heapq.heappop(heap)
+    if dist > distance[node]:
+        continue
+    for neighbor, weight in graph_adj[node]:
+        if distance[neighbor] > distance[node] + weight:
+            distance[neighbor] = distance[node] + weight
+            path[neighbor] = node
+            heapq.heappush(heap, (distance[neighbor], neighbor))
+for i in range(n):
+    print(distance[i], end="" "")
+print()
+def find_path(destination):
+    result = []
+    current = destination
+    while current is not None:
+        result.append(current)
+        current = path[current]
+    return result[::-1]
+for i in range(n):
+    resulting_path = find_path(i)
+    print(f""Path to {i}: {resulting_path}"")"
+116,"import heapq
+n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_list[u].append((v, w))
+start_node = int(input())
+distances = [float('inf')] * n
+distances[start_node] = 0
+pq = [(0, start_node)]
+predecessors = [None] * n
+while pq:
+    dist, u = heapq.heappop(pq)
+    if dist > distances[u]:
+        continue
+    for v, weight in adj_list[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            predecessors[v] = u
+            heapq.heappush(pq, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def get_route(end):
+    route = []
+    curr = end
+    while curr is not None:
+        route.append(curr)
+        curr = predecessors[curr]
+    return route[::-1]
+for i in range(n):
+    route = get_route(i)
+    print(f""Path to {i}: {route}"")"
+117,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
+source = int(input())
+dist = [float('inf')] * n
+dist[source] = 0
+pq = [(0, source)]
+parent = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in graph[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            parent[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def find_path(destination):
+    path = []
+    curr = destination
+    while curr is not None:
+        path.append(curr)
+        curr = parent[curr]
+    return path[::-1]
+for i in range(n):
+    path = find_path(i)
+    print(f""Path to {i}: {path}"")"
+118,"import heapq
+n, m = map(int, input().split())
+adjacencies = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adjacencies[u].append((v, w))
+origin = int(input())
+distances = [float('inf')] * n
+distances[origin] = 0
+priority_queue = [(0, origin)]
+backpointers = [None] * n
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > distances[u]:
+        continue
+    for v, weight in adjacencies[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            backpointers[v] = u
+            heapq.heappush(priority_queue, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def build_trail(terminus):
+    trail = []
+    current = terminus
+    while current is not None:
+        trail.append(current)
+        current = backpointers[current]
+    return trail[::-1]
+for i in range(n):
+    trail = build_trail(i)
+    print(f""Path to {i}: {trail}"")"
+119,"import heapq
+n, m = map(int, input().split())
+network = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    network[u].append((v, w))
+starting_node = int(input())
+shortest_distances = [float('inf')] * n
+shortest_distances[starting_node] = 0
+priority_queue = [(0, starting_node)]
+previous_nodes = [None] * n
+while priority_queue:
+    distance, current_node = heapq.heappop(priority_queue)
+    if distance > shortest_distances[current_node]:
+        continue
+    for neighbor, weight in network[current_node]:
+        new_distance = shortest_distances[current_node] + weight
+        if new_distance < shortest_distances[neighbor]:
+            shortest_distances[neighbor] = new_distance
+            previous_nodes[neighbor] = current_node
+            heapq.heappush(priority_queue, (new_distance, neighbor))
+for i in range(n):
+    print(shortest_distances[i], end="" "")
+print()
+def reconstruct_route(destination):
+    path = []
+    curr = destination
+    while curr is not None:
+        path.append(curr)
+        curr = previous_nodes[curr]
+    return path[::-1]
+for i in range(n):
+    route = reconstruct_route(i)
+    print(f""Path to {i}: {route}"")"
+120,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+s = int(input())
+dist = [float('inf')] * n
+dist[s] = 0
+pq = [(0, s)]
+parent = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in adj[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            parent[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def get_shortest_path(destination):
+    path = []
+    current = destination
+    while current is not None:
+        path.append(current)
+        current = parent[current]
+    return path[::-1]
+for i in range(n):
+    shortest_path = get_shortest_path(i)
+    print(f""Path to {i}: {shortest_path}"")"
+121,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+src = int(input())
+dist = [float('inf')] * n
+dist[src] = 0
+pq = [(0, src)]
+prev = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in adj[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            prev[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def get_path(target):
+    path = []
+    curr = target
+    while curr is not None:
+        path.append(curr)
+        curr = prev[curr]
+    return path[::-1]
+for i in range(n):
+    path = get_path(i)
+    print(f""Path to {i}: {path}"")"
+122,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    x, y, z = map(int, input().split())
+    graph[x].append((y, z))
+start_node = int(input())
+distances = [float('inf')] * n
+distances[start_node] = 0
+priority_queue = [(0, start_node)]
+predecessors = [None] * n
+while priority_queue:
+    d, node = heapq.heappop(priority_queue)
+    if d > distances[node]:
+        continue
+    for neighbor, weight in graph[node]:
+        if distances[neighbor] > distances[node] + weight:
+            distances[neighbor] = distances[node] + weight
+            predecessors[neighbor] = node
+            heapq.heappush(priority_queue, (distances[neighbor], neighbor))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def reconstruct_path(end_node):
+    path = []
+    current = end_node
+    while current is not None:
+        path.append(current)
+        current = predecessors[current]
+    return path[::-1]
+for i in range(n):
+    path = reconstruct_path(i)
+    print(f""Path to {i}: {path}"")"
+123,"import heapq
+num_nodes, num_edges = map(int, input().split())
+edges_list = []
+for _ in range(num_edges):
+    u, v, w = map(int, input().split())
+    edges_list.append((u, v, w))
+source_node = int(input())
+adj_matrix = [[] for _ in range(num_nodes)]
+for u, v, w in edges_list:
+    adj_matrix[u].append((v, w))
+dist_arr = [float('inf')] * num_nodes
+dist_arr[source_node] = 0
+pq = [(0, source_node)]
+path_arr = [None] * num_nodes
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist_arr[u]:
+        continue
+    for v, weight in adj_matrix[u]:
+        if dist_arr[v] > dist_arr[u] + weight:
+            dist_arr[v] = dist_arr[u] + weight
+            path_arr[v] = u
+            heapq.heappush(pq, (dist_arr[v], v))
+for i in range(num_nodes):
+    print(dist_arr[i], end="" "")
+print()
+def trace_path(dest_node):
+    path = []
+    curr = dest_node
+    while curr is not None:
+        path.append(curr)
+        curr = path_arr[curr]
+    return path[::-1]
+for i in range(num_nodes):
+    path = trace_path(i)
+    print(f""Path to {i}: {path}"")"
+124,"import heapq
+nodes, edges_count = map(int, input().split())
+edge_list = []
+for _ in range(edges_count):
+    a, b, c = map(int, input().split())
+    edge_list.append((a, b, c))
+start_node = int(input())
+adjacency_list = [[] for _ in range(nodes)]
+for u, v, w in edge_list:
+    adjacency_list[u].append((v, w))
+distances = [float('inf')] * nodes
+distances[start_node] = 0
+priority_queue = [(0, start_node)]
+previous_nodes = [None] * nodes
+while priority_queue:
+    current_distance, current_node = heapq.heappop(priority_queue)
+    if current_distance > distances[current_node]:
+        continue
+    for neighbor, weight in adjacency_list[current_node]:
+        new_distance = current_distance + weight
+        if new_distance < distances[neighbor]:
+            distances[neighbor] = new_distance
+            previous_nodes[neighbor] = current_node
+            heapq.heappush(priority_queue, (new_distance, neighbor))
+for i in range(nodes):
+    print(distances[i], end="" "")
+print()
+def build_path(target_node):
+    path = []
+    current = target_node
+    while current is not None:
+        path.append(current)
+        current = previous_nodes[current]
+    return path[::-1]
+for i in range(nodes):
+    path = build_path(i)
+    print(f""Path to {i}: {path}"")"
+125,"import heapq
+n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_list[u].append((v, w))
+source = int(input())
+dist = [float('inf')] * n
+dist[source] = 0
+pq = [(0, source)]
+path = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in adj_list[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            path[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def reconstruct(end_node):
+    result = []
+    curr = end_node
+    while curr is not None:
+        result.append(curr)
+        curr = path[curr]
+    return result[::-1]
+for i in range(n):
+    result = reconstruct(i)
+    print(f""Path to {i}: {result}"")"
+126,"import heapq
+num_vertices, num_edges = map(int, input().split())
+edge_connections = []
+for _ in range(num_edges):
+    start, end, weight = map(int, input().split())
+    edge_connections.append((start, end, weight))
+starting_vertex = int(input())
+graph = [[] for _ in range(num_vertices)]
+for u, v, w in edge_connections:
+    graph[u].append((v, w))
+distances = [float('inf')] * num_vertices
+distances[starting_vertex] = 0
+priority_queue = [(0, starting_vertex)]
+previous = [None] * num_vertices
+while priority_queue:
+    distance, current_vertex = heapq.heappop(priority_queue)
+    if distance > distances[current_vertex]:
+        continue
+    for neighbor, weight in graph[current_vertex]:
+        new_distance = distance + weight
+        if new_distance < distances[neighbor]:
+            distances[neighbor] = new_distance
+            previous[neighbor] = current_vertex
+            heapq.heappush(priority_queue, (new_distance, neighbor))
+for i in range(num_vertices):
+    print(distances[i], end="" "")
+print()
+def create_path(destination_vertex):
+    path = []
+    current = destination_vertex
+    while current is not None:
+        path.append(current)
+        current = previous[current]
+    return path[::-1]
+for i in range(num_vertices):
+    path = create_path(i)
+    print(f""Path to {i}: {path}"")"
+127,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+s = int(input())
+dists = [float('inf')] * n
+dists[s] = 0
+pq = [(0, s)]
+paths = [None] * n
+while pq:
+    dist, u = heapq.heappop(pq)
+    if dist > dists[u]:
+        continue
+    for v, weight in adj[u]:
+        if dists[v] > dists[u] + weight:
+            dists[v] = dists[u] + weight
+            paths[v] = u
+            heapq.heappush(pq, (dists[v], v))
+for i in range(n):
+    print(dists[i], end="" "")
+print()
+def build_path(target):
+    result = []
+    curr = target
+    while curr is not None:
+        result.append(curr)
+        curr = paths[curr]
+    return result[::-1]
+for i in range(n):
+    path = build_path(i)
+    print(f""Path to {i}: {path}"")"
+128,"import heapq
+num_nodes, num_edges = map(int, input().split())
+edges = []
+for _ in range(num_edges):
+    u, v, w = map(int, input().split())
+    edges.append((u, v, w))
+start_node = int(input())
+graph = [[] for _ in range(num_nodes)]
+for u, v, w in edges:
+    graph[u].append((v, w))
+distance = [float('inf')] * num_nodes
+distance[start_node] = 0
+pq = [(0, start_node)]
+predecessor = [None] * num_nodes
+while pq:
+    dist, u = heapq.heappop(pq)
+    if dist > distance[u]:
+        continue
+    for v, weight in graph[u]:
+        if distance[v] > distance[u] + weight:
+            distance[v] = distance[u] + weight
+            predecessor[v] = u
+            heapq.heappush(pq, (distance[v], v))
+for i in range(num_nodes):
+    print(distance[i], end="" "")
+print()
+def get_path(end_node):
+    path = []
+    curr = end_node
+    while curr is not None:
+        path.append(curr)
+        curr = predecessor[curr]
+    return path[::-1]
+for i in range(num_nodes):
+    path = get_path(i)
+    print(f""Path to {i}: {path}"")"
+129,"import heapq
+n, m = map(int, input().split())
+neighbors = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    neighbors[u].append((v, w))
+source = int(input())
+distances = [float('inf')] * n
+distances[source] = 0
+heap = [(0, source)]
+previous = [None] * n
+while heap:
+    dist, node = heapq.heappop(heap)
+    if dist > distances[node]:
+        continue
+    for neighbor, weight in neighbors[node]:
+        new_dist = dist + weight
+        if new_dist < distances[neighbor]:
+            distances[neighbor] = new_dist
+            previous[neighbor] = node
+            heapq.heappush(heap, (new_dist, neighbor))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def create_shortest_path(target):
+    path = []
+    current = target
+    while current is not None:
+        path.append(current)
+        current = previous[current]
+    return path[::-1]
+for i in range(n):
+    path = create_shortest_path(i)
+    print(f""Path to {i}: {path}"")"
+130,"import heapq
+node_count, edge_count = map(int, input().split())
+edge_details = []
+for _ in range(edge_count):
+    u, v, w = map(int, input().split())
+    edge_details.append((u, v, w))
+start_node = int(input())
+adj_list = [[] for _ in range(node_count)]
+for u, v, w in edge_details:
+    adj_list[u].append((v, w))
+dist_arr = [float('inf')] * node_count
+dist_arr[start_node] = 0
+priority_queue = [(0, start_node)]
+path_arr = [None] * node_count
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > dist_arr[u]:
+        continue
+    for v, weight in adj_list[u]:
+        if dist_arr[v] > dist_arr[u] + weight:
+            dist_arr[v] = dist_arr[u] + weight
+            path_arr[v] = u
+            heapq.heappush(priority_queue, (dist_arr[v], v))
+for i in range(node_count):
+    print(dist_arr[i], end="" "")
+print()
+def find_path(end_node):
+    path = []
+    curr = end_node
+    while curr is not None:
+        path.append(curr)
+        curr = path_arr[curr]
+    return path[::-1]
+for i in range(node_count):
+    path = find_path(i)
+    print(f""Path to {i}: {path}"")"
+131,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+src = int(input())
+dist = [float('inf')] * n
+dist[src] = 0
+pq = [(0, src)]
+prev = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in adj[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            prev[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def reconstruct_path(target):
+    path = []
+    curr = target
+    while curr is not None:
+        path.append(curr)
+        curr = prev[curr]
+    return path[::-1]
+for i in range(n):
+  path = reconstruct_path(i)
+  print(f""Path to {i}: {path}"")"
+132,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    graph[a].append((b, c))
+start_node = int(input())
+distances = [float('inf')] * n
+distances[start_node] = 0
+priority_queue = [(0, start_node)]
+source_node = [None] * n
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > distances[u]:
+        continue
+    for v, weight in graph[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            source_node[v] = u
+            heapq.heappush(priority_queue, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def build_path(end_node):
+    path = []
+    current = end_node
+    while current is not None:
+        path.append(current)
+        current = source_node[current]
+    return path[::-1]
+for i in range(n):
+  path = build_path(i)
+  print(f""Path to {i}: {path}"")"
+133,"import heapq
+n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    x, y, z = map(int, input().split())
+    adj_list[x].append((y, z))
+start_point = int(input())
+dist_values = [float('inf')] * n
+dist_values[start_point] = 0
+pq_items = [(0, start_point)]
+path_nodes = [None] * n
+while pq_items:
+    d, u = heapq.heappop(pq_items)
+    if d > dist_values[u]:
+        continue
+    for v, w in adj_list[u]:
+        if dist_values[v] > dist_values[u] + w:
+            dist_values[v] = dist_values[u] + w
+            path_nodes[v] = u
+            heapq.heappush(pq_items, (dist_values[v], v))
+for i in range(n):
+    print(dist_values[i], end="" "")
+print()
+def get_path(node):
+    road = []
+    curr = node
+    while curr is not None:
+        road.append(curr)
+        curr = path_nodes[curr]
+    return road[::-1]
+for i in range(n):
+  path = get_path(i)
+  print(f""Path to {i}: {path}"")"
+134,"import heapq
+n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    edges[u].append((v, w))
+source = int(input())
+distances = [float('inf')] * n
+distances[source] = 0
+priority_queue = [(0, source)]
+predecessors = [None] * n
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > distances[u]:
+        continue
+    for v, weight in edges[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            predecessors[v] = u
+            heapq.heappush(priority_queue, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def reconstruct_path_from_source(target):
+    path = []
+    current = target
+    while current is not None:
+        path.append(current)
+        current = predecessors[current]
+    return path[::-1]
+for i in range(n):
+  path = reconstruct_path_from_source(i)
+  print(f""Path to {i}: {path}"")"
+135,"import heapq
+n, m = map(int, input().split())
+adj_matrix = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_matrix[u].append((v, w))
+start_node = int(input())
+dist_array = [float('inf')] * n
+dist_array[start_node] = 0
+pq = [(0, start_node)]
+path_dict = [None] * n
+while pq:
+    distance, current_node = heapq.heappop(pq)
+    if distance > dist_array[current_node]:
+        continue
+    for neighbor, weight in adj_matrix[current_node]:
+        if dist_array[neighbor] > dist_array[current_node] + weight:
+            dist_array[neighbor] = dist_array[current_node] + weight
+            path_dict[neighbor] = current_node
+            heapq.heappush(pq, (dist_array[neighbor], neighbor))
+for i in range(n):
+    print(dist_array[i], end="" "")
+print()
+def trace_path(end_node):
+    route = []
+    current = end_node
+    while current is not None:
+        route.append(current)
+        current = path_dict[current]
+    return route[::-1]
+for i in range(n):
+  path = trace_path(i)
+  print(f""Path to {i}: {path}"")"
+136,"import heapq
+n, m = map(int, input().split())
+graph_list = [[] for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    graph_list[a].append((b, c))
+source_vertex = int(input())
+dist_vals = [float('inf')] * n
+dist_vals[source_vertex] = 0
+priority_queue = [(0, source_vertex)]
+parent_nodes = [None] * n
+while priority_queue:
+    d, u = heapq.heappop(priority_queue)
+    if d > dist_vals[u]:
+        continue
+    for v, w in graph_list[u]:
+        if dist_vals[v] > dist_vals[u] + w:
+            dist_vals[v] = dist_vals[u] + w
+            parent_nodes[v] = u
+            heapq.heappush(priority_queue, (dist_vals[v], v))
+for i in range(n):
+    print(dist_vals[i], end="" "")
+print()
+def find_path(dest):
+    paths = []
+    curr = dest
+    while curr is not None:
+        paths.append(curr)
+        curr = parent_nodes[curr]
+    return paths[::-1]
+for i in range(n):
+  path = find_path(i)
+  print(f""Path to {i}: {path}"")"
+137,"import heapq
+n, m = map(int, input().split())
+network = [[] for _ in range(n)]
+for _ in range(m):
+    x, y, z = map(int, input().split())
+    network[x].append((y, z))
+starting_node = int(input())
+distances = [float('inf')] * n
+distances[starting_node] = 0
+queue = [(0, starting_node)]
+previous = [None] * n
+while queue:
+    d, u = heapq.heappop(queue)
+    if d > distances[u]:
+        continue
+    for v, weight in network[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            previous[v] = u
+            heapq.heappush(queue, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def get_route(target):
+    path = []
+    current = target
+    while current is not None:
+        path.append(current)
+        current = previous[current]
+    return path[::-1]
+for i in range(n):
+  path = get_route(i)
+  print(f""Path to {i}: {path}"")"
+138,"import heapq
+n, m = map(int, input().split())
+graph_adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph_adj[u].append((v, w))
+src_node = int(input())
+dist_values = [float('inf')] * n
+dist_values[src_node] = 0
+pq = [(0, src_node)]
+path_predecessors = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist_values[u]:
+        continue
+    for v, weight in graph_adj[u]:
+        if dist_values[v] > dist_values[u] + weight:
+            dist_values[v] = dist_values[u] + weight
+            path_predecessors[v] = u
+            heapq.heappush(pq, (dist_values[v], v))
+for i in range(n):
+    print(dist_values[i], end="" "")
+print()
+def find_shortest_path(target):
+    path = []
+    current = target
+    while current is not None:
+        path.append(current)
+        current = path_predecessors[current]
+    return path[::-1]
+for i in range(n):
+  path = find_shortest_path(i)
+  print(f""Path to {i}: {path}"")"
+139,"import heapq
+n, m = map(int, input().split())
+adjacent_list = [[] for _ in range(n)]
+for _ in range(m):
+    a, b, c = map(int, input().split())
+    adjacent_list[a].append((b, c))
+starting_node = int(input())
+distances = [float('inf')] * n
+distances[starting_node] = 0
+pq = [(0, starting_node)]
+parents = [None] * n
+while pq:
+    dist, u = heapq.heappop(pq)
+    if dist > distances[u]:
+        continue
+    for v, weight in adjacent_list[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            parents[v] = u
+            heapq.heappush(pq, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def reconstruct_path(end):
+    path = []
+    curr = end
+    while curr is not None:
+        path.append(curr)
+        curr = parents[curr]
+    return path[::-1]
+for i in range(n):
+  path = reconstruct_path(i)
+  print(f""Path to {i}: {path}"")"
+140,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
+source = int(input())
+dist = [float('inf')] * n
+dist[source] = 0
+pq = [(0, source)]
+prev_node = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in graph[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            prev_node[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def get_path(dest):
+    path = []
+    curr = dest
+    while curr is not None:
+        path.append(curr)
+        curr = prev_node[curr]
+    return path[::-1]
+for i in range(n):
+  path = get_path(i)
+  print(f""Path to {i}: {path}"")"
+141,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+src = int(input())
+dist = [float('inf')] * n
+dist[src] = 0
+pq = [(0, src)]
+prev = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, weight in adj[u]:
+        if dist[v] > dist[u] + weight:
+            dist[v] = dist[u] + weight
+            prev[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def reconstruct_path(end):
+    path = []
+    curr = end
+    while curr is not None:
+        path.insert(0, curr)
+        curr = prev[curr]
+    return path
+for i in range(n):
+    path = reconstruct_path(i)
+    print(f""Path to {i}: {path}"")"
+142,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    start, end, cost = map(int, input().split())
+    graph[start].append((end, cost))
+source = int(input())
+distances = [float('inf')] * n
+distances[source] = 0
+priority_queue = [(0, source)]
+path_tracker = [None] * n
+while priority_queue:
+    current_distance, current_node = heapq.heappop(priority_queue)
+    if current_distance > distances[current_node]:
+        continue
+    for neighbor, weight in graph[current_node]:
+        new_distance = current_distance + weight
+        if new_distance < distances[neighbor]:
+            distances[neighbor] = new_distance
+            path_tracker[neighbor] = current_node
+            heapq.heappush(priority_queue, (new_distance, neighbor))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def build_path(destination):
+    result = []
+    current = destination
+    while current is not None:
+        result.insert(0, current)
+        current = path_tracker[current]
+    return result
+for i in range(n):
+    print(f""Path to {i}: {build_path(i)}"")"
+143,"import heapq
+n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_list[u].append((v, w))
+start_node = int(input())
+distances = [float('inf')] * n
+distances[start_node] = 0
+priority_queue = [(0, start_node)]
+previous_nodes = [None] * n
+while priority_queue:
+    dist, u = heapq.heappop(priority_queue)
+    if dist > distances[u]:
+        continue
+    for v, weight in adj_list[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            previous_nodes[v] = u
+            heapq.heappush(priority_queue, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def trace_path(target):
+    path = []
+    current = target
+    while current is not None:
+        path.insert(0, current)
+        current = previous_nodes[current]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {trace_path(i)}"")"
+144,"import heapq
+n, m = map(int, input().split())
+edges = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    edges[u].append((v, w))
+source = int(input())
+dists = [float('inf')] * n
+dists[source] = 0
+pq = [(0, source)]
+paths = [None] * n
+while pq:
+    dist, node = heapq.heappop(pq)
+    if dist > dists[node]:
+        continue
+    for neighbor, weight in edges[node]:
+        if dists[neighbor] > dists[node] + weight:
+            dists[neighbor] = dists[node] + weight
+            paths[neighbor] = node
+            heapq.heappush(pq, (dists[neighbor], neighbor))
+for i in range(n):
+    print(dists[i], end="" "")
+print()
+def find_path(target):
+    path = []
+    curr = target
+    while curr is not None:
+        path.insert(0, curr)
+        curr = paths[curr]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {find_path(i)}"")"
+145,"import heapq
+n, m = map(int, input().split())
+graph_adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph_adj[u].append((v, w))
+start_node = int(input())
+distance = [float('inf')] * n
+distance[start_node] = 0
+priority_queue = [(0, start_node)]
+predecessor = [None] * n
+while priority_queue:
+    dist, u = heapq.heappop(priority_queue)
+    if dist > distance[u]:
+        continue
+    for v, weight in graph_adj[u]:
+        if distance[v] > distance[u] + weight:
+            distance[v] = distance[u] + weight
+            predecessor[v] = u
+            heapq.heappush(priority_queue, (distance[v], v))
+for i in range(n):
+    print(distance[i], end="" "")
+print()
+def get_path(end_node):
+    path = []
+    curr = end_node
+    while curr is not None:
+        path.insert(0, curr)
+        curr = predecessor[curr]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {get_path(i)}"")"
+146,"import heapq
+n, m = map(int, input().split())
+adj_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj_list[u].append((v, w))
+src = int(input())
+distances = [float('inf')] * n
+distances[src] = 0
+pq = [(0, src)]
+parents = [None] * n
+while pq:
+    dist, u = heapq.heappop(pq)
+    if dist > distances[u]:
+        continue
+    for v, weight in adj_list[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            parents[v] = u
+            heapq.heappush(pq, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def get_path(dest):
+    path = []
+    curr = dest
+    while curr is not None:
+        path.insert(0, curr)
+        curr = parents[curr]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {get_path(i)}"")"
+147,"import heapq
+n, m = map(int, input().split())
+graph = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph[u].append((v, w))
+start = int(input())
+dist = [float('inf')] * n
+dist[start] = 0
+pq = [(0, start)]
+previous = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist[u]:
+        continue
+    for v, w in graph[u]:
+        if dist[v] > dist[u] + w:
+            dist[v] = dist[u] + w
+            previous[v] = u
+            heapq.heappush(pq, (dist[v], v))
+for i in range(n):
+    print(dist[i], end="" "")
+print()
+def path(end):
+    res = []
+    curr = end
+    while curr is not None:
+        res.insert(0, curr)
+        curr = previous[curr]
+    return res
+for i in range(n):
+    print(f""Path to {i}: {path(i)}"")"
+148,"import heapq
+n, m = map(int, input().split())
+adj = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((v, w))
+start_node = int(input())
+distances = [float('inf')] * n
+distances[start_node] = 0
+priority_q = [(0, start_node)]
+parents = [None] * n
+while priority_q:
+    d, u = heapq.heappop(priority_q)
+    if d > distances[u]:
+        continue
+    for v, weight in adj[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            parents[v] = u
+            heapq.heappush(priority_q, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def reconstruct_path(destination):
+    path = []
+    current = destination
+    while current is not None:
+        path.insert(0, current)
+        current = parents[current]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {reconstruct_path(i)}"")"
+149,"import heapq
+n, m = map(int, input().split())
+adjacency_list = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adjacency_list[u].append((v, w))
+source_node = int(input())
+distances = [float('inf')] * n
+distances[source_node] = 0
+priority_queue = [(0, source_node)]
+path_trace = [None] * n
+while priority_queue:
+    dist, u = heapq.heappop(priority_queue)
+    if dist > distances[u]:
+        continue
+    for v, weight in adjacency_list[u]:
+        if distances[v] > distances[u] + weight:
+            distances[v] = distances[u] + weight
+            path_trace[v] = u
+            heapq.heappush(priority_queue, (distances[v], v))
+for i in range(n):
+    print(distances[i], end="" "")
+print()
+def build_path(end_node):
+    path = []
+    curr = end_node
+    while curr is not None:
+        path.insert(0, curr)
+        curr = path_trace[curr]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {build_path(i)}"")"
+150,"import heapq
+n, m = map(int, input().split())
+graph_data = [[] for _ in range(n)]
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    graph_data[u].append((v, w))
+start = int(input())
+dist_vals = [float('inf')] * n
+dist_vals[start] = 0
+pq = [(0, start)]
+path_info = [None] * n
+while pq:
+    d, u = heapq.heappop(pq)
+    if d > dist_vals[u]:
+        continue
+    for v, weight in graph_data[u]:
+        if dist_vals[v] > dist_vals[u] + weight:
+            dist_vals[v] = dist_vals[u] + weight
+            path_info[v] = u
+            heapq.heappush(pq, (dist_vals[v], v))
+for i in range(n):
+    print(dist_vals[i], end="" "")
+print()
+def create_path(end_node):
+    path = []
+    curr = end_node
+    while curr is not None:
+        path.insert(0, curr)
+        curr = path_info[curr]
+    return path
+for i in range(n):
+    print(f""Path to {i}: {create_path(i)}"")"

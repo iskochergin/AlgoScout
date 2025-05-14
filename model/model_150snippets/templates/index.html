@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card w-full max-w-2xl">
+  <h1 class="title">Algorithm&nbsp;Categorizer</h1>
+
+  <form method="post" enctype="multipart/form-data" class="space-y-4">
+    <textarea name="code" rows="12" placeholder="Paste your code here…"
+              class="form-control"></textarea>
+
+    <div class="flex items-center gap-4">
+      <input type="file" name="file" class="file-input">
+      <button class="btn-primary">Categorize</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

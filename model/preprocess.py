@@ -17,12 +17,17 @@ import tokenize
 
 # ───────────────────────── 1) LEXICAL STRIP ───────────────────────── #
 
-def _remove_comments(src: str) -> str:
+def _remove_comments_blanks_blanks(src: str) -> str:
     out, prev_row = [], -2
     for tok in tokenize.generate_tokens(io.StringIO(src).readline):
         ttype, tstr, (row, _), _, _ = tok
         if ttype == tokenize.COMMENT:
             continue
+
+        # blanks
+        if ttype == tokenize.NL:
+            continue
+
         if ttype == tokenize.NL and row == prev_row + 1:      # collapse blank lines
             prev_row = row
             continue
@@ -128,7 +133,7 @@ _GEN_FIX = re.compile(
 def preprocess_and_canonicalize(src: str) -> str:
     """Return a cleaned & canonicalised version of `src`. Never raises."""
     # 1. lexical strip
-    stripped = _remove_comments(src)
+    stripped = _remove_comments_blanks(src)
 
     for attempt in (0, 1):         # at most 2 parse attempts
         try:

@@ -6,7 +6,7 @@ Run:  python categorize.py
 from pathlib import Path
 import torch, html
 from flask import Flask, render_template, request, redirect, url_for, flash
-import preprocess                     # <- your robust pre-processor
+from model import preprocess
 from transformers import AutoTokenizer, AutoModel
 
 CKPT = Path("model_ckpt")
