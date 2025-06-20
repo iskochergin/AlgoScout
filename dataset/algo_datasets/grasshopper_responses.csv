@@ -1,0 +1,2847 @@
+number,code
+1,"def solve_grasshopper_recursive(costs):
+    n = len(costs)
+    memo = {}
+    path = {}
+    def hop(idx):
+        if idx >= n:
+            return 0, []
+        if idx in memo:
+            return memo[idx]
+        cost1, path1 = hop(idx + 1)
+        cost2, path2 = hop(idx + 2)
+        if cost1 + costs[idx] < cost2 + costs[idx]:
+            memo[idx] = cost1 + costs[idx], [idx + 1] + path1
+            return memo[idx]
+        else:
+            memo[idx] = cost2 + costs[idx], [idx + 2] + path2
+            return memo[idx]
+    result_cost, result_path = hop(0)
+    return result_cost, [i + 1 for i in result_path]"
+2,"def solve_grasshopper_iterative(costs):
+    n = len(costs)
+    dp = [0] * n
+    path = [[] for _ in range(n)]
+    dp[0] = costs[0]
+    path[0] = [1]
+    if n > 1:
+        dp[1] = costs[1]
+        path[1] = [2]
+        for i in range(2, n):
+            if dp[i - 1] + costs[i] < dp[i - 2] + costs[i]:
+                dp[i] = dp[i - 1] + costs[i]
+                path[i] = [i + 1] + path[i - 1]
+            else:
+                dp[i] = dp[i - 2] + costs[i]
+                path[i] = [i + 1] + path[i - 2]
+    return dp[n - 1], path[n - 1]"
+3,"def solve_grasshopper_rolling_array(costs):
+    n = len(costs)
+    if n < 3:
+        return sum(costs), list(range(1, n + 1))
+    dp = [0, costs[0], costs[1]]
+    prev = [0, 1, 1]
+    for i in range(2, n):
+        if dp[1] + costs[i] < dp[2] + costs[i]:
+            dp[0] = dp[1] + costs[i]
+            prev[0] = 1
+        else:
+            dp[0] = dp[2] + costs[i]
+            prev[0] = 2
+        dp[1] = dp[0]
+        dp[2] = dp[1]
+    path = []
+    index = n - 1
+    while index >= 0:
+        path.insert(0, index + 1)
+        if prev[0] == 1:
+            index -= 1
+        else:
+            index -= 2
+    return dp[0], path"
+4,"def solve_grasshopper_in_place(costs):
+    n = len(costs)
+    for i in range(2, n):
+        if costs[i - 1] < costs[i - 2]:
+            costs[i] += costs[i - 1]
+        else:
+            costs[i] += costs[i - 2]
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and costs[i - 1] < costs[i - 2]:
+            i -= 1
+        else:
+            i -= 2
+    return costs[n-1], path"
+5,"def solve_grasshopper_parent_pointers(costs):
+    n = len(costs)
+    dp = [float('inf')] * n
+    parent = [None] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        if dp[i - 1] + costs[i] < dp[i - 2] + costs[i]:
+            dp[i] = dp[i - 1] + costs[i]
+            parent[i] = i - 1
+        else:
+            dp[i] = dp[i - 2] + costs[i]
+            parent[i] = i - 2
+    path = []
+    curr = n - 1
+    while curr is not None:
+        path.insert(0, curr + 1)
+        curr = parent[curr]
+    return dp[n - 1], path"
+6,"def solve_grasshopper_generator(costs):
+    def jumps(index):
+        if index >= len(costs):
+            yield (0, [])
+        else:
+            for next_index in [index + 1, index + 2]:
+                for cost, path in jumps(next_index):
+                    yield (cost + costs[index], [index + 1] + path)
+    best_cost = float('inf')
+    best_path = []
+    for cost, path in jumps(0):
+        if cost < best_cost:
+            best_cost = cost
+            best_path = path
+    return best_cost, best_path"
+7,"from functools import reduce
+def solve_grasshopper_reduce(costs):
+    n = len(costs)
+    dp = reduce(lambda acc, i: acc + [min(acc[-1] + costs[i], acc[-2] + costs[i])], range(2, n), [costs[0], costs[1]])
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and dp[i-1] < dp[i-2]:
+            i -= 1
+        else:
+            i -= 2
+    return dp[n-1], path"
+8,"import numpy as np
+def solve_grasshopper_numpy(costs):
+    n = len(costs)
+    dp = np.zeros(n)
+    dp[0] = costs[0]
+    if n > 1:
+        dp[1] = costs[1]
+        for i in range(2, n):
+            dp[i] = min(dp[i-1], dp[i-2]) + costs[i]
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and dp[i-1] < dp[i-2]:
+            i -= 1
+        else:
+            i -= 2
+    return dp[n-1], path"
+9,"def solve_grasshopper_early_exit(costs):
+    n = len(costs)
+    if n < 3:
+        return sum(costs), list(range(1, n + 1))
+    dp = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        dp[i] = min(dp[i-1], dp[i-2]) + costs[i]
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and dp[i-1] < dp[i-2]:
+            i -= 1
+        else:
+            i -= 2
+    return dp[n-1], path"
+10,"def solve_grasshopper_parallel(costs):
+    n = len(costs)
+    if n < 3:
+        return sum(costs), list(range(1, n + 1))
+    dp = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        dp[i] = min(dp[i - 1] + costs[i], dp[i - 2] + costs[i])
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and dp[i - 1] + costs[i] < dp[i - 2] + costs[i]:
+            i -= 1
+        else:
+            i -= 2
+    return dp[n-1], path"
+11,"def grasshopper_dp_memo(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    dp = {}
+    path = {}
+    def solve(idx):
+        if idx == n - 1:
+            return costs[idx], [idx + 1]
+        if idx in dp:
+            return dp[idx]
+        jump1_cost, jump1_path = solve(idx + 1)
+        jump2_cost, jump2_path = solve(idx + 2)
+        if jump1_cost < jump2_cost:
+            dp[idx] = costs[idx] + jump1_cost, [idx + 1] + jump1_path
+            path[idx] = idx + 1
+        else:
+            dp[idx] = costs[idx] + jump2_cost, [idx + 1] + jump2_path
+            path[idx] = idx + 2
+        return dp[idx]
+    total_cost, route = solve(0)
+    return total_cost, route"
+12,"def grasshopper_dp_iterative(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    dp = [0] * n
+    path = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    path[1] = 1
+    for i in range(2, n):
+        if dp[i-1] < dp[i-2]:
+            dp[i] = costs[i] + dp[i-1]
+            path[i] = i - 1
+        else:
+            dp[i] = costs[i] + dp[i-2]
+            path[i] = i - 2
+    route = [n]
+    curr = n - 1
+    while curr != 0:
+      route.insert(0, curr + 1)
+      curr = path[curr]
+    if len(costs) == 1:
+      return costs[0], [1]
+    return dp[n-1], route"
+13,"def grasshopper_dp_rolling(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    prev2 = costs[0]
+    prev1 = costs[1]
+    for i in range(2, n):
+        curr = costs[i] + min(prev1, prev2)
+        prev2 = prev1
+        prev1 = curr
+    route = [n]
+    curr = n - 1
+    if n >= 3:
+      while curr != 0:
+        if curr == 0:
+          break
+        if curr == 1:
+          route.insert(0, 1)
+          break
+        if costs[curr-1] + prev2 < costs[curr-2] + prev2:
+          route.insert(0, curr)       
+          curr -= 1
+        else:
+          route.insert(0, curr)
+          curr -= 2
+    elif n == 2:
+      route = [1,2]
+    elif n == 1:
+      route = [1]
+    return prev1, route"
+14,"def grasshopper_in_place(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    for i in range(2, n):
+        costs[i] += min(costs[i-1], costs[i-2])
+    route = [n]
+    curr = n - 1
+    while curr != 0:
+        route.insert(0, curr + 1)
+        if curr == 1:
+            break
+        if costs[curr - 1] <= costs[curr - 2]:
+            curr -= 1
+        else:
+            curr -= 2
+    return costs[n-1], route"
+15,"def grasshopper_parent_pointers(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    dp = [0] * n
+    parent = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        if dp[i-1] < dp[i-2]:
+            dp[i] = costs[i] + dp[i-1]
+            parent[i] = i - 1
+        else:
+            dp[i] = costs[i] + dp[i-2]
+            parent[i] = i - 2
+    route = [n]
+    curr = n - 1
+    while curr != 0:
+        route.insert(0, curr + 1)
+        curr = parent[curr]
+    return dp[n-1], route"
+16,"def grasshopper_generator(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    def solve(idx):
+        if idx == n - 1:
+            yield costs[idx], [idx + 1]
+        else:
+            if idx + 1 < n:
+                for cost1, path1 in solve(idx + 1):
+                    yield costs[idx] + cost1, [idx + 1] + path1
+            if idx + 2 < n:
+                for cost2, path2 in solve(idx + 2):
+                    yield costs[idx] + cost2, [idx + 1] + path2
+    min_cost = float('inf')
+    best_path = []
+    for cost, path in solve(0):
+        if cost < min_cost:
+            min_cost = cost
+            best_path = path
+    return min_cost, best_path"
+17,"from functools import reduce
+def grasshopper_reduce(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    dp = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    dp = reduce(lambda acc, i: acc + [costs[i] + min(acc[i-1], acc[i-2])], range(2, n), dp)
+    route = [n]
+    curr = n - 1
+    while curr != 0:
+        route.insert(0, curr + 1)
+        if curr == 1:
+          break
+        if costs[curr - 1] <= costs[curr - 2]:
+            curr -= 1
+        else:
+            curr -= 2
+    return dp[n-1], route"
+18,"import numpy as np
+def grasshopper_numpy(costs):
+    costs = np.array(costs)
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    dp = np.zeros(n, dtype=int)
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        dp[i] = costs[i] + np.min([dp[i-1], dp[i-2]])
+    route = [n]
+    curr = n - 1
+    while curr != 0:
+        route.insert(0, curr + 1)
+        if curr == 1:
+          break
+        if dp[curr - 1] <= dp[curr - 2]:
+            curr -= 1
+        else:
+            curr -= 2
+    return dp[n-1], route"
+19,"def grasshopper_early_exit(costs):
+  n = len(costs)
+  if n < 3:
+      return costs[-1], [1, n]
+  dp = [0] * n
+  path = [0] * n
+  dp[0] = costs[0]
+  dp[1] = costs[1]
+  for i in range(2, n):
+      if dp[i - 1] < dp[i - 2]:
+          dp[i] = costs[i] + dp[i - 1]
+          path[i] = i - 1
+      else:
+          dp[i] = costs[i] + dp[i - 2]
+          path[i] = i - 2
+  route = [n]
+  curr = n - 1
+  while curr != 0:
+    route.insert(0, curr + 1)
+    curr = path[curr]
+  return dp[n-1], route"
+20,"import multiprocessing
+def grasshopper_parallel(costs):
+    n = len(costs)
+    if n < 3:
+        return costs[-1], [1, n]
+    def calculate_cost(index):
+        if index == n - 1:
+            return costs[index], [index + 1]
+        else:
+            cost1, path1 = calculate_cost(index + 1)
+            cost2, path2 = calculate_cost(index + 2)
+            if cost1 < cost2:
+                return costs[index] + cost1, [index + 1] + path1
+            else:
+                return costs[index] + cost2, [index + 1] + path2
+    with multiprocessing.Pool(processes=2) as pool:
+        result = pool.apply_async(calculate_cost, (0,))
+        total_cost, route = result.get()
+    return total_cost, route"
+21,"def grasshopper_dp_recursive(route):
+    n = len(route)
+    memo = {}
+    def solve(idx):
+        if idx >= n:
+            return 0, []
+        if idx in memo:
+            return memo[idx]
+        cost1, path1 = solve(idx + 1)
+        cost2, path2 = solve(idx + 2)
+        if cost1 + route[idx] < cost2 + route[idx]:
+            memo[idx] = cost1 + route[idx], [idx + 1] + path1
+        else:
+            memo[idx] = cost2 + route[idx], [idx + 2] + path2
+        return memo[idx]
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    return solve(0)"
+22,"def grasshopper_dp_iterative(route):
+    n = len(route)
+    dp = [0] * n
+    path = [[] for _ in range(n)]
+    dp[n - 1] = route[n - 1]
+    path[n - 1] = [n]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+        path[n - 2] = [n - 1, n]
+    for i in range(n - 3, -1, -1):
+        if dp[i + 1] + route[i] < dp[i + 2] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+            path[i] = [i + 1] + path[i + 1]
+        else:
+            dp[i] = dp[i + 2] + route[i]
+            path[i] = [i + 2] + path[i + 2]
+    return dp[0], path[0]"
+23,"def grasshopper_dp_rolling(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0, 0]
+    path = [[], []]
+    dp[0] = route[n - 1]
+    path[0] = [n]
+    dp[1] = route[n - 2] + route[n - 1]
+    path[1] = [n - 1, n]
+    for i in range(n - 3, -1, -1):
+        if dp[0] + route[i] < dp[1] + route[i]:
+            dp[1] = dp[0] + route[i]
+            path[1] = [i + 1] + path[0]
+        else:
+            dp[0] = dp[1] + route[i]
+            path[0] = [i + 2] + path[1]
+    return dp[0], path[0]"
+24,"def grasshopper_dp_inplace(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = route[:]
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        dp[i] = route[i] + min(dp[i + 1], dp[i + 2])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+25,"def grasshopper_dp_parent(route):
+    n = len(route)
+    dp = [0] * n
+    parent = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+        parent[n - 2] = n - 1
+    for i in range(n - 3, -1, -1):
+        if dp[i + 1] + route[i] < dp[i + 2] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+            parent[i] = i + 1
+        else:
+            dp[i] = dp[i + 2] + route[i]
+            parent[i] = i + 2
+    path = []
+    curr = 0
+    while curr < n:
+        path.append(curr + 1)
+        curr = parent[curr]
+    return dp[0], path"
+26,"def grasshopper_dp_generator(route):
+    n = len(route)
+    def path_generator(idx):
+        if idx >= n:
+            yield []
+        else:
+            for next_idx in [idx + 1, idx + 2]:
+                for sub_path in path_generator(next_idx):
+                    yield [idx + 1] + sub_path
+    min_cost = float('inf')
+    best_path = []
+    for path in path_generator(0):
+        cost = sum(route[i - 1] for i in path)
+        if cost < min_cost:
+            min_cost = cost
+            best_path = path
+    return min_cost, best_path"
+27,"from functools import reduce
+def grasshopper_dp_reduce(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = reduce(lambda acc, i: [route[i] + min(acc[0], acc[1])] + acc, range(n - 2, -1, -1), [route[n - 1], route[n - 2] + route[n - 1]])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[0] < dp[1]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+28,"import numpy as np
+def grasshopper_dp_numpy(route):
+    n = len(route)
+    route = np.array(route)
+    if n < 3:
+        return np.sum(route), list(range(1, n + 1))
+    dp = np.zeros(n)
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        dp[i] = route[i] + np.min([dp[i + 1], dp[i + 2]])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+29,"def grasshopper_dp_shortcut(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        if dp[i + 2] > dp[i + 1] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+        else:
+            dp[i] = dp[i + 2] + route[i]
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+30,"import multiprocessing
+def grasshopper_dp_parallel(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    with multiprocessing.Pool(processes=2) as pool:
+        results = pool.starmap(
+            lambda i: (i, route[i] + min(dp[i + 1], dp[i + 2])),
+            [(i,) for i in range(n - 3, -1, -1)]
+        )
+    for i, cost in results:
+        dp[i] = cost
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+31,"def solve_grasshopper_recursion(costs):
+    n = len(costs)
+    memo = {}
+    path = {}
+    def recurse(index):
+        if index >= n:
+            return 0, []
+        if index in memo:
+            return memo[index]
+        cost1, path1 = recurse(index + 1)
+        cost2, path2 = recurse(index + 2)
+        if cost1 + costs[index] < cost2 + costs[index]:
+            memo[index] = cost1 + costs[index], [index + 1] + path1
+        else:
+            memo[index] = cost2 + costs[index], [index + 2] + path2
+        return memo[index]
+    total_cost, hops = recurse(0)
+    return total_cost, [i + 1 for i in hops]"
+32,"def solve_grasshopper_iterative(costs):
+    n = len(costs)
+    dp = [0] * n
+    path = [[] for _ in range(n)]
+    dp[0] = costs[0]
+    path[0] = [1]
+    if n > 1:
+        dp[1] = costs[1]
+        path[1] = [2]
+        for i in range(2, n):
+            if dp[i - 1] + costs[i] < dp[i - 2] + costs[i]:
+                dp[i] = dp[i - 1] + costs[i]
+                path[i] = [i + 1] + path[i - 1]
+            else:
+                dp[i] = dp[i - 2] + costs[i]
+                path[i] = [i + 1] + path[i - 2]
+    return dp[n - 1], path[n - 1]"
+33,"def solve_grasshopper_rolling(costs):
+    n = len(costs)
+    if n < 3: return costs[-1] if n > 0 else 0, []
+    prev2 = costs[0]
+    prev1 = costs[1]
+    path_prev2 = [1]
+    path_prev1 = [2]
+    for i in range(2, n):
+        if prev1 + costs[i] < prev2 + costs[i]:
+            curr = prev1 + costs[i]
+            path = [i + 1] + path_prev1
+        else:
+            curr = prev2 + costs[i]
+            path = [i + 1] + path_prev2
+        prev2 = prev1
+        prev1 = curr
+        path_prev2 = path_prev1
+        path_prev1 = path
+    return prev1, [x+1 for x in path_prev1]"
+34,"def solve_grasshopper_inplace(costs):
+    n = len(costs)
+    if n < 3: return costs[-1] if n > 0 else 0, []
+    costs = costs[:]
+    for i in range(2, n):
+        costs[i] += min(costs[i - 1], costs[i - 2])
+    path = []
+    curr = n - 1
+    while curr > 0:
+        path.append(curr + 1)
+        if curr >= 2 and costs[curr] == costs[curr - 2] + costs[curr]:
+            curr -= 2
+        else:
+            curr -= 1
+    path.append(1)
+    return costs[n - 1], path[::-1]"
+35,"def solve_grasshopper_parent(costs):
+    n = len(costs)
+    dp = [float('inf')] * n
+    parent = [None] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    parent[1] = 0
+    for i in range(2, n):
+        if dp[i - 1] + costs[i] < dp[i - 2] + costs[i]:
+            dp[i] = dp[i - 1] + costs[i]
+            parent[i] = i - 1
+        else:
+            dp[i] = dp[i - 2] + costs[i]
+            parent[i] = i - 2
+    path = []
+    curr = n - 1
+    while curr is not None:
+        path.append(curr + 1)
+        curr = parent[curr]
+    return dp[n - 1], path[::-1]"
+36,"def solve_grasshopper_generator(costs):
+    n = len(costs)
+    dp = [0] * n
+    path = [[] for _ in range(n)]
+    dp[0] = costs[0]
+    path[0] = [1]
+    if n > 1:
+        dp[1] = costs[1]
+        path[1] = [2]
+        for i in range(2, n):
+            def gen_path(j):
+                if j == i-1:
+                    yield [i+1] + path[i-1]
+                else:
+                    yield [i+1] + path[i-2]
+            if dp[i - 1] + costs[i] < dp[i - 2] + costs[i]:
+                dp[i] = dp[i - 1] + costs[i]
+                path[i] = next(gen_path(i-1))
+            else:
+                dp[i] = dp[i - 2] + costs[i]
+                path[i] = next(gen_path(i-2))
+    return dp[n - 1], path[n - 1]"
+37,"from functools import reduce
+def solve_grasshopper_reduce(costs):
+    n = len(costs)
+    dp = reduce(lambda acc, i: acc + [min(acc[-1] + costs[i], (acc[-2] if i > 1 else float('inf')) + costs[i])], range(n), [0, costs[0]] if n > 0 else [])
+    path = []
+    curr = n - 1
+    while curr > 0:
+        path.append(curr + 1)
+        if curr > 1 and dp[curr] == dp[curr - 1] + costs[curr]:
+            curr -= 1
+        else:
+            curr -= 2
+    path.append(1)
+    return dp[n - 1], path[::-1]"
+38,"import numpy as np
+def solve_grasshopper_numpy(costs):
+    n = len(costs)
+    dp = np.zeros(n)
+    if n>0:
+        dp[0] = costs[0]
+        if n > 1:
+            dp[1] = costs[1]
+            for i in range(2, n):
+                dp[i] = costs[i] + min(dp[i - 1], dp[i - 2])
+    path = []
+    curr = n - 1
+    while curr > 0:
+        path.append(curr + 1)
+        if dp[curr] == dp[curr - 1] + costs[curr]:
+            curr -= 1
+        else:
+            curr -= 2
+    path.append(1)
+    return dp[n - 1], path[::-1]"
+39,"def solve_grasshopper_early_exit(costs):
+    n = len(costs)
+    if n < 3: return costs[-1] if n > 0 else 0, []
+    dp = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        dp[i] = costs[i] + min(dp[i - 1], dp[i - 2])
+        if dp[i] > 1e6:
+            break
+    path = []
+    curr = n - 1
+    while curr > 0:
+        path.append(curr + 1)
+        if dp[curr] == dp[curr - 1] + costs[curr]:
+            curr -= 1
+        else:
+            curr -= 2
+    path.append(1)
+    return dp[n - 1], path[::-1]"
+40,"from multiprocessing import Pool
+def solve_grasshopper_parallel(costs):
+    n = len(costs)
+    if n < 3: return costs[-1] if n > 0 else 0, []
+    dp = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    with Pool(processes=2) as pool:
+        for i in range(2, n):
+                results = pool.starmap(_calculate_dp_value, [(dp, costs, i)])
+                dp[i] = results[0]
+    path = []
+    curr = n - 1
+    while curr > 0:
+        path.append(curr + 1)
+        if dp[curr] == dp[curr - 1] + costs[curr]:
+            curr -= 1
+        else:
+            curr -= 2
+    path.append(1)
+    return dp[n - 1], path[::-1]
+def _calculate_dp_value(dp, costs, i):
+    return costs[i] + min(dp[i - 1], dp[i - 2])"
+41,"def solve_dp_recursive_memo(costs):
+    n = len(costs)
+    if n < 3: return (0, [1]) if n else (0, [])
+    memo = {}
+    path = []
+    def recurse(index):
+        if index == n: return 0, []
+        if index in memo: return memo[index]
+        jump1_cost, jump1_path = recurse(index + 1)
+        jump2_cost, jump2_path = recurse(index + 2)
+        if jump1_cost < jump2_cost:
+            cost = costs[index] + jump1_cost
+            p = [index + 1] + jump1_path
+        else:
+            cost = costs[index] + jump2_cost
+            p = [index + 2] + jump2_path
+        memo[index] = (cost, p)
+        return cost, p
+    total_cost, path = recurse(0)
+    return total_cost, path"
+42,"def solve_dp_iterative(road):
+    size = len(road)
+    if size < 3: return (0, [1]) if size else (0, [])
+    dp = [0] * size
+    prev = [None] * size
+    dp[0] = road[0]
+    dp[1] = road[1]
+    prev[1] = 0
+    for i in range(2, size):
+        if dp[i - 1] < dp[i - 2]:
+            dp[i] = road[i] + dp[i - 1]
+            prev[i] = i - 1
+        else:
+            dp[i] = road[i] + dp[i - 2]
+            prev[i] = i - 2
+    path = []
+    curr = size - 1
+    while curr is not None:
+        path.insert(0, curr + 1)
+        curr = prev[curr]
+    return dp[size - 1], path"
+43,"def solve_rolling_array(pathway):
+    count = len(pathway)
+    if count < 3: return (0, [1]) if count else (0, [])
+    a = 0
+    b = pathway[0]
+    c = pathway[1]
+    for i in range(2, count):
+        temp = pathway[i] + min(a, b)
+        a = b
+        b = c
+        c = temp
+    path = []
+    curr = count - 1
+    if c <= a + pathway[count-1]:
+        path.append(curr + 1)
+        curr -= 2
+    else:
+        path.append(curr + 1)
+        curr -= 1
+    while curr >= 0:
+        path.append(curr + 1)
+        if curr - 2 >= 0:
+            curr -= 2
+        else:
+            curr -= 1
+    return c, path[::-1]"
+44,"def solve_in_place(expenses):
+    n = len(expenses)
+    if n < 3: return (0, [1]) if n else (0, [])
+    for i in range(2, n):
+        expenses[i] += min(expenses[i-1], expenses[i-2])
+    path = [n]
+    curr = n - 1
+    while curr > 0:
+        if curr - 2 >= 0 and expenses[curr-2] <= expenses[curr-1]:
+            curr -= 2
+        else:
+            curr -= 1
+        path.append(curr + 1)
+    return expenses[n-1], path[::-1]"
+45,"def solve_parent_pointers(prices):
+    length = len(prices)
+    if length < 3: return (0, [1]) if length else (0, [])
+    dp = [0] * length
+    parent = [None] * length
+    dp[0] = prices[0]
+    dp[1] = prices[1]
+    parent[1] = 0
+    for i in range(2, length):
+        if dp[i-1] < dp[i-2]:
+            dp[i] = prices[i] + dp[i-1]
+            parent[i] = i - 1
+        else:
+            dp[i] = prices[i] + dp[i-2]
+            parent[i] = i - 2
+    path = []
+    curr = length - 1
+    while curr is not None:
+        path.insert(0, curr + 1)
+        curr = parent[curr] 
+    return dp[length - 1], path"
+46,"def solve_generator(costs_list):
+    n = len(costs_list)
+    if n < 3: return (0, [1]) if n else (0, [])
+    def cost_gen(index, current_cost, path):
+        if index == n:
+            yield current_cost, path
+        else:
+            yield from cost_gen(index + 1, current_cost + costs_list[index], path + [index + 1])
+            yield from cost_gen(index + 2, current_cost + costs_list[index], path + [index + 2])
+    min_cost = float('inf')
+    best_path = []
+    for cost, path in cost_gen(0, 0, []):
+      if cost < min_cost:
+          min_cost = cost
+          best_path = path
+    return min_cost, best_path"
+47,"from functools import reduce
+def solve_reduce(route_costs):
+    n = len(route_costs)
+    if n < 3: return (0, [1]) if n else (0, [])
+    dp = reduce(lambda acc, i: acc + [route_costs[i] + min(acc[i-1], acc[i-2] if i > 1 else float('inf'))], range(2, n), [route_costs[0], route_costs[1]])
+    path = []
+    curr = n - 1
+    while curr > 0:
+        path.insert(0, curr + 1)
+        if curr - 2 >= 0 and dp[curr-2] <= dp[curr-1]:
+            curr -= 2
+        else:
+            curr -= 1
+    return dp[n-1], path"
+48,"import numpy as np
+def solve_numpy(data):
+    n = len(data)
+    if n < 3: return (0, [1]) if n else (0, [])
+    dp = np.zeros(n, dtype=np.int64)
+    dp[0] = data[0]
+    dp[1] = data[1]
+    for i in range(2, n):
+        dp[i] = data[i] + min(dp[i-1], dp[i-2])
+    path = []
+    curr = n - 1
+    while curr >= 0:
+        path.insert(0, curr + 1)
+        if curr - 2 >= 0 and dp[curr-2] <= dp[curr-1]:
+            curr -= 2
+        else:
+            curr -= 1
+    return dp[n-1], path"
+49,"def solve_early_exit(costs_route):
+    n = len(costs_route)
+    if n < 3: return (0, [1]) if n else (0, [])
+    dp = [0] * n
+    dp[0] = costs_route[0]
+    dp[1] = costs_route[1]
+    for i in range(2, n):
+        dp[i] = costs_route[i] + min(dp[i-1], dp[i-2])
+        if dp[i] > 10**6:
+            break      
+    path = [n]
+    curr = n - 1
+    while curr > 0:
+        path.insert(0, curr + 1)
+        if curr - 2 >= 0 and dp[curr - 2] <= dp[curr-1]:
+            curr -= 2
+        else:
+            curr -= 1
+    return dp[n-1], path"
+50,"import multiprocessing
+def solve_parallel_jumps(costs_list):
+    n = len(costs_list)
+    if n < 3: return (0, [1]) if n else (0, [])
+    with multiprocessing.Pool(processes=2) as pool:
+        results = pool.starmap(calculate_cost_path, [(i, costs_list) for i in [1, 2]])
+    jump1_cost, jump1_path = results[0]
+    jump2_cost, jump2_path = results[1]
+    if jump1_cost < jump2_cost:
+        cost = costs_list[0] + jump1_cost
+        path = [1] + jump1_path
+    else:
+        cost = costs_list[0] + jump2_cost
+        path = [2] + jump2_path
+    return cost, path
+def calculate_cost_path(start_jump, costs_list):
+    n = len(costs_list)
+    dp = [0] * n
+    dp[0] = 0
+    dp[1] = costs_list[1]
+    for i in range(2, n):
+        dp[i] = costs_list[i] + min(dp[i-1], dp[i-2])
+    path = [x + 1 for x in range(n-1, -1, -1)]
+    return dp[n-1], path"
+51,"def grasshopper_dp_recursive(path):
+    n = len(path)
+    memo = {}
+    def solve(idx):
+        if idx >= n: return 0, []
+        if idx in memo: return memo[idx]
+        jump_one_cost, jump_one_path = solve(idx + 1)
+        jump_two_cost, jump_two_path = solve(idx + 2)
+        if jump_one_cost + path[idx] < jump_two_cost + path[idx]:
+            memo[idx] = jump_one_cost + path[idx], [idx + 1] + jump_one_path
+        else:
+            memo[idx] = jump_two_cost + path[idx], [idx + 2] + jump_two_path
+        return memo[idx]
+    if n < 3: return sum(path), list(range(1, n+1))
+    return solve(0)"
+52,"def grasshopper_dp_iterative(route):
+    length = len(route)
+    dp = [0] * length
+    path_info = [[] for _ in range(length)]
+    dp[0] = route[0]
+    path_info[0] = [1]
+    if length > 1:
+        dp[1] = route[1]
+        path_info[1] = [2]
+    for i in range(2, length):
+        if dp[i-1] + route[i] < dp[i-2] + route[i]:
+            dp[i] = dp[i-1] + route[i]
+            path_info[i] = [i + 1] + path_info[i-1]
+        else:
+            dp[i] = dp[i-2] + route[i]
+            path_info[i] = [i + 2] + path_info[i-2]
+    return dp[length-1], path_info[length-1]"
+53,"def grasshopper_dp_rolling(costs):
+    n = len(costs)
+    if n < 3: return sum(costs), list(range(1, n + 1))
+    dp = [0, 0]
+    paths = [[1], [2]]
+    for i in range(2, n):
+        if dp[0] + costs[i] < dp[1] + costs[i]:
+            dp[1] = dp[0] + costs[i]
+            paths[1] = [i+1] + paths[0]
+        else:
+            dp[1] = dp[1] + costs[i]
+            paths[1] = [i+2] + paths[1]
+        dp[0], dp[1] = dp[1], dp[0]
+        paths[0], paths[1] = paths[1], paths[0]
+    return dp[1], paths[1]"
+54,"def grasshopper_dp_inplace(arr):
+    n = len(arr)
+    if n < 3: return sum(arr), list(range(1, n+1))
+    for i in range(2,n): 
+        if arr[i-1] < arr[i-2]:
+            arr[i] = arr[i-1] + arr[i]
+        else:
+            arr[i] = arr[i-2] + arr[i]
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and arr[i-1] < arr[i-2]:
+            i -= 1
+        else:
+            i -= 2
+    return arr[n-1], path"
+55,"def grasshopper_dp_parent(costs):
+    n = len(costs)
+    dp = [0] * n
+    parent = [None] * n
+    dp[0] = costs[0]
+    if n > 1:
+        dp[1] = costs[1]
+        parent[1] = 0
+    for i in range(2, n):
+        if dp[i-1] + costs[i] < dp[i-2] + costs[i]:
+            dp[i] = dp[i-1] + costs[i]
+            parent[i] = i - 1
+        else:
+            dp[i] = dp[i-2] + costs[i]
+            parent[i] = i - 2
+    path = []
+    curr = n - 1
+    while curr is not None:
+        path.insert(0, curr + 1)
+        curr = parent[curr]
+    return dp[n-1], path"
+56,"def grasshopper_dp_generator(a):
+    def solve(idx, current_path):
+        if idx >= len(a):
+            yield 0, current_path
+        else:
+            for jump in [1, 2]:
+                next_idx = idx + jump
+                yield (a[idx] + (next_cost for next_cost, _ in solve(next_idx, current_path + [next_idx+1]))[0] if next_idx < len(a) else 0), current_path + [next_idx+1]
+    min_cost = float('inf')
+    best_path = []
+    for cost, path in solve(0, [1]):
+        if cost < min_cost:
+            min_cost, best_path = cost, path
+    return min_cost, best_path"
+57,"from functools import reduce
+def grasshopper_dp_reduce(route_costs):
+    n = len(route_costs)
+    if n < 3: return sum(route_costs), list(range(1, n + 1))
+    dp = reduce(lambda acc, i: acc + [min(acc[i-1] + route_costs[i], acc[i-2] + route_costs[i])], range(2, n), [route_costs[0], route_costs[1]])
+    path = []
+    i = n - 1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and dp[i-1] < dp[i-2]:
+            i -= 1
+        else:
+            i -= 2
+    return dp[-1], path"
+58,"import numpy as np
+def grasshopper_np(arr):
+    n = len(arr)
+    if n < 3: return np.sum(arr), list(range(1, n+1))
+    dp = np.zeros(n)
+    dp[0] = arr[0]
+    if n > 1:
+        dp[1] = arr[1]
+    for i in range(2, n):
+        dp[i] = min(dp[i-1] + arr[i], dp[i-2] + arr[i])
+    path = []
+    i = n-1
+    while i >= 0:
+        path.insert(0, i + 1)
+        if i > 1 and dp[i-1] < dp[i-2]:
+            i -= 1
+        else:
+            i -= 2
+    return dp[n-1], path"
+59,"def grasshopper_early_exit(path):
+  n = len(path)
+  if n < 3: return sum(path), list(range(1, n + 1))
+  cost = [0] * n
+  cost[0] = path[0]
+  cost[1] = path[1]
+  for i in range(2, n):
+    cost[i] = min(cost[i-1], cost[i-2]) + path[i]
+    if cost[i] > 100000:
+        return float('inf'), []
+  trace = [n]
+  i = n-1
+  while i > 0:
+    if i >= 2 and cost[i-2] < cost[i-1]:
+      i -= 2
+    else:
+      i -= 1
+    trace.append(i)
+  trace.reverse()
+  return cost[n-1], trace"
+60,"import concurrent.futures
+def grasshopper_parallel(route):
+    n = len(route)
+    if n < 3: return sum(route), list(range(1, n + 1))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+        future1 = executor.submit(lambda: solve(route, n, 1))
+        future2 = executor.submit(lambda: solve(route, n, 2))
+        cost1, path1 = future1.result()
+        cost2, path2 = future2.result()
+    if cost1 < cost2:
+        return cost1, path1
+    else:
+        return cost2, path2
+def solve(route, n, jump):
+    if jump >= n:
+        return 0, []
+    if jump == n -1:
+        return route[jump], [jump+1]
+    cost1, path1 = solve(route, n, jump+1)
+    cost2, path2 = solve(route, n, jump+2)
+    if cost1 + route[jump] < cost2 + route[jump]:
+        return cost1 + route[jump], [jump+1] + path1
+    else:
+        return cost2 + route[jump], [jump+2] + path2"
+61,"def solve_grasshopper_recursive(arr):
+    n = len(arr)
+    memo = {}
+    def recurse(idx):
+        if idx >= n:
+            return 0, []
+        if idx in memo:
+            return memo[idx]
+        cost1, path1 = recurse(idx + 1)
+        cost2, path2 = recurse(idx + 2)
+        if cost1 + arr[idx] < cost2 + arr[idx]:
+            memo[idx] = cost1 + arr[idx], [idx + 1] + path1
+        else:
+            memo[idx] = cost2 + arr[idx], [idx + 2] + path2
+        return memo[idx]
+    if n < 3:
+        return sum(arr) , list(range(1,n+1))
+    cost, path = recurse(0)
+    return cost, path"
+62,"def solve_grasshopper_iterative(route):
+    length = len(route)
+    dp = [0] * length
+    path = [[] for _ in range(length)]
+    dp[0] = route[0]
+    path[0] = [1]
+    dp[1] = route[1]
+    path[1] = [2]
+    for i in range(2, length):
+        if dp[i - 1] + route[i] < dp[i - 2] + route[i]:
+            dp[i] = dp[i - 1] + route[i]
+            path[i] = [i + 1] + path[i - 1]
+        else:
+            dp[i] = dp[i - 2] + route[i]
+            path[i] = [i + 2] + path[i - 2]
+    return dp[length - 1], path[length - 1]"
+63,"def solve_grasshopper_rolling(costs):
+    n = len(costs)
+    if n < 3:
+        return sum(costs), list(range(1, n + 1))
+    prev2 = costs[0]
+    prev1 = costs[1]
+    for i in range(2, n):
+        curr = min(prev1 + costs[i], prev2 + costs[i])
+        prev2 = prev1
+        prev1 = curr
+    path = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            path = [1] + path
+            break
+        if i == 1:
+            path = [2] + path
+            break
+        if prev1 + costs[i] < prev2 + costs[i]:
+            path = [i + 1] + path
+            prev2 = prev1
+            prev1 = prev1 + costs[i]
+            i -= 1
+        else:
+            path = [i + 2] + path
+            prev1 = prev2
+            prev2 = prev2 + costs[i]
+            i -= 2
+    return prev1, path"
+64,"def solve_grasshopper_inplace(arr):
+    n = len(arr)
+    if n < 3:
+        return sum(arr),list(range(1,n+1))
+    for i in range(2, n):
+        arr[i] += min(arr[i - 1], arr[i - 2])
+    path = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            path = [1] + path
+            break
+        if i == 1:
+            path = [2] + path
+            break        
+        if arr[i-1] < arr[i-2]:
+            path = [i+1] + path
+            i-=1
+        else:
+            path = [i+2] + path
+            i-=2
+    return arr[n - 1], path"
+65,"def solve_grasshopper_parent(values):
+    n = len(values)
+    dp = [0] * n
+    parent = [None] * n
+    dp[0] = values[0]
+    dp[1] = values[1]
+    parent[1] = 0
+    for i in range(2, n):
+        if dp[i - 1] + values[i] < dp[i - 2] + values[i]:
+            dp[i] = dp[i - 1] + values[i]
+            parent[i] = i - 1
+        else:
+            dp[i] = dp[i - 2] + values[i]
+            parent[i] = i - 2
+    path = []
+    curr = n - 1
+    while curr is not None:
+        path.append(curr + 1)
+        curr = parent[curr]
+    return dp[n - 1], path[::-1]"
+66,"def solve_grasshopper_generator(route_data):
+    def cost_and_path(start_idx, current_path):
+        if start_idx >= len(route_data):
+            yield 0, current_path
+        else:
+            for jump in [1, 2]:
+                next_idx = start_idx + jump
+                yield route_data[start_idx] + (yield from cost_and_path(next_idx, current_path + [next_idx + 1]))
+    min_cost = float('inf')
+    best_path = []
+    for cost, path in cost_and_path(0, []):
+        if cost < min_cost:
+            min_cost = cost
+            best_path = path
+    return min_cost, best_path"
+67,"from functools import reduce
+def solve_grasshopper_reduce(costs_list):
+    n = len(costs_list)
+    if n < 3:
+        return sum(costs_list),list(range(1,n+1))
+    dp = reduce(lambda acc, i: acc + [min(acc[-1] + costs_list[i], acc[-2] + costs_list[i])], range(2, n), [costs_list[0], costs_list[1]])
+    path = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            path = [1] + path
+            break
+        if i == 1:
+            path = [2] + path
+            break       
+        if dp[i-1] < dp[i-2]:
+            path = [i+1] + path
+            i-=1
+        else:
+            path = [i+2] + path
+            i-=2
+    return dp[-1], path"
+68,"import numpy as np
+def solve_grasshopper_numpy(route_arr):
+    n = len(route_arr)
+    if n < 3:
+        return np.sum(route_arr),list(range(1,n+1))
+    dp = np.zeros(n)
+    dp[0] = route_arr[0]
+    dp[1] = route_arr[1]
+    for i in range(2, n):
+        dp[i] = route_arr[i] + min(dp[i - 1], dp[i - 2])
+    path = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            path = [1] + path
+            break
+        if i == 1:
+            path = [2] + path
+            break
+        if dp[i-1] < dp[i-2]:
+            path = [i+1] + path
+            i-=1
+        else:
+            path = [i+2] + path
+            i-=2
+    return dp[n - 1], path"
+69,"def solve_grasshopper_earlyexit(costs_arr):
+    n = len(costs_arr)
+    if n < 3:
+        return sum(costs_arr), list(range(1, n+1))
+    dp = [0] * n
+    dp[0] = costs_arr[0]
+    dp[1] = costs_arr[1]
+    for i in range(2, n):
+        dp[i] = costs_arr[i] + min(dp[i-1], dp[i-2])
+        if dp[i] >= 1000000:
+            break
+    path = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            path = [1] + path
+            break
+        if i == 1:
+            path = [2] + path
+            break
+        if dp[i-1] < dp[i-2]:
+            path = [i+1] + path
+            i-=1
+        else:
+            path = [i+2] + path
+            i-=2
+    return dp[n - 1], path"
+70,"def solve_grasshopper_parallel(costs):
+    n = len(costs)
+    if n < 3:
+        return sum(costs), list(range(1,n+1))
+    dp = [0] * n
+    dp[0] = costs[0]
+    dp[1] = costs[1]
+    for i in range(2, n):
+        dp[i] = costs[i] + min(dp[i - 1], dp[i - 2])
+    path = []
+    i = n - 1
+    while i >= 0:
+        if i == 0:
+            path = [1] + path
+            break
+        if i == 1:
+            path = [2] + path
+            break
+        if dp[i-1] < dp[i-2]:
+            path = [i+1] + path
+            i-=1
+        else:
+            path = [i+2] + path
+            i-=2
+    return dp[n - 1], path"
+71,"def grasshopper_dp_memo(path):
+    n = len(path)
+    memo = {}
+    trace = {}
+    def solve(index):
+        if index >= n:
+            return 0, []
+        if index in memo:
+            return memo[index]
+        cost1, path1 = solve(index + 1)
+        cost2, path2 = solve(index + 2)
+        if cost1 + path[index] < cost2 + path[index]:
+            memo[index] = cost1 + path[index], [index + 1] + path1
+            trace[index] = index + 1
+        else:
+            memo[index] = cost2 + path[index], [index + 2] + path2
+            trace[index] = index + 2
+        return memo[index]
+    total_cost, path_indices = solve(0)
+    return total_cost, path_indices"
+72,"def grasshopper_dp_iter(route):
+    n = len(route)
+    dp = [0] * n
+    path = [0] * n
+    dp[0] = route[0]
+    dp[1] = route[1]
+    path[1] = 0
+    for i in range(2, n):
+        if dp[i - 1] < dp[i - 2]:
+            dp[i] = dp[i - 1] + route[i]
+            path[i] = i - 1
+        else:
+            dp[i] = dp[i - 2] + route[i]
+            path[i] = i - 2
+    current = n - 1
+    result_path = [current + 1]
+    while current > 0:
+        current = path[current]
+        result_path.append(current + 1)
+    return dp[n - 1], result_path[::-1]"
+73,"def grasshopper_rolling_array(costs):
+    n = len(costs)
+    if n < 3: return (sum(costs[:n]), list(range(1, n + 1)))
+    dp = [0, 0]
+    path = [0,0]
+    for i in range(2, n):
+        if dp[0] + costs[i] < dp[1] + costs[i]:
+            dp[1] = dp[0] + costs[i]
+            path[1] = i
+        else:
+            dp[1] = dp[1] + costs[i]
+            path[1] = i
+        dp[0], dp[1] = dp[1], dp[0] 
+    final_path=[n]
+    current = n-1
+    return dp[1], final_path"
+74,"def grasshopper_in_place(arr):
+    n = len(arr)
+    for i in range(2, n):
+        arr[i] += min(arr[i - 1], arr[i - 2])
+    path = [n]
+    i = n - 1
+    while i > 0:
+        if i == 1:
+            path.append(0)
+            break
+        if arr[i - 1] < arr[i - 2]:
+            path.append(i - 1)
+            i = i - 1
+        else:
+            path.append(i - 2)
+            i = i - 2
+    return arr[n - 1], path[::-1]"
+75,"def grasshopper_parent(data):
+    n = len(data)
+    dp = [0] * n
+    parent = [None] * n
+    dp[1] = data[1]
+    for i in range(2, n):
+        if dp[i - 1] < dp[i - 2]:
+            dp[i] = dp[i - 1] + data[i]
+            parent[i] = i - 1
+        else:
+            dp[i] = dp[i - 2] + data[i]
+            parent[i] = i - 2
+    path = []
+    curr = n - 1
+    while curr is not None:
+        path.append(curr + 1)
+        curr = parent[curr]
+    return dp[n - 1], path[::-1]"
+76,"def grasshopper_generator(costs_list):
+    def solve(idx, current_cost, current_path):
+        if idx >= len(costs_list):
+            yield current_cost, current_path
+        else:
+            yield from solve(idx + 1, current_cost + costs_list[idx], current_path + [idx + 1])
+            yield from solve(idx + 2, current_cost + costs_list[idx], current_path + [idx + 1, idx + 2])
+    results = list(solve(0, 0, []))
+    return min(results, key=lambda x: x[0])"
+77,"from functools import reduce
+def grasshopper_functional(cost_array):
+    n = len(cost_array)
+    dp = reduce(lambda acc, i: acc + [min(acc[-1] + cost_array[i], (acc[-2] if i > 1 else float('inf')) + cost_array[i])], range(2, n), [0,cost_array[0] if n > 0 else 0, cost_array[1] if n > 1 else 0])
+    path = []
+    i = n-1
+    while i > 0:
+        path.append(i+1)
+        if i == 1:
+            i = 0
+        elif dp[i] == dp[i-1] + cost_array[i]:
+            i = i-1
+        else:
+            i = i-2
+    return dp[-1], path[::-1]"
+78,"import numpy as np
+def grasshopper_numpy(cost_vec):
+    n = len(cost_vec)
+    dp = np.zeros(n)
+    dp[1] = cost_vec[1]
+    for i in range(2, n):
+        dp[i] = min(dp[i-1], dp[i-2]) + cost_vec[i]
+    path = [n]
+    i = n - 1
+    while i > 0:
+        if i == 1:
+            path.append(0)
+            break
+        if dp[i] == dp[i - 1] + cost_vec[i]:
+            path.append(i - 1)
+            i = i - 1
+        else:
+            path.append(i - 2)
+            i = i - 2
+    return dp[n - 1], path[::-1]"
+79,"def grasshopper_early_exit(charges):
+    n = len(charges)
+    if n <= 1:
+      return (sum(charges), list(range(1, n + 1)))
+    dp = [0] * n
+    dp[0] = charges[0]
+    dp[1] = charges[1]
+    for i in range(2, n):
+        dp[i] = min(dp[i-1], dp[i-2]) + charges[i]
+    path = [n]
+    i = n-1
+    while i > 0:
+      path.append(i)
+      if i == 1:
+        i = 0
+      elif dp[i] == dp[i-1] + charges[i]:
+        i = i - 1
+      else:
+        i = i - 2
+    return dp[n-1], path[::-1]"
+80,"def grasshopper_parallel_jumps(price):
+    n = len(price)
+    dp = [0] * n
+    dp[1] = price[1]
+    for i in range(2, n):
+        dp[i] = min(dp[i-1] + price[i], dp[i-2] + price[i])
+    path = [n]
+    i = n-1
+    while i > 0:
+        path.append(i)
+        if i == 1:
+          i = 0
+        elif dp[i] == dp[i-1] + price[i]:
+            i = i - 1
+        else:
+            i = i - 2
+    return dp[n-1], path[::-1]"
+81,"def grasshopper_dp_recursive(route):
+    n = len(route)
+    memo = {}
+    def solve(idx):
+        if idx >= n:
+            return 0, []
+        if idx in memo:
+            return memo[idx]
+        cost1, path1 = solve(idx + 1)
+        cost2, path2 = solve(idx + 2)
+        if cost1 + route[idx] < cost2 + route[idx]:
+            memo[idx] = cost1 + route[idx], [idx + 1] + path1
+        else:
+            memo[idx] = cost2 + route[idx], [idx + 2] + path2
+        return memo[idx]
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    return solve(0)"
+82,"def grasshopper_dp_iterative(route):
+    n = len(route)
+    dp = [0] * n
+    path = [[] for _ in range(n)]
+    dp[n - 1] = route[n - 1]
+    path[n - 1] = [n]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+        path[n - 2] = [n - 1, n]
+    for i in range(n - 3, -1, -1):
+        if dp[i + 1] + route[i] < dp[i + 2] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+            path[i] = [i + 1] + path[i + 1]
+        else:
+            dp[i] = dp[i + 2] + route[i]
+            path[i] = [i + 2] + path[i + 2]
+    return dp[0], path[0]"
+83,"def grasshopper_dp_rolling(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0, 0]
+    path = [[], []]
+    dp[0] = route[n - 1]
+    path[0] = [n]
+    dp[1] = route[n - 2] + route[n - 1]
+    path[1] = [n - 1, n]
+    for i in range(n - 3, -1, -1):
+        if dp[0] + route[i] < dp[1] + route[i]:
+            dp[1] = dp[0] + route[i]
+            path[1] = [i + 1] + path[0]
+        else:
+            dp[0] = dp[1] + route[i]
+            path[0] = [i + 2] + path[1]
+    return dp[0], path[0]"
+84,"def grasshopper_dp_inplace(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = route[:]
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        dp[i] = route[i] + min(dp[i + 1], dp[i + 2])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+85,"def grasshopper_dp_parent(route):
+    n = len(route)
+    dp = [0] * n
+    parent = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+        parent[n - 2] = n - 1
+    for i in range(n - 3, -1, -1):
+        if dp[i + 1] + route[i] < dp[i + 2] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+            parent[i] = i + 1
+        else:
+            dp[i] = dp[i + 2] + route[i]
+            parent[i] = i + 2
+    path = []
+    curr = 0
+    while curr < n:
+        path.append(curr + 1)
+        curr = parent[curr]
+    return dp[0], path"
+86,"def grasshopper_dp_generator(route):
+    n = len(route)
+    def path_generator(idx):
+        if idx >= n:
+            yield []
+        else:
+            for next_idx in [idx + 1, idx + 2]:
+                for sub_path in path_generator(next_idx):
+                    yield [idx + 1] + sub_path
+    min_cost = float('inf')
+    best_path = []
+    for path in path_generator(0):
+        cost = sum(route[i - 1] for i in path)
+        if cost < min_cost:
+            min_cost = cost
+            best_path = path
+    return min_cost, best_path"
+87,"from functools import reduce
+def grasshopper_dp_reduce(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = reduce(lambda acc, i: [route[i] + min(acc[0], acc[1])] + acc, range(n - 2, -1, -1), [route[n - 1], route[n - 2] + route[n - 1]])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[0] < dp[1]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+88,"import numpy as np
+def grasshopper_dp_numpy(route):
+    n = len(route)
+    route = np.array(route)
+    if n < 3:
+        return np.sum(route), list(range(1, n + 1))
+    dp = np.zeros(n)
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        dp[i] = route[i] + np.min([dp[i + 1], dp[i + 2]])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+89,"def grasshopper_dp_shortcut(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        if dp[i + 2] > dp[i + 1] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+        else:
+            dp[i] = dp[i + 2] + route[i]
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+90,"import multiprocessing
+def grasshopper_dp_parallel(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    with multiprocessing.Pool(processes=2) as pool:
+        results = pool.starmap(
+            lambda i: (i, route[i] + min(dp[i + 1], dp[i + 2])),
+            [(i,) for i in range(n - 3, -1, -1)]
+        )
+    for i, val in results:
+        dp[i] = val
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+91,"def grasshopper_dp_recursive(route):
+    n = len(route)
+    memo = {}
+    def solve(idx):
+        if idx >= n:
+            return 0, []
+        if idx in memo:
+            return memo[idx]
+        cost1, path1 = solve(idx + 1)
+        cost2, path2 = solve(idx + 2)
+        if cost1 + route[idx] < cost2 + route[idx]:
+            memo[idx] = cost1 + route[idx], [idx + 1] + path1
+        else:
+            memo[idx] = cost2 + route[idx], [idx + 2] + path2
+        return memo[idx]
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    return solve(0)"
+92,"def grasshopper_dp_iterative(route):
+    n = len(route)
+    dp = [0] * n
+    path = [[] for _ in range(n)]
+    dp[n - 1] = route[n - 1]
+    path[n - 1] = [n]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+        path[n - 2] = [n - 1, n]
+    for i in range(n - 3, -1, -1):
+        if dp[i + 1] + route[i] < dp[i + 2] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+            path[i] = [i + 1] + path[i + 1]
+        else:
+            dp[i] = dp[i + 2] + route[i]
+            path[i] = [i + 2] + path[i + 2]
+    return dp[0], path[0]"
+93,"def grasshopper_dp_rolling(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0, 0]
+    path = [[], []]
+    dp[0] = route[n - 1]
+    path[0] = [n]
+    dp[1] = route[n - 2] + route[n - 1]
+    path[1] = [n - 1, n]
+    for i in range(n - 3, -1, -1):
+        if dp[0] + route[i] < dp[1] + route[i]:
+            dp[1] = dp[0] + route[i]
+            path[1] = [i + 1] + path[0]
+        else:
+            dp[0] = dp[1] + route[i]
+            path[0] = [i + 2] + path[1]
+    return dp[0], path[0]"
+94,"def grasshopper_dp_inplace(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = route[:]
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        dp[i] = route[i] + min(dp[i + 1], dp[i + 2])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+95,"def grasshopper_dp_parent(route):
+    n = len(route)
+    dp = [0] * n
+    parent = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+        parent[n - 2] = n - 1
+    for i in range(n - 3, -1, -1):
+        if dp[i + 1] + route[i] < dp[i + 2] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+            parent[i] = i + 1
+        else:
+            dp[i] = dp[i + 2] + route[i]
+            parent[i] = i + 2
+    path = []
+    curr = 0
+    while curr < n:
+        path.append(curr + 1)
+        curr = parent[curr]
+    return dp[0], path"
+96,"def grasshopper_dp_generator(route):
+    n = len(route)
+    def path_generator(idx):
+        if idx >= n:
+            yield []
+        else:
+            for next_idx in [idx + 1, idx + 2]:
+                for sub_path in path_generator(next_idx):
+                    yield [next_idx] + sub_path
+    min_cost = float('inf')
+    best_path = []
+    for path in path_generator(0):
+        cost = sum(route[i - 1] for i in path)
+        if cost < min_cost:
+            min_cost = cost
+            best_path = path
+    return min_cost, best_path"
+97,"from functools import reduce
+def grasshopper_dp_reduce(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = reduce(lambda acc, i: [route[i] + min(acc[0], acc[1])] + acc, range(n - 2, -1, -1), [route[n - 1], route[n - 2] + route[n - 1]])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[0] < dp[1]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+98,"import numpy as np
+def grasshopper_dp_numpy(route):
+    n = len(route)
+    route = np.array(route)
+    if n < 3:
+        return np.sum(route), list(range(1, n + 1))
+    dp = np.zeros(n)
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        dp[i] = route[i] + np.min([dp[i + 1], dp[i + 2]])
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+99,"def grasshopper_dp_shortcut(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    for i in range(n - 3, -1, -1):
+        if dp[i + 2] > dp[i + 1] + route[i]:
+            dp[i] = dp[i + 1] + route[i]
+        else:
+            dp[i] = dp[i + 2] + route[i]
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+100,"import multiprocessing
+def grasshopper_dp_parallel(route):
+    n = len(route)
+    if n < 3:
+        return sum(route), list(range(1, n + 1))
+    dp = [0] * n
+    dp[n - 1] = route[n - 1]
+    if n > 1:
+        dp[n - 2] = route[n - 2] + route[n - 1]
+    with multiprocessing.Pool(processes=2) as pool:
+        results = pool.starmap(
+            lambda i: (i, route[i] + min(dp[i + 1], dp[i + 2])),
+            [(i,) for i in range(n - 3, -1, -1)]
+        )
+    for i, cost in results:
+        dp[i] = cost
+    path = []
+    curr = 0
+    while curr < n - 1:
+        if dp[curr + 1] < dp[curr + 2]:
+            path.append(curr + 1)
+            curr += 1
+        else:
+            path.append(curr + 2)
+            curr += 2
+    path.append(n)
+    return dp[0], [x + 1 for x in path]"
+101,"n = int(input())
+costs = list(map(int, input().split()))
+dp = [0] * n
+path = [0] * n
+dp[0] = costs[0]
+path[0] = 0
+for i in range(1, n):
+    dp[i] = dp[i-1] + costs[i]
+    path[i] = i-1
+    if i > 1 and dp[i-2] + costs[i] < dp[i]:
+        dp[i] = dp[i-2] + costs[i]
+        path[i] = i-2
+route = []
+curr = n-1
+while curr >= 0:
+    route.append(curr)
+    curr = path[curr]
+route.reverse()
+print(dp[n-1], *route)"
+102,"n = int(input())
+weights = list(map(int, input().split()))
+min_cost = [0] * n
+prev_node = [0] * n
+min_cost[0] = weights[0]
+prev_node[0] = -1
+for i in range(1, n):
+    min_cost[i] = min_cost[i-1] + weights[i]
+    prev_node[i] = i - 1
+    if i > 1 and min_cost[i-2] + weights[i] < min_cost[i]:
+        min_cost[i] = min_cost[i-2] + weights[i]
+        prev_node[i] = i - 2
+optimal_path = []
+current = n - 1
+while current != -1:
+    optimal_path.append(current)
+    current = prev_node[current]
+optimal_path.reverse()
+print(min_cost[n-1], *optimal_path)"
+103,"n = int(input())
+values = list(map(int, input().split()))
+d = [0] * n
+p = [0] * n
+d[0] = values[0]
+p[0] = -1
+for i in range(1, n):
+    d[i] = d[i-1] + values[i]
+    p[i] = i - 1
+    if i > 1 and d[i-2] + values[i] < d[i]:
+        d[i] = d[i-2] + values[i]
+        p[i] = i - 2
+path = []
+curr = n - 1
+while curr != -1:
+    path.append(curr)
+    curr = p[curr]
+path.reverse()
+print(d[n-1], *path)"
+104,"n = int(input())
+price = list(map(int, input().split()))
+dp_table = [0] * n
+trace = [0] * n
+dp_table[0] = price[0]
+trace[0] = -1
+for i in range(1, n):
+    dp_table[i] = dp_table[i-1] + price[i]
+    trace[i] = i - 1
+    if i >= 2 and dp_table[i-2] + price[i] < dp_table[i]:
+        dp_table[i] = dp_table[i-2] + price[i]
+        trace[i] = i - 2
+route_taken = []
+current = n - 1
+while current != -1:
+    route_taken.append(current)
+    current = trace[current]
+route_taken.reverse()
+print(dp_table[n-1], *route_taken)"
+105,"n = int(input())
+cost = list(map(int, input().split()))
+minimum = [0] * n
+previous = [0] * n
+minimum[0] = cost[0]
+previous[0] = -1
+for i in range(1, n):
+    minimum[i] = minimum[i-1] + cost[i]
+    previous[i] = i-1
+    if i > 1 and minimum[i-2] + cost[i] < minimum[i]:
+        minimum[i] = minimum[i-2] + cost[i]
+        previous[i] = i-2
+path_taken = []
+current = n-1
+while current != -1:
+    path_taken.append(current)
+    current = previous[current]
+path_taken.reverse()
+print(minimum[n-1], *path_taken)"
+106,"n = int(input())
+expenses = list(map(int, input().split()))
+table = [0] * n
+parent = [0] * n
+table[0] = expenses[0]
+parent[0] = -1
+for i in range(1, n):
+    table[i] = table[i-1] + expenses[i]
+    parent[i] = i-1
+    if i > 1 and table[i-2] + expenses[i] < table[i]:
+        table[i] = table[i-2] + expenses[i]
+        parent[i] = i-2
+journey = []
+index = n-1
+while index != -1:
+    journey.append(index)
+    index = parent[index]
+journey.reverse()
+print(table[n-1], *journey)"
+107,"n = int(input())
+price_list = list(map(int, input().split()))
+dp_array = [0] * n
+jump = [0] * n
+dp_array[0] = price_list[0]
+jump[0] = -1
+for i in range(1, n):
+    dp_array[i] = dp_array[i-1] + price_list[i]
+    jump[i] = i - 1
+    if i > 1 and dp_array[i-2] + price_list[i] < dp_array[i]:
+        dp_array[i] = dp_array[i-2] + price_list[i]
+        jump[i] = i-2
+route_list = []
+current_index = n-1
+while current_index != -1:
+    route_list.append(current_index)
+    current_index = jump[current_index]
+route_list.reverse()
+print(dp_array[n-1], *route_list)"
+108,"n = int(input())
+step_costs = list(map(int, input().split()))
+minimum_costs = [0] * n
+path_taken = [0] * n
+minimum_costs[0] = step_costs[0]
+path_taken[0] = -1
+for i in range(1, n):
+    minimum_costs[i] = minimum_costs[i - 1] + step_costs[i]
+    path_taken[i] = i - 1
+    if i > 1 and minimum_costs[i - 2] + step_costs[i] < minimum_costs[i]:
+        minimum_costs[i] = minimum_costs[i - 2] + step_costs[i]
+        path_taken[i] = i - 2
+optimal_path = []
+current_index = n - 1
+while current_index != -1:
+    optimal_path.append(current_index)
+    current_index = path_taken[current_index]
+optimal_path.reverse()
+print(minimum_costs[n - 1], *optimal_path)"
+109,"n = int(input())
+vals = list(map(int, input().split()))
+cost = [0] * n
+prev = [0] * n
+cost[0] = vals[0]
+prev[0] = -1
+for i in range(1, n):
+  cost[i] = cost[i-1] + vals[i]
+  prev[i] = i-1
+  if i > 1 and cost[i-2] + vals[i] < cost[i]:
+    cost[i] = cost[i-2] + vals[i]
+    prev[i] = i-2
+path = []
+curr = n-1
+while curr != -1:
+  path.append(curr)
+  curr = prev[curr]
+path.reverse()
+print(cost[n-1], *path)"
+110,"n = int(input())
+points = list(map(int, input().split()))
+dp = [0] * n
+traceback = [0] * n
+dp[0] = points[0]
+traceback[0] = -1
+for i in range(1, n):
+    dp[i] = dp[i-1] + points[i]
+    traceback[i] = i - 1
+    if i > 1 and dp[i-2] + points[i] < dp[i]:
+        dp[i] = dp[i-2] + points[i]
+        traceback[i] = i-2
+result_path = []
+current = n - 1
+while current != -1:
+    result_path.append(current)
+    current = traceback[current]
+result_path.reverse()
+print(dp[n-1], *result_path)"
+111,"n = int(input())
+prices = list(map(int, input().split()))
+dp = [0] * n
+path = [0] * n
+dp[0] = prices[0]
+path[0] = 0
+for i in range(1, n):
+    dp[i] = dp[i-1] + prices[i]
+    path[i] = i-1
+    if i > 1 and dp[i-2] + prices[i] < dp[i]:
+        dp[i] = dp[i-2] + prices[i]
+        path[i] = i-2
+print(dp[n-1])
+indices = []
+curr = n-1
+while curr >= 0:
+    indices.append(curr)
+    curr = path[curr]
+print(*reversed(indices))"
+112,"n = int(input())
+costs = list(map(int, input().split()))
+min_cost = [0] * n
+prev = [0] * n
+min_cost[0] = costs[0]
+prev[0] = -1
+for i in range(1, n):
+    min_cost[i] = min_cost[i-1] + costs[i]
+    prev[i] = i-1
+    if i > 1 and min_cost[i-2] + costs[i] < min_cost[i]:
+        min_cost[i] = min_cost[i-2] + costs[i]
+        prev[i] = i-2
+print(min_cost[n-1])
+route = []
+curr = n-1
+while curr != -1:
+    route.append(curr)
+    curr = prev[curr]
+print(*reversed(route))"
+113,"n = int(input())
+values = list(map(int, input().split()))
+dp_table = [0] * n
+ancestors = [0] * n
+dp_table[0] = values[0]
+ancestors[0] = -1
+for i in range(1, n):
+    dp_table[i] = dp_table[i-1] + values[i]
+    ancestors[i] = i-1
+    if i > 1 and dp_table[i-2] + values[i] < dp_table[i]:
+        dp_table[i] = dp_table[i-2] + values[i]
+        ancestors[i] = i-2
+print(dp_table[n-1])
+path_taken = []
+current = n-1
+while current != -1:
+    path_taken.append(current)
+    current = ancestors[current]
+print(*reversed(path_taken))"
+114,"n = int(input())
+jump_costs = list(map(int, input().split()))
+lowest_cost = [0] * n
+predecessors = [0] * n
+lowest_cost[0] = jump_costs[0]
+predecessors[0] = -1
+for i in range(1, n):
+    lowest_cost[i] = lowest_cost[i-1] + jump_costs[i]
+    predecessors[i] = i-1
+    if i > 1 and lowest_cost[i-2] + jump_costs[i] < lowest_cost[i]:
+        lowest_cost[i] = lowest_cost[i-2] + jump_costs[i]
+        predecessors[i] = i-2
+print(lowest_cost[n-1])
+trace = []
+node = n-1
+while node != -1:
+    trace.append(node)
+    node = predecessors[node]
+print(*reversed(trace))"
+115,"n = int(input())
+node_values = list(map(int, input().split()))
+cost = [0] * n
+parent = [0] * n
+cost[0] = node_values[0]
+parent[0] = -1
+for i in range(1, n):
+    cost[i] = cost[i-1] + node_values[i]
+    parent[i] = i-1
+    if i > 1 and cost[i-2] + node_values[i] < cost[i]:
+        cost[i] = cost[i-2] + node_values[i]
+        parent[i] = i-2
+print(cost[n-1])
+route_indices = []
+curr_node = n-1
+while curr_node != -1:
+    route_indices.append(curr_node)
+    curr_node = parent[curr_node]
+print(*reversed(route_indices))"
+116,"n = int(input())
+a = list(map(int, input().split()))
+dp_arr = [0] * n
+backtrack = [0] * n
+dp_arr[0] = a[0]
+backtrack[0] = -1
+for i in range(1, n):
+    dp_arr[i] = dp_arr[i-1] + a[i]
+    backtrack[i] = i-1
+    if i > 1 and dp_arr[i-2] + a[i] < dp_arr[i]:
+        dp_arr[i] = dp_arr[i-2] + a[i]
+        backtrack[i] = i-2
+print(dp_arr[n-1])
+path = []
+curr = n-1
+while curr != -1:
+    path.append(curr)
+    curr = backtrack[curr]
+print(*reversed(path))"
+117,"n = int(input())
+nums = list(map(int, input().split()))
+d = [0] * n
+p = [0] * n
+d[0] = nums[0]
+p[0] = -1
+for i in range(1, n):
+    d[i] = d[i-1] + nums[i]
+    p[i] = i-1
+    if i > 1 and d[i-2] + nums[i] < d[i]:
+        d[i] = d[i-2] + nums[i]
+        p[i] = i-2
+print(d[n-1])
+path_list = []
+curr_idx = n-1
+while curr_idx != -1:
+    path_list.append(curr_idx)
+    curr_idx = p[curr_idx]
+print(*reversed(path_list))"
+118,"n = int(input())
+vals = list(map(int, input().split()))
+costs = [0] * n
+parents = [0] * n
+costs[0] = vals[0]
+parents[0] = -1
+for i in range(1, n):
+    costs[i] = costs[i-1] + vals[i]
+    parents[i] = i-1
+    if i > 1 and costs[i-2] + vals[i] < costs[i]:
+        costs[i] = costs[i-2] + vals[i]
+        parents[i] = i-2
+print(costs[n-1])
+route = []
+curr = n-1
+while curr != -1:
+    route.append(curr)
+    curr = parents[curr]
+print(*reversed(route))"
+119,"n = int(input())
+arr = list(map(int, input().split()))
+dp_vals = [0] * n
+prev_node = [0] * n
+dp_vals[0] = arr[0]
+prev_node[0] = -1
+for i in range(1, n):
+    dp_vals[i] = dp_vals[i-1] + arr[i]
+    prev_node[i] = i-1
+    if i > 1 and dp_vals[i-2] + arr[i] < dp_vals[i]:
+        dp_vals[i] = dp_vals[i-2] + arr[i]
+        prev_node[i] = i-2
+print(dp_vals[n-1])
+visited_nodes = []
+curr = n-1
+while curr != -1:
+    visited_nodes.append(curr)
+    curr = prev_node[curr]
+print(*reversed(visited_nodes))"
+120,"n = int(input())
+weights = list(map(int, input().split()))
+min_path = [0] * n
+pointers = [0] * n
+min_path[0] = weights[0]
+pointers[0] = -1
+for i in range(1, n):
+    min_path[i] = min_path[i-1] + weights[i]
+    pointers[i] = i-1
+    if i > 1 and min_path[i-2] + weights[i] < min_path[i]:
+        min_path[i] = min_path[i-2] + weights[i]
+        pointers[i] = i-2
+print(min_path[n-1])
+path_indices = []
+current = n-1
+while current != -1:
+    path_indices.append(current)
+    current = pointers[current]
+print(*reversed(path_indices))"
+121,"n = int(input())
+costs = list(map(int, input().split()))
+dp = [float('inf')] * n
+dp[0] = 0
+path = [[] for _ in range(n)]
+path[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp[j] + abs(costs[i] - costs[j]) < dp[i]:
+            dp[i] = dp[j] + abs(costs[i] - costs[j])
+            path[i] = path[j] + [i]
+min_cost = dp[n - 1]
+route = path[n - 1]
+print(min_cost)
+print(*route)"
+122,"n = int(input())
+values = list(map(int, input().split()))
+minimums = [float('inf')] * n
+minimums[0] = 0
+predecessors = [None] * n
+for i in range(1, n):
+    for j in range(i):
+        if minimums[j] + abs(values[i] - values[j]) < minimums[i]:
+            minimums[i] = minimums[j] + abs(values[i] - values[j])
+            predecessors[i] = j
+min_cost = minimums[n - 1]
+route = []
+current = n - 1
+while current is not None:
+    route.insert(0, current)
+    current = predecessors[current]
+print(min_cost)
+print(*route)"
+123,"n = int(input())
+data = list(map(int, input().split()))
+d = [float('inf')] * n
+d[0] = 0
+parent = [[] for _ in range(n)]
+parent[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if d[j] + abs(data[i] - data[j]) < d[i]:
+            d[i] = d[j] + abs(data[i] - data[j])
+            parent[i] = parent[j] + [i]
+min_cost = d[n - 1]
+route = parent[n - 1]
+print(min_cost)
+print(*route)"
+124,"n = int(input())
+nums = list(map(int, input().split()))
+dist = [float('inf')] * n
+dist[0] = 0
+prev = [None] * n
+for i in range(1, n):
+    for j in range(i):
+        if dist[j] + abs(nums[i] - nums[j]) < dist[i]:
+            dist[i] = dist[j] + abs(nums[i] - nums[j])
+            prev[i] = j
+min_cost = dist[n - 1]
+route = []
+curr = n - 1
+while curr is not None:
+    route.insert(0, curr)
+    curr = prev[curr]
+print(min_cost)
+print(*route)"
+125,"n = int(input())
+arr = list(map(int, input().split()))
+dp_arr = [float('inf')] * n
+dp_arr[0] = 0
+shortest_path = [[] for _ in range(n)]
+shortest_path[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp_arr[j] + abs(arr[i] - arr[j]) < dp_arr[i]:
+            dp_arr[i] = dp_arr[j] + abs(arr[i] - arr[j])
+            shortest_path[i] = shortest_path[j] + [i]
+min_cost = dp_arr[n - 1]
+route = shortest_path[n - 1]
+print(min_cost)
+print(*route)"
+126,"n = int(input())
+vals = list(map(int, input().split()))
+min_cost_dp = [float('inf')] * n
+min_cost_dp[0] = 0
+path_so_far = [[] for _ in range(n)]
+path_so_far[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if min_cost_dp[j] + abs(vals[i] - vals[j]) < min_cost_dp[i]:
+            min_cost_dp[i] = min_cost_dp[j] + abs(vals[i] - vals[j])
+            path_so_far[i] = path_so_far[j] + [i]
+min_cost = min_cost_dp[n - 1]
+route = path_so_far[n - 1]
+print(min_cost)
+print(*route)"
+127,"n = int(input())
+points = list(map(int, input().split()))
+cost_matrix = [float('inf')] * n
+cost_matrix[0] = 0
+route_keeper = [[] for _ in range(n)]
+route_keeper[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if cost_matrix[j] + abs(points[i] - points[j]) < cost_matrix[i]:
+            cost_matrix[i] = cost_matrix[j] + abs(points[i] - points[j])
+            route_keeper[i] = route_keeper[j] + [i]
+min_cost = cost_matrix[n - 1]
+route = route_keeper[n - 1]
+print(min_cost)
+print(*route)"
+128,"n = int(input())
+numbers = list(map(int, input().split()))
+dp_table = [float('inf')] * n
+dp_table[0] = 0
+history = [[] for _ in range(n)]
+history[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp_table[j] + abs(numbers[i] - numbers[j]) < dp_table[i]:
+            dp_table[i] = dp_table[j] + abs(numbers[i] - numbers[j])
+            history[i] = history[j] + [i]
+min_cost = dp_table[n - 1]
+route = history[n - 1]
+print(min_cost)
+print(*route)"
+129,"n = int(input())
+x = list(map(int, input().split()))
+costs = [float('inf')] * n
+costs[0] = 0
+paths = [[] for _ in range(n)]
+paths[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if costs[j] + abs(x[i] - x[j]) < costs[i]:
+            costs[i] = costs[j] + abs(x[i] - x[j])
+            paths[i] = paths[j] + [i]
+min_cost = costs[n - 1]
+route = paths[n - 1]
+print(min_cost)
+print(*route)"
+130,"n = int(input())
+vals = list(map(int, input().split()))
+dp_values = [float('inf')] * n
+dp_values[0] = 0
+path_list = [[] for _ in range(n)]
+path_list[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp_values[j] + abs(vals[i] - vals[j]) < dp_values[i]:
+            dp_values[i] = dp_values[j] + abs(vals[i] - vals[j])
+            path_list[i] = path_list[j] + [i]
+min_cost = dp_values[n - 1]
+route = path_list[n - 1]
+print(min_cost)
+print(*route)"
+131,"n = int(input())
+costs = list(map(int, input().split()))
+route = [0] * n
+dp = [0] * n
+dp[0] = costs[0]
+for i in range(1, n):
+    dp[i] = dp[i - 1] + costs[i]
+    if i > 1:
+        dp[i] = min(dp[i], dp[i - 2] + costs[i])
+for i in range(n - 1, -1, -1):
+    if i == 0:
+        route.append(0)
+    elif i == 1:
+        if dp[1] == dp[0] + costs[1]:
+            route.append(1)
+        else:
+            route.append(0)
+    else:
+        if dp[i] == dp[i - 1] + costs[i]:
+            route.append(i)
+        else:
+            route.append(i - 2)
+route.reverse()
+print(dp[n - 1])
+print(*route)"
+132,"n = int(input())
+heights = list(map(int, input().split()))
+path = [0] * n
+memo = {}
+def solve(idx):
+    if idx == 0:
+        return heights[0]
+    if idx in memo:
+        return memo[idx]
+    jump_one = solve(idx - 1) + heights[idx]
+    jump_two = (solve(idx - 2) if idx > 1 else float('inf')) + heights[idx]
+    memo[idx] = min(jump_one, jump_two)
+    return memo[idx]
+result = solve(n - 1)
+i = n - 1
+while i >= 0:
+    path[i] = i
+    if i > 1 and (memo.get(i - 2, float('inf')) + heights[i] == memo[i]):
+        i -= 2
+    else:
+        i -= 1
+print(result)
+print(*path)"
+133,"n = int(input())
+jmp_costs = list(map(int, input().split()))
+best_path = [0] * n
+cost_arr = [0] * n
+cost_arr[0] = jmp_costs[0]
+if n > 1:
+    cost_arr[1] = jmp_costs[0] + jmp_costs[1]
+for i in range(2, n):
+    cost_arr[i] = min(cost_arr[i - 1], cost_arr[i - 2]) + jmp_costs[i]
+i = n - 1
+while i >= 0:
+    best_path[i] = i
+    if i > 1 and cost_arr[i - 2] + jmp_costs[i] == cost_arr[i]:
+        i -= 2
+    else:
+        i -= 1
+print(cost_arr[n - 1])
+print(*best_path)"
+134,"n = int(input())
+costs = list(map(int, input().split()))
+min_costs = [0] * n
+path = [0] * n
+min_costs[0] = costs[0]
+if n > 1:
+    min_costs[1] = min_costs[0] + costs[1]
+for i in range(2, n):
+    min_costs[i] = min(min_costs[i - 1], min_costs[i - 2]) + costs[i]
+i = n - 1
+while i >= 0:
+    path[i] = i
+    if i > 1 and min_costs[i - 2] + costs[i] == min_costs[i]:
+        i -= 2
+    else:
+        i -= 1
+print(min_costs[n - 1])
+print(*path)"
+135,"n = int(input())
+vals = list(map(int, input().split()))
+dp_table = [0] * n
+trace = [0] * n
+dp_table[0] = vals[0]
+if n > 1:
+    dp_table[1] = vals[0] + vals[1]
+for i in range(2, n):
+    dp_table[i] = min(dp_table[i - 1], dp_table[i - 2]) + vals[i]
+i = n - 1
+while i >= 0:
+    trace[i] = i
+    if i > 1 and dp_table[i - 2] + vals[i] == dp_table[i]:
+        i -= 2
+    else:
+        i -= 1
+print(dp_table[n - 1])
+print(*trace)"
+136,"n = int(input())
+cost_list = list(map(int, input().split()))
+min_cost = [0] * n
+steps = [0] * n
+min_cost[0] = cost_list[0]
+if n > 1:
+    min_cost[1] = min_cost[0] + cost_list[1]
+for i in range(2, n):
+    min_cost[i] = min(min_cost[i - 1], min_cost[i - 2]) + cost_list[i]
+i = n - 1
+while i >= 0:
+    steps[i] = i
+    if i > 1 and min_cost[i - 2] + cost_list[i] == min_cost[i]:
+        i -= 2
+    else:
+        i -= 1
+print(min_cost[n - 1])
+print(*steps)"
+137,"n = int(input())
+prices = list(map(int, input().split()))
+dp = [0] * n
+path_indices = []
+dp[0] = prices[0]
+if n > 1:
+    dp[1] = dp[0] + prices[1]
+for i in range(2, n):
+    dp[i] = min(dp[i - 1], dp[i - 2]) + prices[i]
+i = n - 1
+while i >= 0:
+    path_indices.append(i)
+    if i > 1 and dp[i - 2] + prices[i] == dp[i]:
+        i -= 2
+    else:
+        i -= 1
+path_indices.reverse()
+print(dp[n - 1])
+print(*path_indices)"
+138,"n = int(input())
+arr = list(map(int, input().split()))
+min_val = [0] * n
+indices = [0] * n
+min_val[0] = arr[0]
+if n > 1:
+    min_val[1] = min_val[0] + arr[1]
+for i in range(2, n):
+    min_val[i] = min(min_val[i - 1], min_val[i - 2]) + arr[i]
+i = n - 1
+while i >= 0:
+    indices[i] = i
+    if i > 1 and min_val[i - 2] + arr[i] == min_val[i]:
+        i -= 2
+    else:
+        i -= 1
+print(min_val[n - 1])
+print(*indices)"
+139,"n = int(input())
+vals = list(map(int, input().split()))
+d = [0] * n
+path = [0] * n
+d[0] = vals[0]
+if n > 1:
+    d[1] = vals[0] + vals[1]
+for i in range(2, n):
+    d[i] = min(d[i - 1], d[i - 2]) + vals[i]
+i = n - 1
+while i >= 0:
+    path[i] = i
+    if i > 1 and d[i - 2] + vals[i] == d[i]:
+        i -= 2
+    else:
+        i -= 1
+print(d[n - 1])
+print(*path)"
+140,"n = int(input())
+costs = list(map(int, input().split()))
+dp_arr = [0] * n
+best_route = [0] * n
+dp_arr[0] = costs[0]
+if n > 1:
+    dp_arr[1] = costs[0] + costs[1]
+for i in range(2, n):
+    dp_arr[i] = min(dp_arr[i - 1], dp_arr[i - 2]) + costs[i]
+i = n - 1
+while i >= 0:
+    best_route[i] = i
+    if i > 1 and dp_arr[i - 2] + costs[i] == dp_arr[i]:
+        i -= 2
+    else:
+        i -= 1
+print(dp_arr[n - 1])
+print(*best_route)"
+141,"n = int(input())
+costs = list(map(int, input().split()))
+dp = [float('inf')] * n
+dp[0] = 0
+path = [[] for _ in range(n)]
+path[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp[j] + abs(costs[i] - costs[j]) < dp[i]:
+            dp[i] = dp[j] + abs(costs[i] - costs[j])
+            path[i] = path[j] + [i]
+min_cost = dp[n - 1]
+route = path[n - 1]
+print(min_cost)
+print(*route)"
+142,"n = int(input())
+prices = list(map(int, input().split()))
+memo = {}
+best_path = {}
+def solve(idx):
+    if idx == 0:
+        return 0
+    if idx in memo:
+        return memo[idx]
+    min_price = float('inf')
+    optimal_path = []
+    for prev_idx in range(idx):
+        cost = solve(prev_idx) + abs(prices[idx] - prices[prev_idx])
+        if cost < min_price:
+            min_price = cost
+            optimal_path = best_path[prev_idx] + [idx]
+    memo[idx] = min_price
+    best_path[idx] = optimal_path
+    return min_price
+total_cost = solve(n - 1)
+route = best_path[n - 1]
+print(total_cost)
+print(*route)"
+143,"n = int(input())
+values = list(map(int, input().split()))
+d = [0] * n
+p = [[] for _ in range(n)]
+p[0] = [0]
+for i in range(1, n):
+    d[i] = float('inf')
+    for j in range(i):
+        if d[j] + abs(values[i] - values[j]) < d[i]:
+            d[i] = d[j] + abs(values[i] - values[j])
+            p[i] = p[j] + [i]
+min_value = d[n - 1]
+route = p[n - 1]
+print(min_value)
+print(*route)"
+144,"n = int(input())
+nums = list(map(int, input().split()))
+dp_table = [float('inf')] * n
+dp_table[0] = 0
+backtrack = [[] for _ in range(n)]
+backtrack[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp_table[j] + abs(nums[i] - nums[j]) < dp_table[i]:
+            dp_table[i] = dp_table[j] + abs(nums[i] - nums[j])
+            backtrack[i] = backtrack[j] + [i]
+lowest_cost = dp_table[n - 1]
+route = backtrack[n - 1]
+print(lowest_cost)
+print(*route)"
+145,"n = int(input())
+data = list(map(int, input().split()))
+cost = [float('inf')] * n
+cost[0] = 0
+trace = [[] for _ in range(n)]
+trace[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if cost[j] + abs(data[i] - data[j]) < cost[i]:
+            cost[i] = cost[j] + abs(data[i] - data[j])
+            trace[i] = trace[j] + [i]
+min_cost = cost[n - 1]
+route = trace[n - 1]
+print(min_cost)
+print(*route)"
+146,"n = int(input())
+arr = list(map(int, input().split()))
+dp_array = [float('inf')] * n
+dp_array[0] = 0
+prev = [None] * n
+for i in range(1, n):
+    for j in range(i):
+        if dp_array[j] + abs(arr[i] - arr[j]) < dp_array[i]:
+            dp_array[i] = dp_array[j] + abs(arr[i] - arr[j])
+            prev[i] = j
+min_cost = dp_array[n-1]
+route = []
+curr = n-1
+while curr is not None:
+    route.append(curr)
+    curr = prev[curr]
+route.reverse()
+print(min_cost)
+print(*route)"
+147,"n = int(input())
+points = list(map(int, input().split()))
+distance = [float('inf')] * n
+distance[0] = 0
+previous = [[] for _ in range(n)]
+previous[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if distance[j] + abs(points[i] - points[j]) < distance[i]:
+            distance[i] = distance[j] + abs(points[i] - points[j])
+            previous[i] = previous[j] + [i]
+min_distance = distance[n - 1]
+route = previous[n - 1]
+print(min_distance)
+print(*route)"
+148,"n = int(input())
+vals = list(map(int, input().split()))
+costs = [float('inf')] * n
+costs[0] = 0
+paths = [[] for _ in range(n)]
+paths[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if costs[j] + abs(vals[i] - vals[j]) < costs[i]:
+            costs[i] = costs[j] + abs(vals[i] - vals[j])
+            paths[i] = paths[j] + [i]
+min_cost = costs[n - 1]
+route = paths[n - 1]
+print(min_cost)
+print(*route)"
+149,"n = int(input())
+numbers = list(map(int, input().split()))
+dp_vals = [float('inf')] * n
+dp_vals[0] = 0
+path_taken = [[] for _ in range(n)]
+path_taken[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp_vals[j] + abs(numbers[i] - numbers[j]) < dp_vals[i]:
+            dp_vals[i] = dp_vals[j] + abs(numbers[i] - numbers[j])
+            path_taken[i] = path_taken[j] + [i]
+total_cost = dp_vals[n - 1]
+route = path_taken[n - 1]
+print(total_cost)
+print(*route)"
+150,"n = int(input())
+data_points = list(map(int, input().split()))
+dp_costs = [float('inf')] * n
+dp_costs[0] = 0
+route_taken = [[] for _ in range(n)]
+route_taken[0] = [0]
+for i in range(1, n):
+    for j in range(i):
+        if dp_costs[j] + abs(data_points[i] - data_points[j]) < dp_costs[i]:
+            dp_costs[i] = dp_costs[j] + abs(data_points[i] - data_points[j])
+            route_taken[i] = route_taken[j] + [i]
+min_cost = dp_costs[n - 1]
+route = route_taken[n - 1]
+print(min_cost)
+print(*route)"

@@ -1,0 +1,7 @@
+/model/model_100snippets/model_ckpt/
+/model/model_100snippets/lightning_logs/
+/dataset/conf.py
+/model/model_150snippets/model_ckpt/
+/model/model_150snippets/lightning_logs/
+/model/template/model_ckpt/
+/model/template/lightning_logs/

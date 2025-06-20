@@ -1,0 +1,2656 @@
+number,code
+1,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+2,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+3,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+4,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+5,"from collections import deque
+def bfs(graph, start_node):
+    if not graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+6,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        neighbors = graph.get(node, [])
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+7,"def bfs(graph, start_node):
+    if start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+8,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+    return result"
+9,"from collections import deque
+def bfs(graph, start_node):
+    if not graph or start_node is None:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor is not None and neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+10,"def bfs(graph, start_node):
+    if not graph:
+        return []
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+11,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+12,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+13,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+14,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    results = []
+    while queue:
+        node = queue.pop(0)
+        results.append(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return results"
+15,"def bfs(matrix, start_node):
+    n = len(matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+16,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    return list(iter(lambda: next((node for node in graph[n] if node not in visited and (visited.add(node) or True)), None) for n in queue))"
+17,"def bfs(graph, start_node):
+    if not graph:
+        return []
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        neighbors = graph.get(node, [])
+        queue.extend([n for n in neighbors if n not in visited and not visited.add(n)])
+    return result"
+18,"def bfs(graph, start_node):
+    if start_node not in graph:
+        return []
+    visited = {start_node}
+    queue = [start_node]
+    result = []
+    while queue:
+      node = queue.pop(0)
+      result.append(node)
+      for neighbor in graph[node]:
+        if neighbor not in visited:
+          visited.add(neighbor)
+          queue.append(neighbor)
+    return result"
+19,"def bfs(matrix, start_node):
+    n = len(matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for i in range(n):
+            if matrix[node][i] == 1 and not visited[i]:
+                visited[i] = True
+                queue.append(i)
+    return result"
+20,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return []
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    nodes = []
+    while queue:
+        node = queue.pop(0)
+        nodes.append(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return nodes"
+21,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+22,"def bfs_matrix(graph, start_node):
+    n = len(graph)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if graph[node][neighbor] and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+23,"from collections import deque
+def bfs_adj_list(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        if node in graph:
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)"
+24,"def bfs_recursive(graph, start_node, visited=None):
+    if visited is None:
+        visited = set()
+    if start_node not in visited:
+        visited.add(start_node)
+        yield start_node
+        for neighbor in graph[start_node]:
+            yield from bfs_recursive(graph, neighbor, visited)"
+25,"from collections import deque
+def bfs_limited_depth(graph, start_node, depth_limit):
+    visited = set()
+    queue = deque([(start_node, 0)])
+    visited.add(start_node)
+    while queue:
+        node, depth = queue.popleft()
+        yield node
+        if depth < depth_limit:
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, depth + 1))"
+26,"def bfs_functional(graph, start_node):
+    q = [(start_node, 0)]
+    visited = {start_node}
+    while q:
+        node, _ = min(q, key=lambda x: x[1])
+        q.remove(node)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.append((neighbor, len([n for n, d in q])))"
+27,"from collections import deque
+def bfs_error_handling(graph, start_node):
+    if start_node not in graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        if node in graph:
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)"
+28,"def bfs_matrix_explicit_visited(graph, start_node):
+    n = len(graph)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    i = 0
+    while i < len(queue):
+        node = queue[i]
+        i += 1
+        yield node
+        for neighbor in range(n):
+            if graph[node][neighbor] and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+29,"from collections import deque
+def bfs_empty_graph(graph, start_node):
+    if not graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+30,"def bfs_no_neighbors(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        neighbors = graph.get(node, [])
+        for neighbor in neighbors:
+          if neighbor not in visited:
+            visited.add(neighbor)
+            queue.append(neighbor)"
+31,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+32,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+33,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+34,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+35,"from collections import deque
+def bfs(graph, start_node):
+    if not graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+36,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        neighbors = graph.get(node, [])
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+37,"def bfs(graph, start_node):
+    if start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+38,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+    return result"
+39,"from collections import deque
+def bfs(graph, start_node):
+    if not graph or start_node is None:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor is not None and neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+40,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    nodes = []
+    while queue:
+        node = queue.pop(0)
+        nodes.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return nodes"
+41,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+42,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+43,"def bfs(matrix, start_node):
+    n = len(matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+44,"import queue
+def bfs(graph, start_node):
+    q = queue.Queue()
+    visited = set()
+    q.put(start_node)
+    visited.add(start_node)
+    while not q.empty():
+        node = q.get()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.put(neighbor)"
+45,"def bfs(graph, start_node):
+    if not graph: return
+    visited = {start_node}
+    q = [start_node]
+    while q:
+        v = q.pop(0)
+        yield v
+        for w in graph.get(v, []):
+            if w not in visited:
+                visited.add(w)
+                q.append(w)"
+46,"def bfs(graph, start_node):
+    visited = set()
+    q = [start_node] if start_node is not None else []
+    if not q: return
+    visited.add(start_node)
+    while q:
+        node = q.pop(0)
+        yield node
+        neighbors = graph.get(node, [])
+        q.extend([n for n in neighbors if n not in visited])
+        visited.update(neighbors)"
+47,"from collections import deque
+def bfs(graph, start_node):
+    if start_node not in graph: return
+    q = deque([start_node])
+    visited = {start_node}
+    while q:
+        node = q.popleft()
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.append(neighbor)"
+48,"def bfs(graph, start_node):
+    q = deque()
+    visited = set()
+    if start_node is not None and start_node in graph:
+        q.append(start_node)
+        visited.add(start_node)
+    while q:
+        v = q.popleft()
+        yield v
+        for neighbor in graph.get(v, []):
+            if neighbor not in visited:
+                q.append(neighbor)
+                visited.add(neighbor)"
+49,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = []
+    if start_node < 0 or start_node >= n: return
+    visited[start_node] = True
+    queue.append(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+50,"def bfs(graph, start_node):
+    if not graph or start_node is None: return
+    visited = set()
+    q = [start_node]
+    visited.add(start_node)
+    while True:
+        if not q: break
+        node = q.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.append(neighbor)"
+51,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+52,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+53,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+54,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+55,"from collections import deque
+def bfs(graph, start_node):
+    if not graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+56,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        neighbors = graph.get(node, [])
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+57,"def bfs(graph, start_node):
+    if start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+58,"from collections import deque
+def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = deque([start_node])
+    visited[start_node] = True
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+59,"def bfs(graph, start_node):
+    if not graph or start_node is None:
+        return
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+60,"def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+61,"def bfs_iterative_adj_list(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+62,"def bfs_iterative_adj_matrix(graph, start_node):
+    n = len(graph)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if graph[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+63,"def bfs_generator_adj_list(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield from bfs_generator_adj_list_helper(graph,node, visited)
+def bfs_generator_adj_list_helper(graph, node, visited):
+    yield node
+    for neighbor in graph.get(node, []):
+        if neighbor not in visited:
+            visited.add(neighbor)
+            yield from bfs_generator_adj_list_helper(graph,neighbor, visited)"
+64,"from collections import deque
+def bfs_deque_adj_list(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+65,"from collections import deque
+def bfs_deque_adj_matrix(graph, start_node):
+    n = len(graph)
+    visited = [False] * n
+    queue = deque([start_node])
+    visited[start_node] = True
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in range(n):
+            if graph[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+66,"def bfs_functional_adj_list(graph, start_node):
+    visited = {start_node}
+    queue = [start_node]
+    def explore(q):
+        if not q: return []
+        node = q.pop(0)
+        neighbors = [n for n in graph.get(node,[]) if n not in visited]
+        visited.update(neighbors)
+        return [node] + explore(q + neighbors)
+    return explore(queue)"
+67,"def bfs_adj_list_error_handling(graph, start_node):
+    if not graph or start_node not in graph:
+        return []
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+68,"def bfs_adj_matrix_error_handling(graph,start_node):
+    if not graph:
+        return []
+    n = len(graph)
+    if start_node < 0 or start_node >= n:
+        return []
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if graph[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+69,"def bfs_recursive_adj_list(graph, start_node, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start_node)
+    yield start_node
+    for neighbor in graph.get(start_node, []):
+        if neighbor not in visited:
+            yield from bfs_recursive_adj_list(graph, neighbor, visited)"
+70,"def bfs_iterative_multiple_starts(graph, start_nodes):
+    visited = set()
+    queue = list(start_nodes)
+    for node in start_nodes:
+        visited.add(node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+71,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+72,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+73,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+74,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+75,"from collections import deque
+def bfs(graph, start_node):
+    if not graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    while queue:
+        node = queue.popleft()
+        if node not in visited:
+            visited.add(node)
+            yield node
+            for neighbor in graph.get(node, []):
+                queue.append(neighbor)"
+76,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        if node not in visited:
+            visited.add(node)
+            yield node
+            for neighbor in graph.get(node, []):
+                queue.append(neighbor)"
+77,"def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        neighbors = graph.get(node, [])
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+78,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = deque([start_node])
+    visited[start_node] = True
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+79,"def bfs(graph, start_node):
+    if not graph or start_node is None:
+        return
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+80,"def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+81,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+82,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+83,"def bfs(graph, start_node):
+    if not graph or start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+84,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+85,"from collections import deque
+def bfs(graph, start_node):
+    if not graph:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+86,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    while queue:
+        node = queue.pop(0)
+        yield node
+        neighbors = graph.get(node, [])
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+87,"def bfs(graph, start_node):
+    if start_node not in graph:
+        return
+    visited = {start_node}
+    queue = [start_node]
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+88,"def bfs(adj_matrix, start_node):
+    n = len(adj_matrix)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for neighbor in range(n):
+            if adj_matrix[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+    return result"
+89,"from collections import deque
+def bfs(graph, start_node):
+    if not graph or start_node is None:
+        return
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor is not None and neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+90,"def bfs(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+91,"from collections import deque
+def bfs(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+92,"def bfs_matrix(graph, start_node):
+    n = len(graph)
+    visited = [False] * n
+    queue = [start_node]
+    visited[start_node] = True
+    while queue:
+        node = queue.pop(0)
+        yield node
+        for neighbor in range(n):
+            if graph[node][neighbor] and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)"
+93,"from collections import deque
+def bfs_iterative(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+94,"def bfs_functional(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    return list(filter(lambda x: True,
+                      (node for node in queue for _ in [0]
+                       if (node not in visited or node == start_node)
+                       and not (node in visited and node != start_node)
+                       and (visited.add(node) or True)
+                       and yield node
+                       and (neighbor for neighbor in graph.get(node, []) if neighbor not in visited))))"
+95,"from collections import deque
+def bfs_empty_graph(graph, start_node):
+    if not graph:
+        return []
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+96,"def bfs_no_neighbors(graph, start_node):
+    visited = set()
+    queue = [start_node]
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.pop(0)
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+97,"from collections import deque
+def bfs_start_not_in_graph(graph, start_node):
+    if start_node not in graph:
+        return []
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+    return result"
+98,"def bfs_complex_matrix(graph, start_node):
+    n = len(graph)
+    visited = [False] * n
+    queue = deque([start_node])
+    visited[start_node] = True
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for neighbor in range(n):
+            if graph[node][neighbor] and not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append(neighbor)
+    return result"
+99,"from collections import deque
+def bfs_weighted(graph, start_node):
+    visited = set()
+    queue = deque([start_node])
+    visited.add(start_node)
+    while queue:
+        node = queue.popleft()
+        yield node
+        for neighbor, weight in graph.get(node, {}).items():
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)"
+100,"def bfs_adj_list_recursive(graph, start_node, visited=None):
+    if visited is None:
+        visited = set()
+    if start_node not in graph:
+        return []
+    visited.add(start_node)
+    result = [start_node]
+    for neighbor in graph[start_node]:
+        if neighbor not in visited:
+            result.extend(bfs_adj_list_recursive(graph, neighbor, visited))
+    return result"
+101,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs(graph, start, target):
+    queue = [(start, [start])]
+    visited = {start}
+    while queue:
+        (vertex, path) = queue.pop(0)
+        if vertex == target:
+            return len(path) - 1, path
+        for neighbor in graph.get(vertex, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+adj = {}
+for u, v in edges:
+    adj.setdefault(u, []).append(v)
+    adj.setdefault(v, []).append(u)
+dist, path = bfs(adj, s, t)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+102,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs(graph, start, target):
+    q = [start]
+    visited = {start}
+    parent = {start: None}
+    while q:
+        u = q.pop(0)
+        if u == target:
+            break
+        for v in graph.get(u, []):
+            if v not in visited:
+                visited.add(v)
+                q.append(v)
+                parent[v] = u
+    if target not in parent:
+        return -1, []
+    path = []
+    curr = target
+    while curr is not None:
+        path.insert(0, curr)
+        curr = parent[curr]
+    return len(path) - 1, path
+adj = {}
+for u, v in edges:
+    adj.setdefault(u, []).append(v)
+    adj.setdefault(v, []).append(u)
+distance, route = bfs(adj, s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*route)"
+103,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs_shortest_path(graph, source, dest):
+    queue = [(source, 0)]
+    visited = {source}
+    while queue:
+        node, dist = queue.pop(0)
+        if node == dest:
+            return dist, [source]
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, dist + 1))
+    return -1, []
+adj = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)
+hop_count, path = bfs_shortest_path(adj, s, t)
+if hop_count == -1:
+    print(-1)
+else:
+    print(hop_count)
+    print(*path)"
+104,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def find_shortest_path(graph, start_node, end_node):
+    q = [(start_node, [start_node])]
+    visited = set()
+    while q:
+        node, path = q.pop(0)
+        if node == end_node:
+            return len(path) - 1, path
+        visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                q.append((neighbor, path + [neighbor]))
+    return -1, []
+graph = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    graph[u].append(v)
+    graph[v].append(u)
+distance, route = find_shortest_path(graph, s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*route)"
+105,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs_search(adj_list, start, end):
+    q = [(start, [start])]
+    explored = {start}
+    while q:
+        vertex, route = q.pop(0)
+        if vertex == end:
+            return len(route) - 1, route
+        for neighbour in adj_list[vertex]:
+            if neighbour not in explored:
+                explored.add(neighbour)
+                q.append((neighbour, route + [neighbour]))
+    return -1, []
+adj = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)
+level, path = bfs_search(adj, s, t)
+if level == -1:
+    print(-1)
+else:
+    print(level)
+    print(*path)"
+106,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs_path(graph, start_node, target_node):
+    dist = {}
+    queue = [start_node]
+    dist[start_node] = 0
+    while queue:
+        node = queue.pop(0)
+        if node == target_node:
+            break
+        for neighbor in graph[node]:
+            if neighbor not in dist:
+                dist[neighbor] = dist[node] + 1
+                queue.append(neighbor)
+    if target_node not in dist:
+        return -1, []
+    path = []
+    curr = target_node
+    while curr is not None:
+        path.insert(0, curr)
+        if curr == start_node:
+            break
+        found = False
+        for neighbor in graph:
+            if curr in graph[neighbor] and neighbor in dist and dist[neighbor] == dist[curr] - 1:
+                curr = neighbor
+                found = True
+                break
+        if not found:
+            curr = None
+    return dist[target_node], path
+adj = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)
+length, shortest_path = bfs_path(adj, s, t)
+if length == -1:
+    print(-1)
+else:
+    print(length)
+    print(*shortest_path)"
+107,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def shortest_path(graph, start, end):
+    queue = [(start, [start])]
+    visited = set()
+    while queue:
+        node, path = queue.pop(0)
+        if node == end:
+            return len(path) - 1, path
+        visited.add(node)
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+adj = {}
+for u, v in edges:
+    adj.setdefault(u, []).append(v)
+    adj.setdefault(v, []).append(u)
+hops, route = shortest_path(adj, s, t)
+if hops == -1:
+    print(-1)
+else:
+    print(hops)
+    print(*route)"
+108,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def breadth_first_search(graph, source, destination):
+    queue = [(source, 0)]
+    seen = {source}
+    while queue:
+        node, distance = queue.pop(0)
+        if node == destination:
+            return distance, [source]
+        for neighbor in graph[node]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                queue.append((neighbor, distance + 1))
+    return -1, []
+adj_list = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj_list[u].append(v)
+    adj_list[v].append(u)
+shortest_distance, path = breadth_first_search(adj_list, s, t)
+if shortest_distance == -1:
+    print(-1)
+else:
+    print(shortest_distance)
+    print(*path)"
+109,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def get_path(graph, start, target):
+    q = [(start, [start])]
+    visited = set()
+    while q:
+        node, path = q.pop(0)
+        if node == target:
+            return len(path) - 1, path
+        visited.add(node)
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                q.append((neighbor, path + [neighbor]))
+    return -1, []
+adj = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)
+distance, path = get_path(adj, s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+110,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs_shortest(graph, source, dest):
+    queue = [(source, 0, [source])]
+    visited = {source}
+    while queue:
+        node, dist, path = queue.pop(0)
+        if node == dest:
+            return dist, path
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, dist + 1, path + [neighbor]))
+    return -1, []
+adj_list = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj_list[u].append(v)
+    adj_list[v].append(u)
+dists, routes = bfs_shortest(adj_list, s, t)
+if dists == -1:
+    print(-1)
+else:
+    print(dists)
+    print(*routes)"
+111,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs_variant1(graph, start, target):
+    queue = [(start, [start])]
+    visited = {start}
+    while queue:
+        node, path = queue.pop(0)
+        if node == target:
+            return len(path) - 1, path
+        for u, v in graph:
+            if u == node and v not in visited:
+                visited.add(v)
+                queue.append((v, path + [v]))
+            elif v == node and u not in visited:
+                visited.add(u)
+                queue.append((u, path + [u]))
+    return -1, []
+distance, path = bfs_variant1(edges, s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+112,"n, m = map(int, input().split())
+edges = [list(map(int, input().split())) for _ in range(m)]
+start_node, end_node = map(int, input().split())
+def bfs_variant2(adj_list, source, destination):
+    q = [(source, [source])]
+    seen = {source}
+    while q:
+        vertex, route = q.pop(0)
+        if vertex == destination:
+            return len(route) - 1, route
+        for edge in edges:
+            if edge[0] == vertex and edge[1] not in seen:
+                q.append((edge[1], route + [edge[1]]))
+                seen.add(edge[1])
+            elif edge[1] == vertex and edge[0] not in seen:
+                q.append((edge[0], route + [edge[0]]))
+                seen.add(edge[0])
+    return -1, []
+hops, route = bfs_variant2(edges, start_node, end_node)
+if hops == -1:
+    print(-1)
+else:
+    print(hops)
+    print(*route)"
+113,"n, m = map(int, input().split())
+edge_list = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edge_list.append((u, v))
+source, target = map(int, input().split())
+def bfs_variant3(connections, beginning, end):
+    q = [(beginning, [beginning])]
+    visited_nodes = {beginning}
+    while q:
+        current, pathway = q.pop(0)
+        if current == end:
+            return len(pathway) - 1, pathway
+        for u, v in connections:
+            if u == current and v not in visited_nodes:
+                q.append((v, pathway + [v]))
+                visited_nodes.add(v)
+            if v == current and u not in visited_nodes:
+                q.append((u, pathway + [u]))
+                visited_nodes.add(u)
+    return -1, []
+dist, path = bfs_variant3(edge_list, source, target)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+114,"n, m = map(int, input().split())
+connections = []
+for _ in range(m):
+    a, b = map(int, input().split())
+    connections.append((a, b))
+start, finish = map(int, input().split())
+def bfs_variant4(edge_data, start_point, end_point):
+    queue = [(start_point, [start_point])]
+    visited = set()
+    while queue:
+        node, path = queue.pop(0)
+        if node == end_point:
+            return len(path) - 1, path
+        visited.add(node)
+        for u, v in edge_data:
+            if u == node and v not in visited:
+                queue.append((v, path + [v]))
+            if v == node and u not in visited:
+                queue.append((u, path + [u]))
+    return -1, []
+length, route = bfs_variant4(connections, start, finish)
+if length == -1:
+    print(-1)
+else:
+    print(length)
+    print(*route)"
+115,"n, m = map(int, input().split())
+adj = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj.append([u, v])
+source, destination = map(int, input().split())
+def bfs_variant5(graph, start, goal):
+    queue = [(start, [start])]
+    explored = {start}
+    while queue:
+        vertex, path = queue.pop(0)
+        if vertex == goal:
+            return len(path) - 1, path
+        for u, v in graph:
+            if u == vertex and v not in explored:
+                queue.append((v, path + [v]))
+                explored.add(v)
+            if v == vertex and u not in explored:
+                queue.append((u, path + [u]))
+                explored.add(u)
+    return -1, []
+dist, path = bfs_variant5(adj, source, destination)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+116,"n, m = map(int, input().split())
+edgelist = []
+for _ in range(m):
+    x, y = map(int, input().split())
+    edgelist.append((x, y))
+start_vertex, end_vertex = map(int, input().split())
+def bfs_variant6(graph_edges, beginning, ending):
+    q = [(beginning, [beginning])]
+    visited_set = set()
+    while q:
+        node, route = q.pop(0)
+        if node == ending:
+            return len(route) - 1, route
+        visited_set.add(node)
+        for u, v in graph_edges:
+            if u == node and v not in visited_set:
+                q.append((v, route + [v]))
+            if v == node and u not in visited_set:
+                q.append((u, route + [u]))
+    return -1, []
+distance, path_found = bfs_variant6(edgelist, start_vertex, end_vertex)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path_found)"
+117,"n, m = map(int, input().split())
+graph_edges = []
+for _ in range(m):
+    a, b = map(int, input().split())
+    graph_edges.append((a, b))
+start_node, target_node = map(int, input().split())
+def bfs_variant7(edge_data, start, target):
+    queue = [(start, [start])]
+    visited_nodes = set()
+    while queue:
+        current, path = queue.pop(0)
+        if current == target:
+            return len(path) - 1, path
+        visited_nodes.add(current)
+        for u, v in edge_data:
+            if u == current and v not in visited_nodes:
+                queue.append((v, path + [v]))
+            if v == current and u not in visited_nodes:
+                queue.append((u, path + [u]))
+    return -1, []
+hops, path_result = bfs_variant7(graph_edges, start_node, target_node)
+if hops == -1:
+    print(-1)
+else:
+    print(hops)
+    print(*path_result)"
+118,"n, m = map(int, input().split())
+edgeset = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edgeset.append((u, v))
+source_node, dest_node = map(int, input().split())
+def bfs_variant8(edge_collection, origin, destination):
+    q = [(origin, [origin])]
+    seen_nodes = {origin}
+    while q:
+        current, route = q.pop(0)
+        if current == destination:
+            return len(route) - 1, route
+        for u, v in edge_collection:
+            if u == current and v not in seen_nodes:
+                q.append((v, route + [v]))
+                seen_nodes.add(v)
+            if v == current and u not in seen_nodes:
+                q.append((u, route + [u]))
+                seen_nodes.add(u)
+    return -1, []
+distance, path = bfs_variant8(edgeset, source_node, dest_node)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+119,"n, m = map(int, input().split())
+connections = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    connections.append((u, v))
+start_point, end_point = map(int, input().split())
+def bfs_variant9(edges, start, end):
+    q = [(start, [start])]
+    visited = set()
+    while q:
+        node, path = q.pop(0)
+        if node == end:
+            return len(path) - 1, path
+        visited.add(node)
+        for u, v in edges:
+            if u == node and v not in visited:
+                q.append((v, path + [v]))
+            if v == node and u not in visited:
+                q.append((u, path + [u]))
+    return -1, []
+length, route = bfs_variant9(connections, start_point, end_point)
+if length == -1:
+    print(-1)
+else:
+    print(length)
+    print(*route)"
+120,"n, m = map(int, input().split())
+adj_list = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_list.append((u, v))
+start_node, end_node = map(int, input().split())
+def bfs_variant10(graph, start, end):
+    queue = [(start, [start])]
+    visited_nodes = {start}
+    while queue:
+        node, path = queue.pop(0)
+        if node == end:
+            return len(path) - 1, path
+        for u, v in graph:
+            if u == node and v not in visited_nodes:
+                queue.append((v, path + [v]))
+                visited_nodes.add(v)
+            if v == node and u not in visited_nodes:
+                queue.append((u, path + [u]))
+                visited_nodes.add(u)
+    return -1, []
+distance, path_found = bfs_variant10(adj_list, start_node, end_node)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path_found)"
+121,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs_1(graph, start, target):
+    queue = [(start, [start])]
+    visited = {start}
+    while queue:
+        node, path = queue.pop(0)
+        if node == target:
+            return len(path) - 1, path
+        for u, v in graph:
+            if u == node and v not in visited:
+                visited.add(v)
+                queue.append((v, path + [v]))
+    return -1, []
+distance, path = bfs_1(edges, s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+122,"n, m = map(int, input().split())
+edges = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges[u].append(v)
+    edges[v].append(u)
+start_node, end_node = map(int, input().split())
+def bfs_2(graph, source, destination):
+    queue = [(source, [source])]
+    visited = {source}
+    while queue:
+        vertex, route = queue.pop(0)
+        if vertex == destination:
+            return len(route) - 1, route
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, route + [neighbor]))
+    return -1, []
+hop_count, route = bfs_2(edges, start_node, end_node)
+if hop_count == -1:
+    print(-1)
+else:
+    print(hop_count)
+    print(*route)"
+123,"n, m = map(int, input().split())
+adj = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u].append(v)
+    adj[v].append(u)
+start_vertex, end_vertex = map(int, input().split())
+def bfs_3(graph, start, end):
+    q = [(start, 0, [start])]
+    visited = {start}
+    while q:
+        node, dist, path = q.pop(0)
+        if node == end:
+            return dist, path
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.append((neighbor, dist + 1, path + [neighbor]))
+    return -1, []
+dist, path = bfs_3(adj, start_vertex, end_vertex)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+124,"n, m = map(int, input().split())
+graph_data = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_data.append((u, v))
+source, target = map(int, input().split())
+def bfs_4(connections, start, goal):
+    q = [(start, [start])]
+    seen = {start}
+    while q:
+        curr, path = q.pop(0)
+        if curr == goal:
+            return len(path) - 1, path
+        for u, v in connections:
+            if u == curr and v not in seen:
+                seen.add(v)
+                q.append((v, path + [v]))
+            elif v == curr and u not in seen:
+                seen.add(u)
+                q.append((u, path + [u]))
+    return -1, []
+shortest_distance, path = bfs_4(graph_data, source, target)
+if shortest_distance == -1:
+    print(-1)
+else:
+    print(shortest_distance)
+    print(*path)"
+125,"n, m = map(int, input().split())
+edge_list = []
+for _ in range(m):
+  u, v = map(int, input().split())
+  edge_list.append((u,v))
+start_node, end_node = map(int, input().split())
+def bfs_5(graph_edges, start, end):
+  queue = [(start, [start])]
+  visited_nodes = set()
+  visited_nodes.add(start)
+  while queue:
+    node, path = queue.pop(0)
+    if node == end:
+      return len(path) - 1, path
+    for u,v in graph_edges:
+      if u == node and v not in visited_nodes:
+        visited_nodes.add(v)
+        queue.append((v, path + [v]))
+      elif v == node and u not in visited_nodes:
+        visited_nodes.add(u)
+        queue.append((u, path + [u]))
+  return -1, []
+distance, path = bfs_5(edge_list, start_node, end_node)
+if distance == -1:
+  print(-1)
+else:
+  print(distance)
+  print(*path)"
+126,"n, m = map(int, input().split())
+adj_list = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_list[u].append(v)
+    adj_list[v].append(u)
+source_node, dest_node = map(int, input().split())
+def bfs_6(graph, source, destination):
+    queue = [(source, 0)]
+    visited = {source}
+    parent = {}
+    while queue:
+        node, distance = queue.pop(0)
+        if node == destination:
+            path = []
+            curr = destination
+            while curr != source:
+                path.append(curr)
+                curr = parent[curr]
+            path.append(source)
+            path.reverse()
+            return distance, path
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, distance + 1))
+                parent[neighbor] = node
+    return -1, []
+distance, path = bfs_6(adj_list, source_node, dest_node)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+127,"n, m = map(int, input().split())
+graph = {}
+for _ in range(m):
+    u, v = map(int, input().split())
+    if u not in graph:
+        graph[u] = []
+    if v not in graph:
+        graph[v] = []
+    graph[u].append(v)
+    graph[v].append(u)
+start_node, end_node = map(int, input().split())
+def bfs_7(graph_data, start, end):
+    q = [(start, [start])]
+    vstd = set()
+    vstd.add(start)
+    while q:
+        node, route = q.pop(0)
+        if node == end:
+            return len(route) - 1, route
+        if node in graph_data:
+            for neighbor in graph_data[node]:
+                if neighbor not in vstd:
+                    vstd.add(neighbor)
+                    q.append((neighbor, route + [neighbor]))
+    return -1, []
+distance, path = bfs_7(graph, start_node, end_node)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+128,"n, m = map(int, input().split())
+adj_matrix = [[0] * (n + 1) for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_matrix[u][v] = 1
+    adj_matrix[v][u] = 1
+start_node, end_node = map(int, input().split())
+def bfs_8(graph, source, destination):
+    q = [(source, [source])]
+    visited = [False] * (n + 1)
+    visited[source] = True
+    while q:
+        node, path = q.pop(0)
+        if node == destination:
+            return len(path) - 1, path
+        for neighbor in range(1, n + 1):
+            if graph[node][neighbor] == 1 and not visited[neighbor]:
+                visited[neighbor] = True
+                q.append((neighbor, path + [neighbor]))
+    return -1, []
+distance, path = bfs_8(adj_matrix, start_node, end_node)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+129,"n, m = map(int, input().split())
+edge_sets = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edge_sets.append((u, v))
+initial_node, final_node = map(int, input().split())
+def bfs_9(graph_edges, start, target):
+    q = [(start, [start])]
+    looked_at = {start}
+    while q:
+        curr, way = q.pop(0)
+        if curr == target:
+            return len(way) - 1, way
+        for u, v in graph_edges:
+            if u == curr and v not in looked_at:
+                looked_at.add(v)
+                q.append((v, way + [v]))
+            elif v == curr and u not in looked_at:
+                looked_at.add(u)
+                q.append((u, way + [u]))
+    return -1, []
+shortest_len, path = bfs_9(edge_sets, initial_node, final_node)
+if shortest_len == -1:
+    print(-1)
+else:
+    print(shortest_len)
+    print(*path)"
+130,"n, m = map(int, input().split())
+graph_dict = {}
+for _ in range(m):
+    u, v = map(int, input().split())
+    if u not in graph_dict:
+        graph_dict[u] = []
+    if v not in graph_dict:
+        graph_dict[v] = []
+    graph_dict[u].append(v)
+    graph_dict[v].append(u)
+start_vertex, end_vertex = map(int, input().split())
+def bfs_10(graph, source, target):
+    queue = [(source, 0, [source])]
+    visited = {source}
+    while queue:
+        node, dist, current_path = queue.pop(0)
+        if node == target:
+            return dist, current_path
+        if node in graph:
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, dist + 1, current_path + [neighbor]))
+    return -1, []
+distance, path = bfs_10(graph_dict, start_vertex, end_vertex)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+131,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+def bfs(start, end, graph):
+    queue = [(start, [start])]
+    visited = set()
+    while queue:
+        (vertex, path) = queue.pop(0)
+        if vertex == end:
+            return len(path) - 1, path
+        if vertex not in visited:
+            visited.add(vertex)
+            for neighbor in graph[vertex]:
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+graph = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    graph[u].append(v)
+    graph[v].append(u)
+distance, path = bfs(s, t, graph)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+132,"n, m = map(int, input().split())
+adj = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj[u].append(v)
+    adj[v].append(u)
+start, target = map(int, input().split())
+def explore(source, destination, network):
+    q = [(source, [source])]
+    seen = {source}
+    while q:
+        node, trace = q.pop(0)
+        if node == destination:
+            return len(trace) - 1, trace
+        for neighbor in network[node]:
+            if neighbor not in seen:
+                seen.add(neighbor)
+                q.append((neighbor, trace + [neighbor]))
+    return -1, []
+result, route = explore(start, target, adj)
+if result == -1:
+    print(-1)
+else:
+    print(result)
+    print(*route)"
+133,"n, m = map(int, input().split())
+connections = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    connections.append((u, v))
+source, destination = map(int, input().split())
+def find_path(start_node, end_node, graph_data, num_nodes):
+    visit_queue = [(start_node, [start_node])]
+    visited_nodes = set()
+    while visit_queue:
+        (current_node, path) = visit_queue.pop(0)
+        if current_node == end_node:
+            return len(path) - 1, path
+        if current_node not in visited_nodes:
+            visited_nodes.add(current_node)
+            for u, v in graph_data:
+                if u == current_node:
+                    visit_queue.append((v, path + [v]))
+                elif v == current_node:
+                    visit_queue.append((u, path + [u]))
+    return -1, []
+graph = connections
+dist, path = find_path(source, destination, graph, n)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+134,"n, m = map(int, input().split())
+edges_list = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges_list.append((u, v))
+start_node, end_node = map(int, input().split())
+def traverse(source, goal, network_edges, total_nodes):
+    q = [(source, [source])]
+    discovered = {source}
+    while q:
+        curr, trace = q.pop(0)
+        if curr == goal:
+            return len(trace) - 1, trace
+        for u, v in network_edges:
+            if u == curr and v not in discovered:
+                discovered.add(v)
+                q.append((v, trace + [v]))
+            elif v == curr and u not in discovered:
+                discovered.add(u)
+                q.append((u, trace + [u]))
+    return -1, []
+shortest_distance, route = traverse(start_node, end_node, edges_list, n)
+if shortest_distance == -1:
+    print(-1)
+else:
+    print(shortest_distance)
+    print(*route)"
+135,"n, m = map(int, input().split())
+relationships = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    relationships.append((u, v))
+init_node, final_node = map(int, input().split())
+def bfs_search(beginning, ending, relations):
+    q = [(beginning, [beginning])]
+    checked = set()
+    while q:
+        node, path = q.pop(0)
+        if node == ending:
+            return len(path) - 1, path
+        if node not in checked:
+            checked.add(node)
+            for u, v in relations:
+                if u == node:
+                    q.append((v, path + [v]))
+                elif v == node:
+                    q.append((u, path + [u]))
+    return -1, []
+length, pathway = bfs_search(init_node, final_node, relationships)
+if length == -1:
+    print(-1)
+else:
+    print(length)
+    print(*pathway)"
+136,"n, m = map(int, input().split())
+graph_data = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    graph_data.append((u, v))
+start_point, end_point = map(int, input().split())
+def find_shortest_path(source, target, graph, num_nodes):
+    queue = [(source, [source])]
+    visited_nodes = set()
+    while queue:
+        node, path = queue.pop(0)
+        if node == target:
+            return len(path) - 1, path
+        if node not in visited_nodes:
+            visited_nodes.add(node)
+            neighbors = []
+            for u, v in graph:
+                if u == node:
+                    neighbors.append(v)
+                elif v == node:
+                    neighbors.append(u)
+            for neighbor in neighbors:
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+distance, path = find_shortest_path(start_point, end_point, graph_data, n)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+137,"n, m = map(int, input().split())
+edges_list = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges_list.append((u, v))
+src, dest = map(int, input().split())
+def breadth_first(start, end, edge_list, nodes):
+    q = [(start, [start])]
+    seen = {start}
+    while q:
+        curr, route = q.pop(0)
+        if curr == end:
+            return len(route) - 1, route
+        for u, v in edge_list:
+            if u == curr and v not in seen:
+                seen.add(v)
+                q.append((v, route + [v]))
+            elif v == curr and u not in seen:
+                seen.add(u)
+                q.append((u, route + [u]))
+    return -1, []
+shortest_len, shortest_route = breadth_first(src, dest, edges_list, n)
+if shortest_len == -1:
+    print(-1)
+else:
+    print(shortest_len)
+    print(*shortest_route)"
+138,"n, m = map(int, input().split())
+links = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    links.append((u, v))
+origin, target = map(int, input().split())
+def breadth_first_search(start_node, goal_node, graph_edges, num_nodes):
+    queue = [(start_node, [start_node])]
+    visited = set()
+    while queue:
+        node, path = queue.pop(0)
+        if node == goal_node:
+            return len(path) - 1, path
+        if node not in visited:
+            visited.add(node)
+            for u, v in graph_edges:
+                if u == node:
+                    queue.append((v, path + [v]))
+                elif v == node:
+                    queue.append((u, path + [u]))
+    return -1, []
+dist, route = breadth_first_search(origin, target, links, n)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*route)"
+139,"n, m = map(int, input().split())
+adj_list = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u, v = map(int, input().split())
+    adj_list[u].append(v)
+    adj_list[v].append(u)
+start_node, end_node = map(int, input().split())
+def bfs_algorithm(start, end, network):
+    q = [(start, [start])]
+    visited_nodes = {start}
+    while q:
+        vertex, trace = q.pop(0)
+        if vertex == end:
+            return len(trace) - 1, trace
+        for neighbor in network[vertex]:
+            if neighbor not in visited_nodes:
+                visited_nodes.add(neighbor)
+                q.append((neighbor, trace + [neighbor]))
+    return -1, []
+distance, path = bfs_algorithm(start_node, end_node, adj_list)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+140,"n, m = map(int, input().split())
+graph = {}
+for _ in range(m):
+    u, v = map(int, input().split())
+    if u not in graph:
+        graph[u] = []
+    if v not in graph:
+        graph[v] = []
+    graph[u].append(v)
+    graph[v].append(u)
+start_node, end_node = map(int, input().split())
+def search_bfs(start, end, graph):
+    queue = [(start, [start])]
+    visited = set()
+    while queue:
+        (node, path) = queue.pop(0)
+        if node == end:
+            return len(path) - 1, path
+        if node not in visited:
+            visited.add(node)
+            if node in graph:
+                for neighbor in graph[node]:
+                    queue.append((neighbor, path + [neighbor]))
+    return -1, []
+distance, path = search_bfs(start_node, end_node, graph)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+141,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+graph = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    graph[u].append(v)
+    graph[v].append(u)
+def bfs_1(start, end):
+    q = [(start, 0, [start])]
+    visited = {start}
+    while q:
+        node, dist, path = q.pop(0)
+        if node == end:
+            return dist, path
+        for neighbor in graph[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.append((neighbor, dist + 1, path + [neighbor]))
+    return -1, []
+dist, path = bfs_1(s, t)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+142,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+adj = [[] for _ in range(n + 1)]
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)
+def bfs_2(source, target):
+    q = [(source, 0, [source])]
+    seen = [False] * (n + 1)
+    seen[source] = True
+    while q:
+        v, d, p = q.pop(0)
+        if v == target:
+            return d, p
+        for neighbour in adj[v]:
+            if not seen[neighbour]:
+                seen[neighbour] = True
+                q.append((neighbour, d + 1, p + [neighbour]))
+    return -1, []
+distance, route = bfs_2(s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*route)"
+143,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+network = {}
+for i in range(1, n + 1):
+    network[i] = []
+for u, v in edges:
+    network[u].append(v)
+    network[v].append(u)
+def bfs_3(start_node, target_node):
+    queue = [(start_node, [start_node])]
+    visited_nodes = set()
+    while queue:
+        (node, path) = queue.pop(0)
+        if node == target_node:
+            return len(path) - 1, path
+        if node not in visited_nodes:
+            visited_nodes.add(node)
+            for neighbor in network[node]:
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+hops, trace = bfs_3(s, t)
+if hops == -1:
+    print(-1)
+else:
+    print(hops)
+    print(*trace)"
+144,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+graph_4 = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    graph_4[u].append(v)
+    graph_4[v].append(u)
+def bfs_4(origin, destination):
+    q = [(origin, [origin])]
+    explored = set()
+    while q:
+        vertex, path = q.pop(0)
+        if vertex == destination:
+            return len(path) - 1, path
+        explored.add(vertex)
+        for neighbor in graph_4[vertex]:
+            if neighbor not in explored:
+                q.append((neighbor, path + [neighbor]))
+    return -1, []
+dist_4, path_4 = bfs_4(s, t)
+if dist_4 == -1:
+    print(-1)
+else:
+    print(dist_4)
+    print(*path_4)"
+145,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+g = [[] for _ in range(n + 1)]
+for a, b in edges:
+    g[a].append(b)
+    g[b].append(a)
+def bfs_5(start, end):
+    q = [(start, 0, [start])]
+    visited = [False] * (n + 1)
+    visited[start] = True
+    while q:
+        node, d, p = q.pop(0)
+        if node == end:
+            return d, p
+        for neighbor in g[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                q.append((neighbor, d + 1, p + [neighbor]))
+    return -1, []
+distance, path = bfs_5(s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*path)"
+146,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+adj_list = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    adj_list[u].append(v)
+    adj_list[v].append(u)
+def bfs_6(start_node, target_node):
+    queue = [(start_node, 0, [start_node])]
+    visited = {start_node}
+    while queue:
+        node, dist, path = queue.pop(0)
+        if node == target_node:
+            return dist, path
+        for neighbor in adj_list[node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, dist + 1, path + [neighbor]))
+    return -1, []
+shortest_distance, path = bfs_6(s, t)
+if shortest_distance == -1:
+    print(-1)
+else:
+    print(shortest_distance)
+    print(*path)"
+147,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+graph_7 = {i: [] for i in range(1, n + 1)}
+for u, v in edges:
+    graph_7[u].append(v)
+    graph_7[v].append(u)
+def bfs_7(source, destination):
+    queue = [(source, [source])]
+    visited_nodes = set()
+    while queue:
+        node, path = queue.pop(0)
+        if node == destination:
+            return len(path) - 1, path
+        if node not in visited_nodes:
+            visited_nodes.add(node)
+            for neighbor in graph_7[node]:
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+distance, route = bfs_7(s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*route)"
+148,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+graph_8 = [[] for _ in range(n + 1)]
+for u, v in edges:
+    graph_8[u].append(v)
+    graph_8[v].append(u)
+def bfs_8(start_node, end_node):
+    q = [(start_node, 0, [start_node])]
+    visited = [False] * (n + 1)
+    visited[start_node] = True
+    while q:
+        node, dist, path = q.pop(0)
+        if node == end_node:
+            return dist, path
+        for neighbor in graph_8[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                q.append((neighbor, dist + 1, path + [neighbor]))
+    return -1, []
+dist, path = bfs_8(s, t)
+if dist == -1:
+    print(-1)
+else:
+    print(dist)
+    print(*path)"
+149,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+adj = {}
+for i in range(1, n + 1):
+    adj[i] = []
+for u, v in edges:
+    adj[u].append(v)
+    adj[v].append(u)
+def bfs_9(start, goal):
+    q = [(start, [start])]
+    visited = set()
+    while q:
+        node, path = q.pop(0)
+        if node == goal:
+            return len(path) - 1, path
+        if node not in visited:
+            visited.add(node)
+            for neighbor in adj[node]:
+                q.append((neighbor, path + [neighbor]))
+    return -1, []
+d, p = bfs_9(s, t)
+if d == -1:
+    print(-1)
+else:
+    print(d)
+    print(*p)"
+150,"n, m = map(int, input().split())
+edges = []
+for _ in range(m):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+s, t = map(int, input().split())
+graph_10 = {i: [] for i in range(1, n + 1)}
+for x, y in edges:
+    graph_10[x].append(y)
+    graph_10[y].append(x)
+def bfs_10(source, target):
+    queue = [(source, [source])]
+    seen = set()
+    while queue:
+        node, path = queue.pop(0)
+        if node == target:
+            return len(path) - 1, path
+        if node not in seen:
+            seen.add(node)
+            for neighbor in graph_10[node]:
+                queue.append((neighbor, path + [neighbor]))
+    return -1, []
+distance, route = bfs_10(s, t)
+if distance == -1:
+    print(-1)
+else:
+    print(distance)
+    print(*route)"
