@@ -4,7 +4,7 @@ ML powered tool to detect the algorithm by its code
 ### How to use
 0. Clone the repository by 
 ```bash
-   git clone https://github.com/iskochergin/AlgoScout
+git clone https://github.com/iskochergin/AlgoScout
 ```
 1. You need to create a prompt for generating the dataset. 
 I prefer generating 75 + 75 versions of code. The **first** generation is more fixed on
