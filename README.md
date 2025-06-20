@@ -21,7 +21,7 @@ PROMPT_Z_SNIPPETS = (
     "```python\n"
     "<complete code>\n"
     "```\n"
-    "No input parsing, no printing, no comments or explanations. Each snippet must provide a standalone function—e.g. `def z_function(s):` or similar—that returns the Z-array. Use diverse approaches (two-pointer, explicit window tracking, slicing, list comprehensions, while vs. for loops, etc.) and rename all variables in each variant. Number variants 1–10."
+    "No input parsing, no printing, no comments or explanations. **Each snippet must employ a structurally unique approach**—covering both the classic two-pointer/window method and less-common styles (e.g. slicing, generators, recursion, list comprehensions, bitwise tricks, functional constructs). Rename all variables in each variant. Number variants 1–10."
 )
 
 PROMPT_Z_IO = (
@@ -30,12 +30,12 @@ PROMPT_Z_IO = (
     "```python\n"
     "<complete code>\n"
     "```\n"
-    "No comments or explanations. Each program must include:\n"
+    "No comments or explanations. **Ensure each program is structurally unique**, using different parsing styles, control flows (for vs. while, recursion, comprehension), data structures, or output formatting. Each must include:\n"
     "- variable declarations for the input string (e.g. `s`, `text`, `str_input`) and its length (`n`)\n"
     "- reading the string from stdin\n"
     "- a full `z_function` (or equivalent) routine\n"
-    "- computing and printing the Z-array (space-separated or as a list)\n"
-    "Use diverse coding styles, loops, indexing schemes, and rename all variables per variant. Number variants 1–10."
+    "- computing and printing the Z-array\n"
+    "Rename all variables per variant. Number variants 1–10."
 )
 ```
 
