@@ -5,3 +5,5 @@
 /model/model_150snippets/lightning_logs/
 /model/template/model_ckpt/
 /model/template/lightning_logs/
+/model/model_150snippets_zpfunc/model_ckpt/
+/model/model_150snippets_zpfunc/lightning_logs/

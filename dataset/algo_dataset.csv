@@ -14142,3 +14142,5208 @@ def create_path(end_node):
     return path
 for i in range(n):
     print(f""Path to {i}: {create_path(i)}"")",Dijkstra
+751,"def z_array_classic(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z_values[k1] < right - k + 1:
+                z_values[k] = z_values[k1]
+            else:
+                left = k
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[k] = right - left
+                right -= 1
+    return z_values",ZFunc
+752,"def z_array_slicing(string):
+    n = len(string)
+    z_arr = [0] * n
+    for i in range(1, n):
+        for j in range(n - i):
+            if string[j:j+i] == string[0:i]:
+                z_arr[i] = i
+                break
+    return z_arr",ZFunc
+753,"def z_array_generator(pattern):
+    length = len(pattern)
+    yield 0
+    for i in range(1, length):
+        yield max(j for j in range(1, length - i + 1) if pattern[i:i+j] == pattern[:j])",ZFunc
+754,"def z_array_recursive(text_str, index, left_bound, right_bound, z_values):
+    n = len(text_str)
+    if index == n:
+        return z_values
+    if index > right_bound:
+        left_bound = right_bound = index
+        while right_bound < n and text_str[right_bound - left_bound] == text_str[right_bound]:
+            right_bound += 1
+        z_values[index] = right_bound - left_bound
+        right_bound -= 1
+    else:
+        k = index - left_bound
+        if z_values[k] < right_bound - index + 1:
+            z_values[index] = z_values[k]
+        else:
+            left_bound = index
+            while right_bound < n and text_str[right_bound - left_bound] == text_str[right_bound]:
+                right_bound += 1
+            z_values[index] = right_bound - left_bound
+            right_bound -= 1
+    return z_array_recursive(text_str, index + 1, left_bound, right_bound, z_values)",ZFunc
+755,"def z_array_comprehension(seq):
+    length = len(seq)
+    return [max(j for j in range(1, length - i + 1) if seq[i:i+j] == seq[:j]) for i in range(length)]",ZFunc
+756,"def z_array_bitwise(data):
+    n = len(data)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        while i + z[i] < n and data[z[i]] == data[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z",ZFunc
+757,"def z_array_functional(string_data):
+    n = len(string_data)
+    z_values = [0] * n
+    def calculate_z(index, left, right):
+        if index > right:
+            new_left = new_right = index
+            while new_right < n and string_data[new_right - new_left] == string_data[new_right]:
+                new_right += 1
+            return new_left, new_right, new_right - new_left
+        else:
+            k = index - left
+            if z_values[k] < right - index + 1:
+                return left, right, z_values[k]
+            else:
+                new_left = index
+                while right < n and string_data[right - new_left] == string_data[right]:
+                    right += 1
+                return new_left, right, right - new_left
+    left, right = 0, 0
+    for i in range(1, n):
+        left, right, z_values[i] = calculate_z(i, left, right)
+    return z_values",ZFunc
+758,"def z_array_iterative(text_input):
+    length = len(text_input)
+    z_arr = [0] * length
+    l = 0
+    r = 0
+    for i in range(1, length):
+        if i <= r:
+            k = i - l
+            z_arr[i] = min(r - i + 1, z_arr[k])
+        while i + z_arr[i] < length and text_input[z_arr[i]] == text_input[i + z_arr[i]]:
+            z_arr[i] += 1
+        if i + z_arr[i] - 1 > r:
+            l = i
+            r = i + z_arr[i] - 1
+    return z_arr",ZFunc
+759,"def z_array_alt(s):
+    n = len(s)
+    z = [0] * n
+    l = r = 0
+    for i in range(1, n):
+        if i > r:
+            k = 0
+            while i + k < n and s[k] == s[i + k]:
+                k += 1
+            z[i] = k
+            l = i
+            r = i + k - 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                k = r - i + 1
+                while i + k < n and s[k] == s[i + k]:
+                    k += 1
+                z[i] = k
+                l = i
+                r = i + k - 1
+    return z",ZFunc
+760,"def z_array_compact(str_data):
+    n = len(str_data)
+    z_values = [0] * n
+    left_pos = 0
+    right_pos = 0
+    for i in range(1, n):
+        if i > right_pos:
+            left_pos = right_pos = i
+            while right_pos < n and str_data[right_pos - left_pos] == str_data[right_pos]:
+                right_pos += 1
+            z_values[i] = right_pos - left_pos
+            right_pos -= 1
+        else:
+            k = i - left_pos
+            if z_values[k] < right_pos - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                left_pos = i
+                while right_pos < n and str_data[right_pos - left_pos] == str_data[right_pos]:
+                    right_pos += 1
+                z_values[i] = right_pos - left_pos
+                right_pos -= 1
+    return z_values",ZFunc
+761,"def z_array_classic(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z_values[k1] < right - k + 1:
+                z_values[k] = z_values[k1]
+            else:
+                left = k
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[k] = right - left
+                right -= 1
+    return z_values",ZFunc
+762,"def z_array_slicing(string):
+    n = len(string)
+    z_arr = [0] * n
+    for i in range(1, n):
+        for j in range(n - i):
+            if string[j:j+i] == string[0:i]:
+                z_arr[i] = i
+                break
+    return z_arr",ZFunc
+763,"def z_array_generator(pattern):
+    length = len(pattern)
+    yield 0
+    for i in range(1, length):
+        yield max(j for j in range(1, length - i + 1) if pattern[i:i+j] == pattern[:j])",ZFunc
+764,"def z_array_recursive(text_str, index, left_bound, right_bound, z_values):
+    n = len(text_str)
+    if index == n:
+        return z_values
+    if index > right_bound:
+        left_bound = right_bound = index
+        while right_bound < n and text_str[right_bound - left_bound] == text_str[right_bound]:
+            right_bound += 1
+        z_values[index] = right_bound - left_bound
+        right_bound -= 1
+    else:
+        k = index - left_bound
+        if z_values[k] < right_bound - index + 1:
+            z_values[index] = z_values[k]
+        else:
+            left_bound = index
+            while right_bound < n and text_str[right_bound - left_bound] == text_str[right_bound]:
+                right_bound += 1
+            z_values[index] = right_bound - left_bound
+            right_bound -= 1
+    return z_array_recursive(text_str, index + 1, left_bound, right_bound, z_values)",ZFunc
+765,"def z_array_comprehension(seq):
+    length = len(seq)
+    return [max(j for j in range(1, length - i + 1) if seq[i:i+j] == seq[:j]) for i in range(length)]",ZFunc
+766,"def z_array_bitwise(data):
+    n = len(data)
+    z_arr = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z_arr[i] = min(r - i + 1, z_arr[k])
+        while i + z_arr[i] < n and data[z_arr[i]] == data[i + z_arr[i]]:
+            z_arr[i] += 1
+        if i + z_arr[i] - 1 > r:
+            l = i
+            r = i + z_arr[i] - 1
+    return z_arr",ZFunc
+767,"def z_array_functional(string_data):
+    n = len(string_data)
+    z_values = [0] * n
+    def calculate_z(index, left, right):
+        if index > right:
+            new_left = new_right = index
+            while new_right < n and string_data[new_right - new_left] == string_data[new_right]:
+                new_right += 1
+            return new_left, new_right, new_right - new_left
+        else:
+            k = index - left
+            if z_values[k] < right - index + 1:
+                return left, right, z_values[k]
+            else:
+                new_left = index
+                while right < n and string_data[right - new_left] == string_data[right]:
+                    right += 1
+                return new_left, right, right - new_left
+    left, right = 0, 0
+    for i in range(1, n):
+        left, right, z_values[i] = calculate_z(i, left, right)
+    return z_values",ZFunc
+768,"def z_array_iterative(text_input):
+    length = len(text_input)
+    z_values = [0] * length
+    l = 0
+    r = 0
+    i = 1
+    while i < length:
+        if i <= r:
+            k = i - l
+            z_values[i] = min(r - i + 1, z_values[k])
+        while i + z_values[i] < length and text_input[z_values[i]] == text_input[i + z_values[i]]:
+            z_values[i] += 1
+        if i + z_values[i] - 1 > r:
+            l = i
+            r = i + z_values[i] - 1
+        i += 1
+    return z_values",ZFunc
+769,"def z_array_alt(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            k = 0
+            while i + k < n and s[k] == s[i + k]:
+                k += 1
+            z[i] = k
+            l = i
+            r = i + k - 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                k = r - i + 1
+                while i + k < n and s[k] == s[i + k]:
+                    k += 1
+                z[i] = k
+                l = i
+                r = i + k - 1
+    return z",ZFunc
+770,"def z_array_compact(text):
+    n = len(text)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        while i + z[i] < n and text[z[i]] == text[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z",ZFunc
+771,"def z_array_classic(text):
+    length = len(text)
+    z = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z[k1] < right - k + 1:
+                z[k] = z[k1]
+            else:
+                left = k
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z[k] = right - left
+                right -= 1
+    return z",ZFunc
+772,"def z_array_slicing(string):
+    n = len(string)
+    z_values = [0] * n
+    for i in range(1, n):
+        for j in range(n - i):
+            if string[j:j+i] == string[0:i]:
+                z_values[i] = i
+                break
+    return z_values",ZFunc
+773,"def z_array_generator(phrase):
+    length = len(phrase)
+    yield 0
+    for i in range(1, length):
+        yield max(j for j in range(1, length - i + 1) if phrase[i:i+j] == phrase[:j])",ZFunc
+774,"def z_array_recursive(pattern):
+    length = len(pattern)
+    def compute_z(index):
+        if index == 0:
+            return 0
+        max_len = 0
+        for j in range(1, length - index + 1):
+            if pattern[index:index+j] == pattern[:j]:
+                max_len = j
+        return max_len
+    return [compute_z(i) for i in range(length)]",ZFunc
+775,"def z_array_comprehension(seq):
+    n = len(seq)
+    return [len(take_while(lambda i: seq[i] == seq[k], range(n - k))) for k in range(n)]
+def take_while(predicate, iterable):
+    result = []
+    for item in iterable:
+        if predicate(item):
+            result.append(item)
+        else:
+            break
+    return result",ZFunc
+776,"def z_array_bitwise(data):
+    size = len(data)
+    z_arr = [0] * size
+    l, r = 0, 0
+    for k in range(1, size):
+        if k > r:
+            l = r = k
+            while r < size and data[r - l] == data[r]:
+                r += 1
+            z_arr[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z_arr[k1] < r - k + 1:
+                z_arr[k] = z_arr[k1]
+            else:
+                l = k
+                while r < size and data[r - l] == data[r]:
+                    r += 1
+                z_arr[k] = r - l
+                r -= 1
+    return z_arr",ZFunc
+777,"def z_array_functional(text_str):
+    n = len(text_str)
+    return [max(len(common_prefix(text_str, text_str[i:])) for i in range(n)) if i > 0 else 0 for i in range(n)]
+def common_prefix(str1, str2):
+    i = 0
+    while i < len(str1) and i < len(str2) and str1[i] == str2[i]:
+        i += 1
+    return str1[:i]",ZFunc
+778,"def z_array_iterative(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                j = r + 1
+                while j < n and s[j] == s[j - i]:
+                    j += 1
+                z[i] = j - i
+                l = i
+                r = j - 1
+        else:
+            j = 0
+            while j < n - i and s[j] == s[j + i]:
+                j += 1
+            z[i] = j
+            if j > 0:
+                l = i
+                r = i + j - 1
+    return z",ZFunc
+779,"def z_array_alt(string):
+    n = len(string)
+    z_val = [0] * n
+    for i in range(1, n):
+        j = 0
+        while i + j < n and string[j] == string[i + j]:
+            j += 1
+        z_val[i] = j
+    return z_val",ZFunc
+780,"def z_array_reduced(text_in):
+    length = len(text_in)
+    z_arr = [0] * length
+    left_bound = 0
+    right_bound = 0
+    for k in range(1, length):
+        if k > right_bound:
+            left_bound = right_bound = k
+            while right_bound < length and text_in[right_bound - left_bound] == text_in[right_bound]:
+                right_bound += 1
+            z_arr[k] = right_bound - left_bound
+            right_bound -= 1
+        else:
+            k1 = k - left_bound
+            if z_arr[k1] < right_bound - k + 1:
+                z_arr[k] = z_arr[k1]
+            else:
+                left_bound = k
+                while right_bound < length and text_in[right_bound - left_bound] == text_in[right_bound]:
+                    right_bound += 1
+                z_arr[k] = right_bound - left_bound
+                right_bound -= 1
+    return z_arr",ZFunc
+781,"def z_array_classic(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z_values[k1] < right - k + 1:
+                z_values[k] = z_values[k1]
+            else:
+                left = k
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[k] = right - left
+                right -= 1
+    return z_values",ZFunc
+782,"def z_array_slicing(string):
+    n = len(string)
+    z_arr = [0] * n
+    for i in range(1, n):
+        for j in range(n - i):
+            if string[j:j+i] == string[0:i]:
+                z_arr[i] = i
+                break
+    return z_arr",ZFunc
+783,"def z_array_generator(pattern):
+    length = len(pattern)
+    yield 0
+    for i in range(1, length):
+        yield max(j for j in range(1, length - i + 1) if pattern[i:i+j] == pattern[:j])",ZFunc
+784,"def z_array_recursive(text_str, index, left_bound, right_bound, z_values):
+    n = len(text_str)
+    if index == n:
+        return z_values
+    if index > right_bound:
+        left_bound = right_bound = index
+        while right_bound < n and text_str[right_bound - left_bound] == text_str[right_bound]:
+            right_bound += 1
+        z_values[index] = right_bound - left_bound
+        right_bound -= 1
+    else:
+        k = index - left_bound
+        if z_values[k] < right_bound - index + 1:
+            z_values[index] = z_values[k]
+        else:
+            left_bound = index
+            while right_bound < n and text_str[right_bound - left_bound] == text_str[right_bound]:
+                right_bound += 1
+            z_values[index] = right_bound - left_bound
+            right_bound -= 1
+    return z_array_recursive(text_str, index + 1, left_bound, right_bound, z_values)",ZFunc
+785,"def z_array_comprehension(seq):
+    length = len(seq)
+    return [max(j for j in range(1, length - i + 1) if seq[i:i+j] == seq[:j]) for i in range(length)]",ZFunc
+786,"def z_array_bitwise(data):
+    n = len(data)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        while i + z[i] < n and data[z[i]] == data[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z",ZFunc
+787,"def z_array_functional(string_data):
+    n = len(string_data)
+    z_values = [0] * n
+    def calculate_z(index, left, right):
+        if index > right:
+            new_left = new_right = index
+            while new_right < n and string_data[new_right - new_left] == string_data[new_right]:
+                new_right += 1
+            return new_left, new_right, new_right - new_left
+        else:
+            k = index - left
+            if z_values[k] < right - index + 1:
+                return left, right, z_values[k]
+            else:
+                new_left = index
+                while right < n and string_data[right - new_left] == string_data[right]:
+                    right += 1
+                return new_left, right, right - new_left
+    for i in range(1, n):
+        left, right, z_val = calculate_z(i, left, right)
+        z_values[i] = z_val
+    return z_values",ZFunc
+788,"def z_array_iterative(text_input):
+    length = len(text_input)
+    z_arr = [0] * length
+    l = 0
+    r = 0
+    for i in range(1, length):
+        if i <= r:
+            k = i - l
+            z_arr[i] = min(r - i + 1, z_arr[k])
+        while i + z_arr[i] < length and text_input[z_arr[i]] == text_input[i + z_arr[i]]:
+            z_arr[i] += 1
+        if i + z_arr[i] - 1 > r:
+            l = i
+            r = i + z_arr[i] - 1
+    return z_arr",ZFunc
+789,"def z_array_alt(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            k = 0
+            while i + k < n and s[k] == s[i + k]:
+                k += 1
+            z[i] = k
+            l = i
+            r = i + k - 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                k = r - i + 1
+                while i + k < n and s[k] == s[i + k]:
+                    k += 1
+                z[i] = k
+                l = i
+                r = i + k - 1
+    return z",ZFunc
+790,"def z_array_compact(text):
+    n = len(text)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        while i + z[i] < n and text[z[i]] == text[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z",ZFunc
+791,"def z_function_v1(pattern):
+    l, r = 0, 0
+    n = len(pattern)
+    z_arr = [0] * n
+    for i in range(1, n):
+        if i > r:
+            left, right = i, n - 1
+            while left < n and pattern[left] == pattern[left - i]:
+                left += 1
+            z_arr[i] = left - i
+            r = left - 1
+        else:
+            k = i - l
+            if z_arr[k] < r - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                left, right = r + 1, n - 1
+                while left < n and pattern[left] == pattern[left - i]:
+                    left += 1
+                z_arr[i] = left - i
+                l = i
+                r = left - 1
+    return z_arr",ZFunc
+792,"def z_function_v2(text):
+    length = len(text)
+    z_values = [0] * length
+    left, right = 0, 0
+    for i in range(1, length):
+        if i <= right:
+            k = i - left
+            z_values[i] = min(right - i + 1, z_values[k])
+        while i + z_values[i] < length and text[z_values[i]] == text[i + z_values[i]]:
+            z_values[i] += 1
+        if i + z_values[i] - 1 > right:
+            left = i
+            right = i + z_values[i] - 1
+    return z_values",ZFunc
+793,"def z_function_v3(string):
+    n = len(string)
+    z_array = [0] * n
+    boundaries = [0, 0]
+    for i in range(1, n):
+        if i <= boundaries[1]:
+            k = i - boundaries[0]
+            z_array[i] = min(boundaries[1] - i + 1, z_array[k])
+        while i + z_array[i] < n and string[z_array[i]] == string[i + z_array[i]]:
+            z_array[i] += 1
+        if i + z_array[i] - 1 > boundaries[1]:
+            boundaries[0] = i
+            boundaries[1] = i + z_array[i] - 1
+    return z_array",ZFunc
+794,"def z_function_v4(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            k = 0
+            while i + k < n and s[k] == s[i + k]:
+                k += 1
+            z[i] = k
+            l = i
+            r = i + k - 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                k = r - i + 1
+                while i + k < n and s[k] == s[i + k]:
+                    k += 1
+                z[i] = k
+                l = i
+                r = i + k - 1
+    return z",ZFunc
+795,"def z_function_v5(txt):
+    n = len(txt)
+    zval = [0] * n
+    left = 0
+    right = 0
+    for i in range(1, n):
+        if i <= right:
+            k = i - left
+            zval[i] = min(right - i + 1, zval[k])
+        while i + zval[i] < n and txt[zval[i]] == txt[i + zval[i]]:
+            zval[i] += 1
+        if i + zval[i] - 1 > right:
+            left = i
+            right = i + zval[i] - 1
+    return zval",ZFunc
+796,"def z_function_v6(string):
+    n = len(string)
+    z_arr = [0] * n
+    l = r = 0
+    for i in range(1, n):
+        if i > r:
+            k = 0
+            while i + k < n and string[k] == string[i + k]:
+                k += 1
+            z_arr[i] = k
+            l = i
+            r = i + k - 1
+        else:
+            k = i - l
+            if z_arr[k] < r - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                k = r - i + 1
+                while i + k < n and string[k] == string[i + k]:
+                    k += 1
+                z_arr[i] = k
+                l = i
+                r = i + k - 1
+    return z_arr",ZFunc
+797,"def z_function_v7(text):
+    n = len(text)
+    z = [0] * n
+    left = 0
+    right = 0
+    for k in range(1,n):
+        if k > right:
+            l = 0
+            r = 0
+            while k+r < n and text[r] == text[k+r]:
+                r += 1
+            z[k] = r
+            left = k
+            right = k+r-1
+        else:
+            k1 = k-left
+            if z[k1] < right-k+1:
+                z[k] = z[k1]
+            else:
+                l = right - k + 1
+                r=0
+                while k+r < n and text[l+r] == text[k+r]:
+                    r += 1
+                z[k] = r
+                left = k
+                right = k+r-1
+    return z",ZFunc
+798,"def z_function_v8(s):
+    n = len(s)
+    arr_z = [0] * n
+    levo = 0
+    pravo = 0
+    for i in range(1, n):
+        if i > pravo:
+            k = 0
+            while i + k < n and s[k] == s[i + k]:
+                k += 1
+            arr_z[i] = k
+            levo = i
+            pravo = i + k - 1
+        else:
+            k = i - levo
+            if arr_z[k] < pravo - i + 1:
+                arr_z[i] = arr_z[k]
+            else:
+                k = pravo - i + 1
+                while i + k < n and s[k] == s[i + k]:
+                    k += 1
+                arr_z[i] = k
+                levo = i
+                pravo = i + k - 1
+    return arr_z",ZFunc
+799,"def z_function_v9(pattern):
+    n = len(pattern)
+    z_arr = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            c = 0
+            while i + c < n and pattern[c] == pattern[i + c]:
+                c += 1
+            z_arr[i] = c
+            l = i
+            r = i + c - 1
+        else:
+            k = i - l
+            if z_arr[k] < r - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                c = r - i + 1
+                while i + c < n and pattern[c] == pattern[i + c]:
+                    c += 1
+                z_arr[i] = c
+                l = i
+                r = i + c - 1
+    return z_arr",ZFunc
+800,"def z_function_v10(text):
+    n = len(text)
+    z_values = [0] * n
+    left = 0
+    right = 0
+    for i in range(1, n):
+        if i <= right:
+            k = i - left
+            z_values[i] = min(right - i + 1, z_values[k])
+        j = 0
+        while i + j < n and text[j] == text[i + j]:
+            j += 1
+        z_values[i] = j
+        if i + z_values[i] - 1 > right:
+            left = i
+            right = i + z_values[i] - 1
+    return z_values",ZFunc
+801,"def z_array_classic(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z_values[k1] < right - k + 1:
+                z_values[k] = z_values[k1]
+            else:
+                left = k
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[k] = right - left
+                right -= 1
+    return z_values",ZFunc
+802,"def z_array_slicing(string):
+    n = len(string)
+    z_arr = [0] * n
+    for i in range(1, n):
+        for j in range(n - i):
+            if string[j:j+i] == string[0:i]:
+                z_arr[i] = i
+                break
+    return z_arr",ZFunc
+803,"def z_array_generator(phrase):
+    length = len(phrase)
+    yield 0
+    for i in range(1, length):
+        yield max(j for j in range(1, length - i + 1) if phrase[i:i+j] == phrase[:j])",ZFunc
+804,"def z_array_recursive(pattern):
+    length = len(pattern)
+    def compute_z(index):
+        if index == 0:
+            return 0
+        max_len = 0
+        for k in range(1, length - index + 1):
+            if pattern[:k] == pattern[index:index+k]:
+                max_len = k
+        return max_len
+    return [compute_z(i) for i in range(length)]",ZFunc
+805,"def z_array_comprehension(seq):
+    n = len(seq)
+    return [max(k for k in range(1, n - i + 1) if seq[i:i+k] == seq[:k]) for i in range(n)]",ZFunc
+806,"def z_array_bitwise(data):
+    length = len(data)
+    z_values = [0] * length
+    l = 0
+    r = 0
+    for k in range(1, length):
+        if k > r:
+            l = r = k
+            while r < length and data[r - l] == data[r]:
+                r += 1
+            z_values[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z_values[k1] < r - k + 1:
+                z_values[k] = z_values[k1]
+            else:
+                l = k
+                while r < length and data[r - l] == data[r]:
+                    r += 1
+                z_values[k] = r - l
+                r -= 1
+    return z_values",ZFunc
+807,"def z_array_functional(text_input):
+    n = len(text_input)
+    z = [0] * n
+    def calculate_z(i):
+        return max(j for j in range(1, n - i + 1) if text_input[i:i+j] == text_input[:j])
+    return list(map(calculate_z, range(n)))",ZFunc
+808,"def z_array_iterative(string_input):
+    n = len(string_input)
+    z_arr = [0] * n
+    for i in range(1, n):
+        j = 0
+        while i + j < n and string_input[j] == string_input[i + j]:
+            j += 1
+        z_arr[i] = j
+    return z_arr",ZFunc
+809,"def z_array_optimized(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                j = r - i + 1
+                while i + j < n and s[j] == s[i + j]:
+                    j += 1
+                z[i] = j
+                l = i
+                r = i + j - 1
+        else:
+            j = 0
+            while i + j < n and s[j] == s[i + j]:
+                j += 1
+            z[i] = j
+            if j > 0:
+                l = i
+                r = i + j - 1
+    return z",ZFunc
+810,"def z_array_alt(text_str):
+    length = len(text_str)
+    z_values = [0] * length
+    left_bound = 0
+    right_bound = 0
+    for k in range(1, length):
+        if k > right_bound:
+            left_bound = right_bound = k
+            while right_bound < length and text_str[right_bound - left_bound] == text_str[right_bound]:
+                right_bound += 1
+            z_values[k] = right_bound - left_bound
+            right_bound -= 1
+        else:
+            k1 = k - left_bound
+            if z_values[k1] < right_bound - k + 1:
+                z_values[k] = z_values[k1]
+            else:
+                left_bound = k
+                while right_bound < length and text_str[right_bound - left_bound] == text_str[right_bound]:
+                    right_bound += 1
+                z_values[k] = right_bound - left_bound
+                right_bound -= 1
+    return z_values",ZFunc
+811,"def z_array_standard(sequence):
+    length = len(sequence)
+    result = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and sequence[right - left] == sequence[right]:
+                right += 1
+            result[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if result[k1] < right - k + 1:
+                result[k] = result[k1]
+            else:
+                left = k
+                while right < length and sequence[right - left] == sequence[right]:
+                    right += 1
+                result[k] = right - left
+                right -= 1
+    return result",ZFunc
+812,"def z_array_slicing(text):
+    n = len(text)
+    z = [0] * n
+    for i in range(1, n):
+        max_len = 0
+        for j in range(n - i):
+            if text[j:j+i] == text[i:i+i]:
+                max_len = i
+        z[i] = max_len
+    return z",ZFunc
+813,"def z_array_generator(string):
+    def z_value(index):
+        count = 0
+        while index + count < len(string) and string[count] == string[index + count]:
+            count += 1
+        return count
+    return [z_value(i) for i in range(len(string))]",ZFunc
+814,"def z_array_recursive(s):
+    def compute_z(index, l, r, z_arr):
+        if index > r:
+            l = r = index
+            while r < len(s) and s[r - l] == s[r]:
+                r += 1
+            z_arr[index] = r - l
+            r -= 1
+            return l, r
+        k = index - l
+        if z_arr[k] < r - index + 1:
+            z_arr[index] = z_arr[k]
+            return l, r
+        else:
+            l = index
+            while r < len(s) and s[r - l] == s[r]:
+                r += 1
+            z_arr[index] = r - l
+            r -= 1
+            return l, r
+    z_arr = [0] * len(s)
+    l, r = 0, 0
+    for i in range(1, len(s)):
+        l, r = compute_z(i, l, r, z_arr)
+    return z_arr",ZFunc
+815,"def z_array_comprehension(seq):
+    n = len(seq)
+    return [max(0, len(seq) - i - j) if seq[j:] == seq[i:i + len(seq) - i] else 0 for i in range(1, n) for j in range(i)]",ZFunc
+816,"def z_array_bitwise(str_):
+    length = len(str_)
+    z = [0] * length
+    left_pos = 0
+    right_pos = 0
+    for k in range(1, length):
+        if k > right_pos:
+            left_pos = right_pos = k
+            while right_pos < length and str_[right_pos - left_pos] == str_[right_pos]:
+                right_pos += 1
+            z[k] = right_pos - left_pos
+            right_pos -= 1
+        else:
+            k1 = k - left_pos
+            if z[k1] < right_pos - k + 1:
+                z[k] = z[k1]
+            else:
+                left_pos = k
+                while right_pos < length and str_[right_pos - left_pos] == str_[right_pos]:
+                    right_pos += 1
+                z[k] = right_pos - left_pos
+                right_pos -= 1
+    return z",ZFunc
+817,"def z_array_functional(text_):
+    n = len(text_)
+    result = [0] * n
+    def find_z(idx):
+        match_len = 0
+        while idx + match_len < n and text_[match_len] == text_[idx + match_len]:
+            match_len += 1
+        return match_len
+    return [find_z(i) for i in range(n)]",ZFunc
+818,"def z_array_alt(pattern):
+    n = len(pattern)
+    z = [0] * n
+    l = r = 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n - 1 and pattern[r - l + 1] == pattern[r + 1]:
+                    r += 1
+                z[i] = r - l + 1
+        else:
+            l = i
+            while r < n - 1 and pattern[r - l + 1] == pattern[r + 1]:
+                r += 1
+            z[i] = r - l + 1
+    return z",ZFunc
+819,"def z_array_dict(string_):
+    n = len(string_)
+    z = {}
+    for i in range(1, n):
+        max_len = 0
+        for j in range(i):
+            if string_[j:j+i] == string_[i:i+i]:
+                max_len = i
+        z[i] = max_len
+    return [z.get(i, 0) for i in range(n)]",ZFunc
+820,"def z_array_map(seq):
+    n = len(seq)
+    def get_z_value(i):
+        max_match = 0
+        for j in range(n - i):
+            if seq[:j+1] == seq[i:i + j + 1]:
+                max_match = j + 1
+        return max_match
+    return list(map(get_z_value, range(1, n)))",ZFunc
+821,"s = input()
+n = len(s)
+table = [0] * n
+left = 0
+right = 0
+for k in range(1, n):
+    if k > right:
+        left = right = k
+        while right < n and s[right - left] == s[right]:
+            right += 1
+        table[k] = right - left
+        right -= 1
+    else:
+        k1 = k - left
+        if table[k1] < right - k + 1:
+            table[k] = table[k1]
+        else:
+            left = k
+            while right < n and s[right - left] == s[right]:
+                right += 1
+            table[k] = right - left
+            right -= 1
+print(*table)",ZFunc
+822,"string = input()
+length = len(string)
+z_array = [0] * length
+l = 0
+r = 0
+i = 1
+while i < length:
+    if i > r:
+        l = r = i
+        while r < length and string[r - l] == string[r]:
+            r += 1
+        z_array[i] = r - l
+        r -= 1
+    else:
+        k = i - l
+        if z_array[k] < r - i + 1:
+            z_array[i] = z_array[k]
+        else:
+            l = i
+            while r < length and string[r - l] == string[r]:
+                r += 1
+            z_array[i] = r - l
+            r -= 1
+    i += 1
+print(*z_array)",ZFunc
+823,"text = input()
+m = len(text)
+z = [0] * m
+prefix = 0
+suffix = 0
+for i in range(1, m):
+    if i <= prefix:
+        z[i] = min(prefix - i + 1, z[i - prefix])
+    while i + z[i] < m and text[z[i]] == text[i + z[i]]:
+        z[i] += 1
+    if i + z[i] - 1 > prefix:
+        prefix = i + z[i] - 1
+print(*z)",ZFunc
+824,"str_input = input()
+n_len = len(str_input)
+z_values = [0] * n_len
+left_pos = 0
+right_pos = 0
+for i in range(1, n_len):
+    if i > right_pos:
+        left_pos = right_pos = i
+        while right_pos < n_len and str_input[right_pos - left_pos] == str_input[right_pos]:
+            right_pos += 1
+        z_values[i] = right_pos - left_pos
+        right_pos -= 1
+    else:
+        k = i - left_pos
+        if z_values[k] < right_pos - i + 1:
+            z_values[i] = z_values[k]
+        else:
+            left_pos = i
+            while right_pos < n_len and str_input[right_pos - left_pos] == str_input[right_pos]:
+                right_pos += 1
+            z_values[i] = right_pos - left_pos
+            right_pos -= 1
+print(*z_values)",ZFunc
+825,"inp_str = input()
+size = len(inp_str)
+z_arr = [0] * size
+l_bound = 0
+r_bound = 0
+for i in range(1, size):
+    if i <= r_bound:
+        k = i - l_bound
+        z_arr[i] = min(r_bound - i + 1, z_arr[k])
+    while i + z_arr[i] < size and inp_str[z_arr[i]] == inp_str[i + z_arr[i]]:
+        z_arr[i] += 1
+    if i + z_arr[i] - 1 > r_bound:
+        l_bound = i
+        r_bound = i + z_arr[i] - 1
+print(*z_arr)",ZFunc
+826,"text_str = input()
+text_len = len(text_str)
+z_array_result = [0] * text_len
+left_end = 0
+right_end = 0
+for i in range(1, text_len):
+    if i > right_end:
+        left_end = i
+        right_end = i
+        while right_end < text_len and text_str[right_end - left_end] == text_str[right_end]:
+            right_end += 1
+        z_array_result[i] = right_end - left_end
+        right_end -= 1
+    else:
+        k_val = i - left_end
+        if z_array_result[k_val] < right_end - i + 1:
+            z_array_result[i] = z_array_result[k_val]
+        else:
+            left_end = i
+            while right_end < text_len and text_str[right_end - left_end] == text_str[right_end]:
+                right_end += 1
+            z_array_result[i] = right_end - left_end
+            right_end -= 1
+print(*z_array_result)",ZFunc
+827,"st = input()
+n_val = len(st)
+z_list = [0] * n_val
+l_pt = 0
+r_pt = 0
+for k in range(1, n_val):
+    if k > r_pt:
+        l_pt = r_pt = k
+        while r_pt < n_val and st[r_pt - l_pt] == st[r_pt]:
+            r_pt += 1
+        z_list[k] = r_pt - l_pt
+        r_pt -= 1
+    else:
+        k_idx = k - l_pt
+        if z_list[k_idx] < r_pt - k + 1:
+            z_list[k] = z_list[k_idx]
+        else:
+            l_pt = k
+            while r_pt < n_val and st[r_pt - l_pt] == st[r_pt]:
+                r_pt += 1
+            z_list[k] = r_pt - l_pt
+            r_pt -= 1
+print(*z_list)",ZFunc
+828,"val = input()
+strlen = len(val)
+zarr = [0] * strlen
+def calculate_z(s, n):
+    l = 0
+    r = 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            zarr[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if zarr[k1] < r - k + 1:
+                zarr[k] = zarr[k1]
+            else:
+                l = k
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                zarr[k] = r - l
+                r -= 1
+    return zarr
+result = calculate_z(val, strlen)
+print(*result)",ZFunc
+829,"data = input()
+data_len = len(data)
+z_output = [0] * data_len
+left_index = 0
+right_index = 0
+for i in range(1, data_len):
+    if i > right_index:
+        left_index = right_index = i
+        while right_index < data_len and data[right_index - left_index] == data[right_index]:
+            right_index += 1
+        z_output[i] = right_index - left_index
+        right_index -= 1
+    else:
+        k = i - left_index
+        if z_output[k] < right_index - i + 1:
+            z_output[i] = z_output[k]
+        else:
+            left_index = i
+            while right_index < data_len and data[right_index - left_index] == data[right_index]:
+                right_index += 1
+            z_output[i] = right_index - left_index
+            right_index -= 1
+print(*z_output)",ZFunc
+830,"input_string = input()
+input_length = len(input_string)
+z_table = [0] * input_length
+l = 0
+r = 0
+for i in range(1, input_length):
+    if i > r:
+        l = r = i
+        while r < input_length and input_string[r - l] == input_string[r]:
+            r += 1
+        z_table[i] = r - l
+        r -= 1
+    else:
+        k = i - l
+        if z_table[k] < r - i + 1:
+            z_table[i] = z_table[k]
+        else:
+            l = i
+            while r < input_length and input_string[r - l] == input_string[r]:
+                r += 1
+            z_table[i] = r - l
+            r -= 1
+print(*z_table)",ZFunc
+831,"def z_function_one(pattern):
+    n = len(pattern)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and pattern[r - l] == pattern[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and pattern[r - l] == pattern[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_one(input_string)
+print(*z_array)",ZFunc
+832,"def z_function_two(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for i in range(1, length):
+        if i > right:
+            left = right = i
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[i] = right - left
+            right -= 1
+        else:
+            k = i - left
+            if z_values[k] < right - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                left = i
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[i] = right - left
+                right -= 1
+    return z_values
+str_input = input()
+n = len(str_input)
+z_result = z_function_two(str_input)
+print(' '.join(map(str, z_result)))",ZFunc
+833,"def z_function_three(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    i = 1
+    while i < n:
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+        i += 1
+    return z
+text = input()
+n = len(text)
+z_array = z_function_three(text)
+print(*z_array, sep=' ')",ZFunc
+834,"def z_function_four(string):
+    length = len(string)
+    z_arr = [0] * length
+    left_pos = 0
+    right_pos = 0
+    for k in range(1, length):
+        if k > right_pos:
+            left_pos = right_pos = k
+            while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                right_pos += 1
+            z_arr[k] = right_pos - left_pos
+            right_pos -= 1
+        else:
+            k1 = k - left_pos
+            if z_arr[k1] < right_pos - k + 1:
+                z_arr[k] = z_arr[k1]
+            else:
+                left_pos = k
+                while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                    right_pos += 1
+                z_arr[k] = right_pos - left_pos
+                right_pos -= 1
+    return z_arr
+str_in = input()
+n = len(str_in)
+z_values = z_function_four(str_in)
+print(*z_values)",ZFunc
+835,"def z_function_five(input_str):
+    n = len(input_str)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        while i + z[i] < n and input_str[z[i]] == input_str[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+s = input()
+n = len(s)
+z_array = z_function_five(s)
+print(*z_array)",ZFunc
+836,"def z_function_six(text_input):
+    n = len(text_input)
+    z_values = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and text_input[r - l] == text_input[r]:
+                r += 1
+            z_values[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z_values[k] < r - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                l = i
+                while r < n and text_input[r - l] == text_input[r]:
+                    r += 1
+                z_values[i] = r - l
+                r -= 1
+    return z_values
+string = input()
+n = len(string)
+z_result = z_function_six(string)
+print(' '.join(map(str, z_result)))",ZFunc
+837,"def z_function_seven(pattern_str):
+    n = len(pattern_str)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and pattern_str[r - l] == pattern_str[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and pattern_str[r - l] == pattern_str[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+input_str = input()
+n = len(input_str)
+z_array = z_function_seven(input_str)
+print(*z_array)",ZFunc
+838,"def z_function_eight(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+text = input()
+n = len(text)
+z_array = z_function_eight(text)
+print(*z_array, sep=' ')",ZFunc
+839,"def z_function_nine(string):
+    n = len(string)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and string[r - l] == string[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and string[r - l] == string[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_nine(input_string)
+print(*z_array)",ZFunc
+840,"def z_function_ten(str_):
+    length = len(str_)
+    z_arr = [0] * length
+    left = 0
+    right = 0
+    for i in range(1, length):
+        if i > right:
+            left = right = i
+            while right < length and str_[right - left] == str_[right]:
+                right += 1
+            z_arr[i] = right - left
+            right -= 1
+        else:
+            k = i - left
+            if z_arr[k] < right - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                left = i
+                while right < length and str_[right - left] == str_[right]:
+                    right += 1
+                z_arr[i] = right - left
+                right -= 1
+    return z_arr
+input_str = input()
+n = len(input_str)
+z_values = z_function_ten(input_str)
+print(*z_values)",ZFunc
+841,"def z_array_calc(pattern):
+    n = len(pattern)
+    z = [0] * n
+    left = 0
+    right = 0
+    for k in range(1, n):
+        if k > right:
+            left = right = k
+            while right < n and pattern[right - left] == pattern[right]:
+                right += 1
+            z[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z[k1] < right - k + 1:
+                z[k] = z[k1]
+            else:
+                left = k
+                while right < n and pattern[right - left] == pattern[right]:
+                    right += 1
+                z[k] = right - left
+                right -= 1
+    return z
+input_string = input()
+n = len(input_string)
+z_arr = z_array_calc(input_string)
+print(*z_arr)",ZFunc
+842,"def compute_z(string):
+    length = len(string)
+    z_vals = [0] * length
+    l, r = 0, 0
+    i = 1
+    while i < length:
+        if i <= r:
+            z_vals[i] = min(r - i + 1, z_vals[i - l])
+        while i + z_vals[i] < length and string[z_vals[i]] == string[i + z_vals[i]]:
+            z_vals[i] += 1
+        if i + z_vals[i] - 1 > r:
+            l = i
+            r = i + z_vals[i] - 1
+        i += 1
+    return z_vals
+text = input()
+n = len(text)
+z = compute_z(text)
+print(*z)",ZFunc
+843,"def zfunction(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+str_input = input()
+n = len(str_input)
+z_array = zfunction(str_input)
+print(*z_array)",ZFunc
+844,"def calculate_z(text_in):
+    n = len(text_in)
+    z_val = [0] * n
+    left_boundary = 0
+    right_boundary = 0
+    for k in range(1,n):
+        if k > right_boundary:
+            left_boundary = right_boundary = k
+            while right_boundary < n and text_in[right_boundary - left_boundary] == text_in[right_boundary]:
+                right_boundary += 1
+            z_val[k] = right_boundary - left_boundary
+            right_boundary -= 1
+        else:
+            k_diff = k - left_boundary
+            if z_val[k_diff] < right_boundary - k + 1:
+                z_val[k] = z_val[k_diff]
+            else:
+                left_boundary = k
+                while right_boundary < n and text_in[right_boundary - left_boundary] == text_in[right_boundary]:
+                    right_boundary += 1
+                z_val[k] = right_boundary - left_boundary
+                right_boundary -= 1
+    return z_val
+input_str = input()
+n = len(input_str)
+z_result = calculate_z(input_str)
+print(*z_result)",ZFunc
+845,"def get_z_array(string_val):
+    n = len(string_val)
+    z_arr = [0] * n
+    l = 0
+    r = 0
+    i = 1
+    while i < n:
+        if i <= r:
+            z_arr[i] = min(r - i + 1, z_arr[i - l])
+        while i + z_arr[i] < n and string_val[z_arr[i]] == string_val[i + z_arr[i]]:
+            z_arr[i] += 1
+        if i + z_arr[i] - 1 > r:
+            l = i
+            r = i + z_arr[i] - 1
+        i += 1
+    return z_arr
+s = input()
+n = len(s)
+z = get_z_array(s)
+print(*z)",ZFunc
+846,"def z_func(txt):
+    n = len(txt)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        while i + z[i] < n and txt[z[i]] == txt[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+string_input = input()
+n = len(string_input)
+z_array = z_func(string_input)
+print(*z_array)",ZFunc
+847,"def build_z(seq):
+    n = len(seq)
+    z = [0] * n
+    leftmost = 0
+    rightmost = 0
+    for i in range(1, n):
+        if i > rightmost:
+            leftmost = rightmost = i
+            k = 0
+            while rightmost < n and seq[k] == seq[rightmost]:
+                k += 1
+                rightmost += 1
+            z[i] = k
+            rightmost -= 1
+        else:
+            k = i - leftmost
+            if z[k] < rightmost - i + 1:
+                z[i] = z[k]
+            else:
+                leftmost = i
+                k = 0
+                while rightmost < n and seq[k] == seq[rightmost]:
+                    k += 1
+                    rightmost += 1
+                z[i] = k
+                rightmost -= 1
+    return z
+phrase = input()
+n = len(phrase)
+z_output = build_z(phrase)
+print(*z_output)",ZFunc
+848,"def z_algorithm(text_data):
+    n = len(text_data)
+    z_values = [0] * n
+    left_pos = 0
+    right_pos = 0
+    for i in range(1, n):
+        if i <= right_pos:
+            z_values[i] = min(right_pos - i + 1, z_values[i - left_pos])
+        while i + z_values[i] < n and text_data[z_values[i]] == text_data[i + z_values[i]]:
+            z_values[i] += 1
+        if i + z_values[i] - 1 > right_pos:
+            left_pos = i
+            right_pos = i + z_values[i] - 1
+    return z_values
+word = input()
+n = len(word)
+result_z = z_algorithm(word)
+print(*result_z)",ZFunc
+849,"def create_z(input_str):
+    n = len(input_str)
+    z_arr = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and input_str[r - l] == input_str[r]:
+                r += 1
+            z_arr[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z_arr[k1] < r - k + 1:
+                z_arr[k] = z_arr[k1]
+            else:
+                l = k
+                while r < n and input_str[r - l] == input_str[r]:
+                    r += 1
+                z_arr[k] = r - l
+                r -= 1
+    return z_arr
+string = input()
+n = len(string)
+z_values = create_z(string)
+print(*z_values)",ZFunc
+850,"def z_func_recursive(string, idx, l, r, z_array):
+    n = len(string)
+    if idx == n:
+        return z_array
+    if idx <= r:
+        z_array[idx] = min(r - idx + 1, z_array[idx - l])
+    else:
+        l_temp, r_temp = idx, idx
+        while r_temp < n and string[r_temp - l_temp] == string[r_temp]:
+            r_temp += 1
+        z_array[idx] = r_temp - l_temp
+        l = idx
+        r = r_temp - 1
+    return z_func_recursive(string, idx + 1, l, r, z_array)
+input_text = input()
+n = len(input_text)
+z = [0] * n
+z_result = z_func_recursive(input_text, 1, 0, 0, z)
+print(*z_result)",ZFunc
+851,"def z_function_v1(pattern, length):
+    z = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and pattern[right - left] == pattern[right]:
+                right += 1
+            z[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z[k1] < right - k + 1:
+                z[k] = z[k1]
+            else:
+                left = k
+                while right < length and pattern[right - left] == pattern[right]:
+                    right += 1
+                z[k] = right - left
+                right -= 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_v1(input_string, n)
+print(*z_array)",ZFunc
+852,"def z_function_v2(text, size):
+    z_values = [0] * size
+    l, r = 0, 0
+    i = 1
+    while i < size:
+        if i <= r:
+            z_values[i] = min(r - i + 1, z_values[i - l])
+        else:
+            l, r = i, i
+            while r < size and text[r - l] == text[r]:
+                r += 1
+            z_values[i] = r - l
+            r -= 1
+        i += 1
+    return z_values
+str_input = input()
+n = len(str_input)
+z_result = z_function_v2(str_input, n)
+print(' '.join(map(str, z_result)))",ZFunc
+853,"def z_function_v3(s, n):
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+text = input()
+length = len(text)
+z_array = z_function_v3(text, length)
+print(*z_array, sep=' ')",ZFunc
+854,"def z_function_v4(string, length):
+    z_arr = [0] * length
+    left_pos = 0
+    right_pos = 0
+    for i in range(1, length):
+        if i > right_pos:
+            left_pos = right_pos = i
+            while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                right_pos += 1
+            z_arr[i] = right_pos - left_pos
+            right_pos -= 1
+        else:
+            k = i - left_pos
+            if z_arr[k] < right_pos - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                left_pos = i
+                while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                    right_pos += 1
+                z_arr[i] = right_pos - left_pos
+                right_pos -= 1
+    return z_arr
+input_str = input()
+n = len(input_str)
+z_values = z_function_v4(input_str, n)
+print(*z_values)",ZFunc
+855,"def z_function_v5(data, size):
+    z_values = [0] * size
+    l, r = 0, 0
+    for i in range(1, size):
+        if i > r:
+            l = r = i
+            while r < size and data[r - l] == data[r]:
+                r += 1
+            z_values[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z_values[k] < r - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                l = i
+                while r < size and data[r - l] == data[r]:
+                    r += 1
+                z_values[i] = r - l
+                r -= 1
+    return z_values
+s = input()
+n = len(s)
+z_array = z_function_v5(s, n)
+print(*z_array)",ZFunc
+856,"def z_function_v6(text, n):
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        else:
+            l = r = i
+            while r < n and text[r - l] == text[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+    return z
+str_input = input()
+length = len(str_input)
+z_result = z_function_v6(str_input, length)
+print(*z_result)",ZFunc
+857,"def z_function_v7(pattern, length):
+    z = [0] * length
+    left = 0
+    right = 0
+    i = 1
+    while i < length:
+        if i > right:
+            left = right = i
+            while right < length and pattern[right - left] == pattern[right]:
+                right += 1
+            z[i] = right - left
+            right -= 1
+        else:
+            k = i - left
+            if z[k] < right - i + 1:
+                z[i] = z[k]
+            else:
+                left = i
+                while right < length and pattern[right - left] == pattern[right]:
+                    right += 1
+                z[i] = right - left
+                right -= 1
+        i += 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_v7(input_string, n)
+print(' '.join(map(str, z_array)))",ZFunc
+858,"def z_function_v8(s, n):
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+text = input()
+length = len(text)
+z_array = z_function_v8(text, length)
+print(*z_array, sep=',')",ZFunc
+859,"def z_function_v9(string, size):
+    z_values = [0] * size
+    left = 0
+    right = 0
+    for i in range(1, size):
+        if i > right:
+            left = right = i
+            while right < size and string[right - left] == string[right]:
+                right += 1
+            z_values[i] = right - left
+            right -= 1
+        else:
+            k = i - left
+            if z_values[k] < right - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                left = i
+                while right < size and string[right - left] == string[right]:
+                    right += 1
+                z_values[i] = right - left
+                right -= 1
+    return z_values
+input_str = input()
+n = len(input_str)
+z_result = z_function_v9(input_str, n)
+print(*z_result)",ZFunc
+860,"def z_function_v10(data, length):
+    z = [0] * length
+    l = 0
+    r = 0
+    for k in range(1, length):
+        if k > r:
+            l = r = k
+            while r < length and data[r - l] == data[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < length and data[r - l] == data[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+s = input()
+n = len(s)
+z_array = z_function_v10(s, n)
+print(*z_array)",ZFunc
+861,"def z_function_one(pattern):
+    n = len(pattern)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and pattern[r - l] == pattern[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and pattern[r - l] == pattern[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_one(input_string)
+print(*z_array)",ZFunc
+862,"def z_function_two(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for i in range(1, length):
+        if i > right:
+            left = right = i
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[i] = right - left
+            right -= 1
+        else:
+            k = i - left
+            if z_values[k] < right - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                left = i
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[i] = right - left
+                right -= 1
+    return z_values
+str_input = input()
+n = len(str_input)
+z_result = z_function_two(str_input)
+print(' '.join(map(str, z_result)))",ZFunc
+863,"def z_function_three(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    i = 1
+    while i < n:
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+        i += 1
+    return z
+text = input()
+n = len(text)
+z_array = z_function_three(text)
+print(*z_array, sep=' ')",ZFunc
+864,"def z_function_four(string):
+    length = len(string)
+    z_arr = [0] * length
+    left_pos = 0
+    right_pos = 0
+    for k in range(1, length):
+        if k > right_pos:
+            left_pos = right_pos = k
+            while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                right_pos += 1
+            z_arr[k] = right_pos - left_pos
+            right_pos -= 1
+        else:
+            k1 = k - left_pos
+            if z_arr[k1] < right_pos - k + 1:
+                z_arr[k] = z_arr[k1]
+            else:
+                left_pos = k
+                while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                    right_pos += 1
+                z_arr[k] = right_pos - left_pos
+                right_pos -= 1
+    return z_arr
+str_in = input()
+n = len(str_in)
+z_values = z_function_four(str_in)
+print(*z_values)",ZFunc
+865,"def z_function_five(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+input_str = input()
+n = len(input_str)
+z_array = z_function_five(input_str)
+print(*z_array)",ZFunc
+866,"def z_function_six(text):
+    n = len(text)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and text[r - l] == text[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and text[r - l] == text[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+string = input()
+n = len(string)
+z_result = z_function_six(string)
+print(' '.join(map(str, z_result)))",ZFunc
+867,"def z_function_seven(pattern):
+    n = len(pattern)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and pattern[r - l] == pattern[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and pattern[r - l] == pattern[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+input_str = input()
+n = len(input_str)
+z_array = z_function_seven(input_str)
+print(*z_array)",ZFunc
+868,"def z_function_eight(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+text_input = input()
+n = len(text_input)
+z_values = z_function_eight(text_input)
+print(*z_values)",ZFunc
+869,"def z_function_nine(string):
+    n = len(string)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and string[r - l] == string[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and string[r - l] == string[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+str_in = input()
+n = len(str_in)
+z_result = z_function_nine(str_in)
+print(*z_result)",ZFunc
+870,"def z_function_ten(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+        if i + z[i] - 1 > r:
+            l = i
+            r = i + z[i] - 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_ten(input_string)
+print(*z_array, sep=' ')",ZFunc
+871,"def z_function_v1(pattern, length):
+    z = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and pattern[right - left] == pattern[right]:
+                right += 1
+            z[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z[k1] < right - k + 1:
+                z[k] = z[k1]
+            else:
+                left = k
+                while right < length and pattern[right - left] == pattern[right]:
+                    right += 1
+                z[k] = right - left
+                right -= 1
+    return z
+string_input = input()
+n = len(string_input)
+z_array = z_function_v1(string_input, n)
+print(*z_array)",ZFunc
+872,"def z_function_v2(str_input, n):
+    z_values = [0] * n
+    l, r = 0, 0
+    i = 1
+    while i < n:
+        if i <= r:
+            z_values[i] = min(r - i + 1, z_values[i - l])
+        else:
+            l = r = i
+            while r < n and str_input[r - l] == str_input[r]:
+                r += 1
+            z_values[i] = r - l
+            r -= 1
+        i += 1
+    return z_values
+input_string = input()
+len_string = len(input_string)
+z_result = z_function_v2(input_string, len_string)
+print(*z_result)",ZFunc
+873,"def z_function_v3(text, size):
+    z_arr = [0] * size
+    l = 0
+    r = 0
+    for i in range(1, size):
+        if i > r:
+            l = r = i
+            k = 0
+            while l + k < size and text[k] == text[l + k]:
+                k += 1
+            z_arr[i] = k
+            r = l + k - 1
+        else:
+            k = i - l
+            if z_arr[k] < r - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                l = i
+                k = r - i + 1
+                while l + k < size and text[k] == text[l + k]:
+                    k += 1
+                z_arr[i] = k
+                r = l + k - 1
+    return z_arr
+s = input()
+length = len(s)
+z = z_function_v3(s, length)
+print(*z)",ZFunc
+874,"def z_function_v4(pattern, n):
+    z = [0] * n
+    left = 0
+    right = 0
+    for k in range(1, n):
+        if k > right:
+            left = right = k
+            while right < n and pattern[right - left] == pattern[right]:
+                right += 1
+            z[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z[k1] < right - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                r = right
+                while r < n and pattern[r - l] == pattern[r]:
+                  r += 1
+                z[k] = r - l
+                right = r - 1
+    return z
+input_string = input()
+string_len = len(input_string)
+result = z_function_v4(input_string, string_len)
+print(*result)",ZFunc
+875,"def z_function_v5(s, size):
+    z_values = [0] * size
+    l = 0
+    r = 0
+    for i in range(1, size):
+        if i <= r:
+            z_values[i] = min(r - i + 1, z_values[i - l])
+        else:
+            l = r = i
+            k = 0
+            while l + k < size and s[k] == s[l + k]:
+                k += 1
+            z_values[i] = k
+            r = l + k - 1
+    return z_values
+input_str = input()
+str_len = len(input_str)
+z_array = z_function_v5(input_str, str_len)
+print(*z_array)",ZFunc
+876,"def z_function_v6(test_str, n):
+    z_arr = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            k = 0
+            while l + k < n and test_str[k] == test_str[l + k]:
+                k += 1
+            z_arr[i] = k
+            r = l + k - 1
+        else:
+            k = i - l
+            if z_arr[k] < r - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                l = i
+                k = r - i + 1
+                while l + k < n and test_str[k] == test_str[l + k]:
+                    k += 1
+                z_arr[i] = k
+                r = l + k - 1
+    return z_arr
+str_in = input()
+len_str = len(str_in)
+z_result = z_function_v6(str_in, len_str)
+print(*z_result)",ZFunc
+877,"def z_function_v7(input_str, length):
+    z = [0] * length
+    left = 0
+    right = 0
+    for k in range(1, length):
+        if k > right:
+            left = right = k
+            while right < length and input_str[right - left] == input_str[right]:
+                right += 1
+            z[k] = right - left
+            right -= 1
+        else:
+            k1 = k - left
+            if z[k1] < right - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                r = right
+                while r < length and input_str[r - l] == input_str[r]:
+                    r += 1
+                z[k] = r - l
+                right = r - 1
+    return z
+s = input()
+n = len(s)
+z_array = z_function_v7(s, n)
+print(*z_array)",ZFunc
+878,"def z_function_v8(text, n):
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            z[i] = min(r - i + 1, z[i - l])
+        else:
+            l = r = i
+            k = 0
+            while l + k < n and text[k] == text[l + k]:
+                k += 1
+            z[i] = k
+            r = l + k - 1
+    return z
+input_string = input()
+str_len = len(input_string)
+print(*z_function_v8(input_string, str_len))",ZFunc
+879,"def z_function_v9(s, n):
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i <= r:
+            k = i - l
+            z[i] = min(r - i + 1, z[k])
+        else:
+            l = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+    return z
+str_input = input()
+len_str = len(str_input)
+z_result = z_function_v9(str_input, len_str)
+print(*z_result)",ZFunc
+880,"def z_function_v10(string, length):
+    z_arr = [0] * length
+    left = 0
+    right = 0
+    for i in range(1, length):
+        if i > right:
+            left = right = i
+            k = 0
+            while left + k < length and string[k] == string[left + k]:
+                k += 1
+            z_arr[i] = k
+            right = left + k - 1
+        else:
+            k = i - left
+            if z_arr[k] < right - i + 1:
+                z_arr[i] = z_arr[k]
+            else:
+                left = i
+                k = right - i + 1
+                while left + k < length and string[k] == string[left + k]:
+                    k += 1
+                z_arr[i] = k
+                right = left + k - 1
+    return z_arr
+input_text = input()
+text_length = len(input_text)
+z_values = z_function_v10(input_text, text_length)
+print(*z_values)",ZFunc
+881,"def z_func_one(pattern):
+    n = len(pattern)
+    z_arr = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i <= r:
+            z_arr[i] = min(r - i + 1, z_arr[i - l])
+        while i + z_arr[i] < n and pattern[z_arr[i]] == pattern[i + z_arr[i]]:
+            z_arr[i] += 1
+        if i + z_arr[i] - 1 > r:
+            l = i
+            r = i + z_arr[i] - 1
+    return z_arr
+string_one = input()
+n_one = len(string_one)
+z_array_one = z_func_one(string_one)
+print(*z_array_one)",ZFunc
+882,"def z_func_two(text):
+    length = len(text)
+    z = [0] * length
+    left = 0
+    right = 0
+    index = 1
+    while index < length:
+        if index > right:
+            left = index
+            right = index
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z[index] = right - left
+            right -= 1
+        else:
+            k = index - left
+            if z[k] < right - index + 1:
+                z[index] = z[k]
+            else:
+                left = index
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z[index] = right - left
+                right -= 1
+        index += 1
+    return z
+str_input = input()
+n_input = len(str_input)
+z_array_input = z_func_two(str_input)
+print(*z_array_input)",ZFunc
+883,"def z_func_three(s):
+  n = len(s)
+  z = [0] * n
+  l = 0
+  r = 0
+  for k in range(1, n):
+    if k > r:
+      l = k
+      r = k
+      while r < n and s[r-l] == s[r]:
+        r += 1
+      z[k] = r-l
+      r -= 1
+    elif z[k-l] < r-k+1:
+      z[k] = z[k-l]
+    else:
+      l = k
+      while r < n and s[r-l] == s[r]:
+        r += 1
+      z[k] = r-l
+      r -= 1
+  return z
+input_str = input()
+n_str = len(input_str)
+z_arr = z_func_three(input_str)
+print(*z_arr)",ZFunc
+884,"def compute_z(text_four):
+    n_four = len(text_four)
+    z_four = [0] * n_four
+    l_four, r_four = 0, 0
+    for i in range(1, n_four):
+        k = 1 if i > r_four else min(r_four - i + 1, z_four[i - l_four])
+        while i + k < n_four and text_four[k] == text_four[i + k]:
+            k += 1
+        z_four[i] = k
+        if i + k - 1 > r_four:
+            l_four = i
+            r_four = i + k - 1
+    return z_four
+text_four = input()
+n_four = len(text_four)
+z_array_four = compute_z(text_four)
+print(*z_array_four)",ZFunc
+885,"def z_function_five(string):
+    n = len(string)
+    z = [0] * n
+    left_five = 0
+    right_five = 0
+    for i in range(1, n):
+        if i <= right_five:
+            z[i] = min(right_five - i + 1, z[i - left_five])
+        else:
+            left_five = i
+            right_five = i
+            while right_five < n and string[right_five - left_five] == string[right_five]:
+                right_five += 1
+            z[i] = right_five - left_five
+            right_five -= 1
+    return z
+s_five = input()
+n_five = len(s_five)
+z_five = z_function_five(s_five)
+print(*z_five)",ZFunc
+886,"def z_func_six(s_six):
+    n_six = len(s_six)
+    z_six = [0] * n_six
+    l_six, r_six = 0, 0
+    for i in range(1, n_six):
+        if i <= r_six:
+            z_six[i] = min(r_six - i + 1, z_six[i - l_six])
+        while i + z_six[i] < n_six and s_six[z_six[i]] == s_six[i + z_six[i]]:
+            z_six[i] += 1
+        if i + z_six[i] - 1 > r_six:
+            l_six = i
+            r_six = i + z_six[i] - 1
+    return z_six
+string_six = input()
+n_six = len(string_six)
+result_six = z_func_six(string_six)
+print("" "".join(map(str, result_six)))",ZFunc
+887,"def z_array(data):
+    n = len(data)
+    z_val = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        k = 0 if i > r else min(r - i + 1, z_val[i - l])
+        while i + k < n and data[k] == data[i + k]:
+            k += 1
+        z_val[i] = k
+        if i + k - 1 > r:
+            l = i
+            r = i + k - 1
+    return z_val
+input_string = input()
+len_string = len(input_string)
+z_result = z_array(input_string)
+print(*z_result)",ZFunc
+888,"def get_z_array(string_eight):
+    z_eight = [0] * len(string_eight)
+    left_eight, right_eight = 0, 0
+    for i in range(1, len(string_eight)):
+        if i <= right_eight:
+            z_eight[i] = min(right_eight - i + 1, z_eight[i - left_eight])
+        else:
+            left_eight = i
+            right_eight = i
+            while right_eight < len(string_eight) and string_eight[right_eight - left_eight] == string_eight[right_eight]:
+                right_eight += 1
+            z_eight[i] = right_eight - left_eight
+            right_eight -= 1
+    return z_eight
+string_eight = input()
+z_array_eight = get_z_array(string_eight)
+print(*z_array_eight)",ZFunc
+889,"def z_function_nine(text_nine):
+  n_nine = len(text_nine)
+  z_nine = [0] * n_nine
+  l_nine = 0
+  r_nine = 0
+  for i in range(1, n_nine):
+    if i <= r_nine:
+      z_nine[i] = min(r_nine - i + 1, z_nine[i - l_nine])
+    else:
+      l_nine = i
+      r_nine = i
+      while r_nine < n_nine and text_nine[r_nine - l_nine] == text_nine[r_nine]:
+        r_nine += 1
+      z_nine[i] = r_nine - l_nine
+      r_nine -= 1
+  return z_nine
+str_nine = input()
+n_nine = len(str_nine)
+z_arr_nine = z_function_nine(str_nine)
+print(*z_arr_nine)",ZFunc
+890,"def create_z_array(str_ten):
+    n_ten = len(str_ten)
+    z_ten = [0] * n_ten
+    left_ten, right_ten = 0, 0
+    for k in range(1, n_ten):
+        if k > right_ten:
+            left_ten = k
+            right_ten = k
+            while right_ten < n_ten and str_ten[right_ten - left_ten] == str_ten[right_ten]:
+                right_ten += 1
+            z_ten[k] = right_ten - left_ten
+            right_ten -= 1
+        else:
+            k_val = k - left_ten
+            if z_ten[k_val] < right_ten - k + 1:
+                z_ten[k] = z_ten[k_val]
+            else:
+                left_ten = k
+                while right_ten < n_ten and str_ten[right_ten - left_ten] == str_ten[right_ten]:
+                    right_ten += 1
+                z_ten[k] = right_ten - left_ten
+                right_ten -= 1
+    return z_ten
+input_ten = input()
+n_ten = len(input_ten)
+z_result_ten = create_z_array(input_ten)
+print(*z_result_ten)",ZFunc
+891,"def z_function_one(pattern):
+    n = len(pattern)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and pattern[r - l] == pattern[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and pattern[r - l] == pattern[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+input_string = input()
+n = len(input_string)
+z_array = z_function_one(input_string)
+print(*z_array)",ZFunc
+892,"def z_function_two(text):
+    length = len(text)
+    z_values = [0] * length
+    left = 0
+    right = 0
+    for i in range(1, length):
+        if i > right:
+            left = right = i
+            while right < length and text[right - left] == text[right]:
+                right += 1
+            z_values[i] = right - left
+            right -= 1
+        else:
+            k = i - left
+            if z_values[k] < right - i + 1:
+                z_values[i] = z_values[k]
+            else:
+                left = i
+                while right < length and text[right - left] == text[right]:
+                    right += 1
+                z_values[i] = right - left
+                right -= 1
+    return z_values
+str_input = input()
+n = len(str_input)
+z_result = z_function_two(str_input)
+print(' '.join(map(str, z_result)))",ZFunc
+893,"def z_function_three(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    i = 1
+    while i < n:
+        if i <= r:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+        else:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        i += 1
+    return z
+text = input()
+n = len(text)
+z_array = z_function_three(text)
+print(*z_array, sep=' ')",ZFunc
+894,"def z_function_four(string):
+    length = len(string)
+    z_arr = [0] * length
+    left_pos = 0
+    right_pos = 0
+    for k in range(1, length):
+        if k > right_pos:
+            left_pos = right_pos = k
+            while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                right_pos += 1
+            z_arr[k] = right_pos - left_pos
+            right_pos -= 1
+        else:
+            k1 = k - left_pos
+            if z_arr[k1] < right_pos - k + 1:
+                z_arr[k] = z_arr[k1]
+            else:
+                left_pos = k
+                while right_pos < length and string[right_pos - left_pos] == string[right_pos]:
+                    right_pos += 1
+                z_arr[k] = right_pos - left_pos
+                right_pos -= 1
+    return z_arr
+str_in = input()
+n = len(str_in)
+z_result = z_function_four(str_in)
+print(*z_result)",ZFunc
+895,"def z_function_five(s):
+    n = len(s)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+input_str = input()
+n = len(input_str)
+z_array = z_function_five(input_str)
+print(' '.join(map(lambda x: str(x), z_array)))",ZFunc
+896,"def z_function_six(text):
+    n = len(text)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and text[r - l] == text[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and text[r - l] == text[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+string = input()
+n = len(string)
+z_values = z_function_six(string)
+print(*z_values)",ZFunc
+897,"def z_function_seven(pattern):
+    n = len(pattern)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and pattern[r - l] == pattern[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and pattern[r - l] == pattern[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+s = input()
+n = len(s)
+z_arr = z_function_seven(s)
+print(*[str(x) for x in z_arr])",ZFunc
+898,"def z_function_eight(text):
+    n = len(text)
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and text[r - l] == text[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and text[r - l] == text[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+input_text = input()
+n = len(input_text)
+z_array = z_function_eight(input_text)
+print(' '.join(map(str, z_array)))",ZFunc
+899,"def z_function_nine(s):
+    n = len(s)
+    z = [0] * n
+    l = 0
+    r = 0
+    for i in range(1, n):
+        if i > r:
+            l = r = i
+            while r < n and s[r - l] == s[r]:
+                r += 1
+            z[i] = r - l
+            r -= 1
+        else:
+            k = i - l
+            if z[k] < r - i + 1:
+                z[i] = z[k]
+            else:
+                l = i
+                while r < n and s[r - l] == s[r]:
+                    r += 1
+                z[i] = r - l
+                r -= 1
+    return z
+string_input = input()
+n = len(string_input)
+z_result = z_function_nine(string_input)
+print(*z_result)",ZFunc
+900,"def z_function_ten(text):
+    n = len(text)
+    z = [0] * n
+    l, r = 0, 0
+    for k in range(1, n):
+        if k > r:
+            l = r = k
+            while r < n and text[r - l] == text[r]:
+                r += 1
+            z[k] = r - l
+            r -= 1
+        else:
+            k1 = k - l
+            if z[k1] < r - k + 1:
+                z[k] = z[k1]
+            else:
+                l = k
+                while r < n and text[r - l] == text[r]:
+                    r += 1
+                z[k] = r - l
+                r -= 1
+    return z
+str_data = input()
+n = len(str_data)
+z_values = z_function_ten(str_data)
+print(*z_values, sep=' ')",ZFunc
+901,"def prefix_function_1(sequence):
+    pi = [0] * len(sequence)
+    k = 0
+    for q in range(1, len(sequence)):
+        while k > 0 and sequence[k] != sequence[q]:
+            k = pi[k-1]
+        if sequence[k] == sequence[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+902,"def prefix_function_2(pattern):
+    length = len(pattern)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if pattern[i] == pattern[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j > 0:
+                j = border[j-1]
+            else:
+                i += 1
+    return border",PrefixFunc
+903,"def prefix_function_3(text):
+    n = len(text)
+    overlaps = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if text[:j] == text[i-j+1:i+1]:
+                overlaps[i] = j
+                break
+    return overlaps",PrefixFunc
+904,"def prefix_function_4(string):
+    arr = [0] * len(string)
+    for idx in range(1, len(string)):
+        val = arr[idx-1]
+        while val > 0 and string[idx] != string[val]:
+            val = arr[val-1]
+        if string[idx] == string[val]:
+            val += 1
+        arr[idx] = val
+    return arr",PrefixFunc
+905,"def prefix_function_5(s):
+    n = len(s)
+    pi_arr = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if s[i] == s[k]:
+            k += 1
+            pi_arr[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_arr[k-1]
+            else:
+                pi_arr[i] = 0
+                i += 1
+    return pi_arr",PrefixFunc
+906,"def prefix_function_6(seq):
+    n = len(seq)
+    p = [0] * n
+    for i in range(1, n):
+        j = p[i-1]
+        while j > 0 and seq[i] != seq[j]:
+            j = p[j-1]
+        if seq[i] == seq[j]:
+            j += 1
+        p[i] = j
+    return p",PrefixFunc
+907,"def prefix_function_7(pattern_str):
+    n = len(pattern_str)
+    pi = [0] * n
+    for i in range(1, n):
+        length = pi[i - 1]
+        while length > 0 and pattern_str[i] != pattern_str[length]:
+            length = pi[length - 1]
+        if pattern_str[i] == pattern_str[length]:
+            length += 1
+        pi[i] = length
+    return pi",PrefixFunc
+908,"def prefix_function_8(txt):
+    length_txt = len(txt)
+    arr_pi = [0] * length_txt
+    current_length = 0
+    for i in range(1, length_txt):
+        while current_length > 0 and txt[i] != txt[current_length]:
+            current_length = arr_pi[current_length - 1]
+        if txt[i] == txt[current_length]:
+            current_length += 1
+        arr_pi[i] = current_length
+    return arr_pi",PrefixFunc
+909,"def prefix_function_9(strng):
+    n = len(strng)
+    pi_val = [0] * n
+    for i in range(1, n):
+        j = 0
+        while j < i:
+            if strng[:j+1] == strng[i-j:i+1]:
+                pi_val[i] = j + 1
+            j += 1
+    return pi_val",PrefixFunc
+910,"def prefix_function_10(s):
+  n = len(s)
+  pi = [0] * n
+  for i in range(1, n):
+    j = pi[i-1]
+    while j > 0 and s[i] != s[j]:
+      j = pi[j-1]
+    if s[i] == s[j]:
+      j += 1
+    pi[i] = j
+  return pi",PrefixFunc
+911,"def compute_prefix_function_one(sequence):
+    pi = [0] * len(sequence)
+    k = 0
+    for q in range(1, len(sequence)):
+        while k > 0 and sequence[k] != sequence[q]:
+            k = pi[k-1]
+        if sequence[k] == sequence[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+912,"def compute_prefix_function_two(pattern):
+    prefix_val = [0] * len(pattern)
+    length = 0
+    i = 1
+    while i < len(pattern):
+        if pattern[i] == pattern[length]:
+            length += 1
+            prefix_val[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = prefix_val[length - 1]
+            else:
+                prefix_val[i] = 0
+                i += 1
+    return prefix_val",PrefixFunc
+913,"def compute_prefix_function_three(string):
+    m = len(string)
+    pi_array = [0] * m
+    idx = 0
+    for i in range(1, m):
+        while idx > 0 and string[i] != string[idx]:
+            idx = pi_array[idx-1]
+        if string[i] == string[idx]:
+            idx += 1
+        pi_array[i] = idx
+    return pi_array",PrefixFunc
+914,"def compute_prefix_function_four(text):
+    n = len(text)
+    p = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if text[i] == text[j]:
+            j += 1
+            p[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = p[j-1]
+            else:
+                p[i] = 0
+                i += 1
+    return p",PrefixFunc
+915,"def compute_prefix_function_five(s):
+    length = [0] * len(s)
+    k = 0
+    for i in range(1, len(s)):
+        while k > 0 and s[i] != s[k]:
+            k = length[k-1]
+        if s[i] == s[k]:
+            k += 1
+        length[i] = k
+    return length",PrefixFunc
+916,"def compute_prefix_function_six(seq):
+    arr = [0] * len(seq)
+    c = 0
+    for i in range(1, len(seq)):
+        while c > 0 and seq[i] != seq[c]:
+            c = arr[c - 1]
+        if seq[i] == seq[c]:
+            c += 1
+        arr[i] = c
+    return arr",PrefixFunc
+917,"def compute_prefix_function_seven(string):
+    n = len(string)
+    prefix = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if string[i] == string[k]:
+            k += 1
+            prefix[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = prefix[k - 1]
+            else:
+                prefix[i] = 0
+                i += 1
+    return prefix",PrefixFunc
+918,"def compute_prefix_function_eight(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi",PrefixFunc
+919,"def compute_prefix_function_nine(text):
+    n = len(text)
+    pi_arr = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if text[i] == text[j]:
+            j += 1
+            pi_arr[i] = j
+            i += 1
+        else:
+            if j > 0:
+                j = pi_arr[j-1]
+            else:
+                i += 1
+    return pi_arr",PrefixFunc
+920,"def compute_prefix_function_ten(word):
+    result = [0] * len(word)
+    l = 0
+    for i in range(1, len(word)):
+        while l > 0 and word[i] != word[l]:
+            l = result[l - 1]
+        if word[i] == word[l]:
+            l += 1
+        result[i] = l
+    return result",PrefixFunc
+921,"def prefix_function_a(sequence):
+    pi = [0] * len(sequence)
+    k = 0
+    for q in range(1, len(sequence)):
+        while k > 0 and sequence[k] != sequence[q]:
+            k = pi[k-1]
+        if sequence[k] == sequence[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+922,"def prefix_function_b(string):
+    lps = [0] * len(string)
+    length = 0
+    i = 1
+    while i < len(string):
+        if string[i] == string[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = lps[length-1]
+            else:
+                lps[i] = 0
+                i += 1
+    return lps",PrefixFunc
+923,"def prefix_function_c(txt):
+    border = [0] * len(txt)
+    j = 0
+    for i in range(1, len(txt)):
+        while j > 0 and txt[i] != txt[j]:
+            j = border[j - 1]
+        if txt[i] == txt[j]:
+            j += 1
+        border[i] = j
+    return border",PrefixFunc
+924,"def prefix_function_d(pattern):
+    pi_arr = [0] * len(pattern)
+    for i in range(1, len(pattern)):
+        for j in range(i):
+            if pattern[:i+1] == pattern[j+1:i+1+j+1] and len(pattern[:i+1]) > pi_arr[i]:
+                pi_arr[i] = len(pattern[:i+1])
+    return pi_arr",PrefixFunc
+925,"def prefix_function_e(s):
+    prefix = [0] * len(s)
+    def compute_prefix(index):
+        if index == 0:
+            return 0
+        k = prefix[index - 1]
+        while k > 0 and s[index] != s[k]:
+            k = prefix[k - 1]
+        if s[index] == s[k]:
+            k += 1
+        return k
+    for i in range(1, len(s)):
+        prefix[i] = compute_prefix(i)
+    return prefix",PrefixFunc
+926,"def prefix_function_f(word):
+    pi_values = [0] * len(word)
+    yield from (pi_values[i] for i in range(len(word)))
+    for i in range(1, len(word)):
+      k = pi_values[i-1]
+      while k > 0 and word[i] != word[k]:
+        k = pi_values[k-1]
+      if word[i] == word[k]:
+        k += 1
+      pi_values[i] = k
+    return pi_values",PrefixFunc
+927,"def prefix_function_g(input_str):
+    arr = [0] * len(input_str)
+    def decorator(func):
+        def wrapper(index):
+            if index == 0:
+                return 0
+            k = func(index - 1)
+            while k > 0 and input_str[index] != input_str[k]:
+                k = arr[k-1]
+            if input_str[index] == input_str[k]:
+                k += 1
+            return k
+        return wrapper
+    @decorator
+    def calculate_prefix(idx):
+        return 0
+    for i in range(1, len(input_str)):
+        arr[i] = calculate_prefix(i)
+    return arr",PrefixFunc
+928,"def prefix_function_h(text):
+    pi_table = [0] * len(text)
+    def find_prefix(idx):
+      if idx==0: return 0
+      d = pi_table[idx-1]
+      while d > 0 and text[idx] != text[d]:
+        d = pi_table[d-1]
+      if text[idx] == text[d]:
+        d +=1
+      return d
+    for i in range(1, len(text)):
+        pi_table[i] = find_prefix(i)
+    return pi_table",PrefixFunc
+929,"def prefix_function_i(s):
+  pi = [0] * len(s)
+  for i in range(1,len(s)):
+    pi[i] = max(0, *[j for j in range(i) if s[:i+1] == s[j+1:i+1+j+1]])
+  return pi",PrefixFunc
+930,"def prefix_function_j(strng):
+    prefix_arr = [0] * len(strng)
+    for i in range(1, len(strng)):
+        max_len = 0
+        for j in range(i):
+            if strng[:i+1] == strng[j+1:i+1+j+1]:
+                max_len = max(max_len, len(strng[:i+1]))
+        prefix_arr[i] = max_len
+    return prefix_arr",PrefixFunc
+931,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+932,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border",PrefixFunc
+933,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result",PrefixFunc
+934,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    def compute(idx):
+        if idx == 0:
+            return 0
+        for k in range(idx, 0, -1):
+            if seq[:k] == seq[idx-k+1:idx+1]:
+                return k
+        return 0
+    for i in range(1, n):
+        arr[i] = compute(i)
+    return arr",PrefixFunc
+935,"def prefix_function_e(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        k = pi[i-1]
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi",PrefixFunc
+936,"def prefix_function_f(pattern_str):
+    n = len(pattern_str)
+    pi_arr = [0] * n
+    for i in range(1, n):
+        j = pi_arr[i-1]
+        while j > 0 and pattern_str[i] != pattern_str[j]:
+            j = pi_arr[j-1]
+        if pattern_str[i] == pattern_str[j]:
+            j += 1
+        pi_arr[i] = j
+    return pi_arr",PrefixFunc
+937,"def prefix_function_g(text_str):
+    n = len(text_str)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text_str[i] == text_str[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi",PrefixFunc
+938,"def prefix_function_h(input_str):
+    n = len(input_str)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(1, i + 1):
+            if input_str[:j] == input_str[i - j + 1:i + 1]:
+                result[i] = j
+    return result",PrefixFunc
+939,"def prefix_function_i(string_val):
+    n = len(string_val)
+    pi_values = [0] * n
+    for i in range(1, n):
+        max_len = 0
+        for j in range(1, i + 1):
+            if string_val[:j] == string_val[i - j + 1:i + 1]:
+                max_len = j
+        pi_values[i] = max_len
+    return pi_values",PrefixFunc
+940,"def prefix_function_j(s_str):
+    n = len(s_str)
+    pi_list = [0] * n
+    for i in range(1, n):
+        k_val = pi_list[i-1]
+        while k_val > 0 and s_str[i] != s_str[k_val]:
+            k_val = pi_list[k_val-1]
+        if s_str[i] == s_str[k_val]:
+            k_val += 1
+        pi_list[i] = k_val
+    return pi_list",PrefixFunc
+941,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+942,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border",PrefixFunc
+943,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result",PrefixFunc
+944,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    for i in range(1, n):
+        arr[i] = max(0, arr[i-1] if seq[i] == seq[arr[i-1]] else 0)
+        while arr[i] > 0 and seq[i] != seq[arr[i]]:
+            arr[i] = arr[arr[i]-1]
+        if seq[i] == seq[arr[i]]:
+            arr[i] += 1
+    return arr",PrefixFunc
+945,"def prefix_function_e(s):
+    n = len(s)
+    pi = [0] * n
+    def compute_pi(idx):
+        if idx == 0:
+            return 0
+        k = pi[idx-1]
+        while k > 0 and s[idx] != s[k]:
+            k = pi[k-1]
+        if s[idx] == s[k]:
+            k += 1
+        return k
+    for i in range(1, n):
+        pi[i] = compute_pi(i)
+    return pi",PrefixFunc
+946,"def prefix_function_f(pattern_str):
+    n = len(pattern_str)
+    pi_arr = [0] * n
+    for i in range(1, n):
+        k = pi_arr[i-1]
+        while k > 0 and pattern_str[i] != pattern_str[k]:
+            k = pi_arr[k-1]
+        if pattern_str[i] == pattern_str[k]:
+            k += 1
+        pi_arr[i] = k
+    return pi_arr",PrefixFunc
+947,"def prefix_function_g(text_str):
+    n = len(text_str)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text_str[i] != text_str[k]:
+            k = pi[k-1]
+        if text_str[i] == text_str[k]:
+            k += 1
+        pi[i] = k
+    return pi",PrefixFunc
+948,"def prefix_function_h(input_str):
+    n = len(input_str)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and input_str[i] != input_str[j]:
+            j = pi[j-1]
+        if input_str[i] == input_str[j]:
+            j += 1
+        pi[i] = j
+    return pi",PrefixFunc
+949,"def prefix_function_i(s_str):
+    n = len(s_str)
+    pi = [0] * n
+    for i in range(1, n):
+        k = 0
+        while k < i:
+            if s_str[:k+1] == s_str[i-k:i+1]:
+                pi[i] = k + 1
+            k += 1
+    return pi",PrefixFunc
+950,"def prefix_function_j(string_val):
+    n = len(string_val)
+    pi = [0] * n
+    for i in range(1, n):
+        k = pi[i-1]
+        while k > 0 and string_val[i] != string_val[k]:
+            k = pi[k-1]
+        if string_val[i] == string_val[k]:
+            k += 1
+        pi[i] = k
+    return pi",PrefixFunc
+951,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+952,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border",PrefixFunc
+953,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result",PrefixFunc
+954,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    for i in range(1, n):
+        arr[i] = max(0, *[k for k in range(1, i + 1) if seq[:k] == seq[i-k+1:i+1]])
+    return arr",PrefixFunc
+955,"def prefix_function_e(s):
+    def compute_prefix(idx):
+        if idx == 0:
+            return 0
+        for k in range(idx, 0, -1):
+            if s[:k] == s[idx-k+1:idx+1]:
+                return k
+        return 0
+    return [compute_prefix(i) for i in range(len(s))]",PrefixFunc
+956,"def prefix_function_f(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    i = 1
+    while i < len(pattern):
+        if pattern[i] == pattern[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k > 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi",PrefixFunc
+957,"def prefix_function_g(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi",PrefixFunc
+958,"def prefix_function_h(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(1, min(i + 1, n)):
+            if string[:j] == string[i - j + 1:i + 1]:
+                result[i] = j
+            else:
+                break
+    return result",PrefixFunc
+959,"def prefix_function_i(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        for j in range(1, i + 1):
+            if s[:j] == s[i - j + 1:i + 1]:
+                pi[i] = j
+    return pi",PrefixFunc
+960,"def prefix_function_j(text):
+    n = len(text)
+    pi = [0] * n
+    i = 1
+    while i < n:
+        j = pi[i-1]
+        if text[i] == text[j]:
+            pi[i] = j + 1
+            i += 1
+        else:
+            if j == 0:
+                pi[i] = 0
+                i += 1
+            else:
+                j = pi[j-1]
+    return pi",PrefixFunc
+961,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi",PrefixFunc
+962,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border",PrefixFunc
+963,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result",PrefixFunc
+964,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    def compute(idx):
+        if idx == 0:
+            return 0
+        for k in range(idx, 0, -1):
+            if seq[:k] == seq[idx-k+1:idx+1]:
+                return k
+        return 0
+    for i in range(1, n):
+        arr[i] = compute(i)
+    return arr",PrefixFunc
+965,"def prefix_function_e(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        k = pi[i-1]
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi",PrefixFunc
+966,"def prefix_function_f(pattern_str):
+    n = len(pattern_str)
+    pi_arr = [0] * n
+    for i in range(1, n):
+        j = pi_arr[i-1]
+        while j > 0 and pattern_str[i] != pattern_str[j]:
+            j = pi_arr[j-1]
+        if pattern_str[i] == pattern_str[j]:
+            j += 1
+        pi_arr[i] = j
+    return pi_arr",PrefixFunc
+967,"def prefix_function_g(text_str):
+    n = len(text_str)
+    pi = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if text_str[i] == text_str[j]:
+            j += 1
+            pi[i] = j
+            i += 1
+        else:
+            if j > 0:
+                j = pi[j-1]
+            else:
+                i += 1
+    return pi",PrefixFunc
+968,"def prefix_function_h(input_str):
+    n = len(input_str)
+    result = [0] * n
+    for i in range(1, n):
+        for k in range(1, i + 1):
+            if input_str[:k] == input_str[i - k + 1:i + 1]:
+                result[i] = k
+    return result",PrefixFunc
+969,"def prefix_function_i(string_val):
+    n = len(string_val)
+    pi_values = [0] * n
+    for i in range(1, n):
+        k = 0
+        while k < i:
+            if string_val[:k+1] == string_val[i-k:i+1]:
+                pi_values[i] = k + 1
+            k += 1
+    return pi_values",PrefixFunc
+970,"def prefix_function_j(s_str):
+    n = len(s_str)
+    pi_list = [0] * n
+    for i in range(1, n):
+        k = pi_list[i-1]
+        while k > 0 and s_str[i] != s_str[k]:
+            k = pi_list[k-1]
+        if s_str[i] == s_str[k]:
+            k += 1
+        pi_list[i] = k
+    return pi_list",PrefixFunc
+971,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+972,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k - 1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)",PrefixFunc
+973,"def get_pi(seq):
+    size = len(seq)
+    pi_arr = [0] * size
+    k = 0
+    i = 1
+    while i < size:
+        if seq[i] == seq[k]:
+            k += 1
+            pi_arr[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_arr[k-1]
+            else:
+                pi_arr[i] = 0
+                i += 1
+    return pi_arr
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)",PrefixFunc
+974,"def pi_function(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    result = pi_function(input_string)
+    print(*result)",PrefixFunc
+975,"def prefix_array(text):
+    length = len(text)
+    pi = [0] * length
+    k = 0
+    for i in range(1, length):
+        k = 0
+        for j in range(i):
+            if text[j] == text[i]:
+                k = j + 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = prefix_array(input_string)
+    print(*pi_array)",PrefixFunc
+976,"def calculate_pi(input_str):
+    n = len(input_str)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if input_str[i] == input_str[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k > 0:
+                k = pi[k - 1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_result = calculate_pi(input_string)
+    print(*pi_result)",PrefixFunc
+977,"def compute_prefix(pattern):
+    n = len(pattern)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k - 1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_prefix(input_string)
+    print(*pi_array)",PrefixFunc
+978,"def get_prefix_function(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_result = get_prefix_function(input_string)
+    print(*pi_result)",PrefixFunc
+979,"def prefix_function_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+    else:
+        if k > 0:
+            k = pi[k-1]
+        else:
+            k = 0
+    pi[i] = k
+    return prefix_function_recursive(text, i + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi = [0] * n
+    result = prefix_function_recursive(input_string, 1, 0, pi)
+    print(*result)",PrefixFunc
+980,"def find_pi(input_text):
+    length = len(input_text)
+    pi_values = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and input_text[i] != input_text[k]:
+            k = pi_values[k - 1]
+        if input_text[i] == input_text[k]:
+            k += 1
+        pi_values[i] = k
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = find_pi(input_string)
+    print(*pi_array)",PrefixFunc
+981,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+982,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        m = self.length
+        pi = [0] * m
+        k = 0
+        for q in range(1, m):
+            while k > 0 and self.pattern[k] != self.pattern[q]:
+                k = pi[k-1]
+            if self.pattern[k] == self.pattern[q]:
+                k += 1
+            pi[q] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)",PrefixFunc
+983,"def get_pi(seq):
+    length = len(seq)
+    pi_values = [0] * length
+    k = 0
+    i = 1
+    while i < length:
+        if seq[i] == seq[k]:
+            k += 1
+            pi_values[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_values[k-1]
+            else:
+                pi_values[i] = 0
+                i += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)",PrefixFunc
+984,"def pi_recursive(text, q, k, pi):
+    if q == len(text):
+        return pi
+    if k > 0 and text[k] != text[q]:
+        k = pi[k-1]
+        return pi_recursive(text, q, k, pi)
+    if text[k] == text[q]:
+        k += 1
+    pi[q] = k
+    return pi_recursive(text, q + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi = [0] * n
+    pi_array = pi_recursive(input_string, 1, 0, pi)
+    print(*pi_array)",PrefixFunc
+985,"def prefix_function_slice(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = prefix_function_slice(input_string)
+    print(*pi_array)",PrefixFunc
+986,"def calculate_pi_array(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+987,"def compute_pi(pattern):
+    m = len(pattern)
+    pi = [0] * m
+    k = 0
+    for i in range(1, m):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k-1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi(input_string)
+    print(*pi_array)",PrefixFunc
+988,"def get_prefix_function(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_prefix_function(input_string)
+    print(*pi_array)",PrefixFunc
+989,"def prefix_function_alt(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text[i] == text[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_alt(input_string)
+    print(*pi_array)",PrefixFunc
+990,"def calculate_pi(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi(input_string)
+    print(' '.join(map(str, pi_array)))",PrefixFunc
+991,"def compute_pi(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi(input_string)
+    print(*pi_array)",PrefixFunc
+992,"def longest_prefix_suffix(pattern):
+    length = len(pattern)
+    lps = [0] * length
+    i = 1
+    len_prefix = 0
+    while i < length:
+        if pattern[i] == pattern[len_prefix]:
+            len_prefix += 1
+            lps[i] = len_prefix
+            i += 1
+        else:
+            if len_prefix != 0:
+                len_prefix = lps[len_prefix - 1]
+            else:
+                lps[i] = 0
+                i += 1
+    return lps
+if __name__ == ""__main__"":
+    str_input = input()
+    size = len(str_input)
+    result = longest_prefix_suffix(str_input)
+    print(*result)",PrefixFunc
+993,"def kmp_table(text):
+    n = len(text)
+    table = [0] * n
+    length = 0
+    i = 1
+    while i < n:
+        if text[i] == text[length]:
+            length += 1
+            table[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = table[length - 1]
+            else:
+                table[i] = 0
+                i += 1
+    return table
+if __name__ == ""__main__"":
+    sequence = input()
+    seq_len = len(sequence)
+    pi_values = kmp_table(sequence)
+    print(*pi_values)",PrefixFunc
+994,"class PrefixFunction:
+    def __init__(self, text):
+        self.text = text
+        self.n = len(text)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.n
+        k = 0
+        for q in range(1, self.n):
+            while k > 0 and self.text[k] != self.text[q]:
+                k = pi[k - 1]
+            if self.text[k] == self.text[q]:
+                k += 1
+            pi[q] = k
+        return pi
+if __name__ == ""__main__"":
+    input_str = input()
+    pf = PrefixFunction(input_str)
+    print(*pf.pi)",PrefixFunc
+995,"def get_pi_array(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[k] != s[i]:
+            k = pi[k-1]
+        if s[k] == s[i]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_str = input()
+    length = len(input_str)
+    pi_array = get_pi_array(input_str)
+    print(*pi_array)",PrefixFunc
+996,"def prep_func(pattern):
+    m = len(pattern)
+    p = [0] * m
+    j = 0
+    for i in range(1, m):
+        while j > 0 and pattern[i] != pattern[j]:
+            j = p[j-1]
+        if pattern[i] == pattern[j]:
+            j += 1
+        p[i] = j
+    return p
+if __name__ == ""__main__"":
+    input_str = input()
+    length = len(input_str)
+    result = prep_func(input_str)
+    print(*result)",PrefixFunc
+997,"def find_prefix(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and s[i] != s[j]:
+            j = pi[j-1]
+        if s[i] == s[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    input_text = input()
+    text_len = len(input_text)
+    pi_values = find_prefix(input_text)
+    print(*pi_values)",PrefixFunc
+998,"def prefix(text_str):
+    size = len(text_str)
+    pi_arr = [0] * size
+    k = 0
+    for i in range(1, size):
+        while k > 0 and text_str[i] != text_str[k]:
+            k = pi_arr[k - 1]
+        if text_str[i] == text_str[k]:
+            k += 1
+        pi_arr[i] = k
+    return pi_arr
+if __name__ == ""__main__"":
+    data = input()
+    result = prefix(data)
+    print(*result)",PrefixFunc
+999,"def compute_pi_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    while k > 0 and text[i] != text[k]:
+        k = pi[k-1]
+    if text[i] == text[k]:
+        k += 1
+    pi[i] = k
+    return compute_pi_recursive(text, i+1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_result = compute_pi_recursive(input_string, 1, 0, pi_array)
+    print(*pi_result)",PrefixFunc
+1000,"def get_prefix_function(text_input):
+    n_val = len(text_input)
+    pi_arr = [0] * n_val
+    length_pref = 0
+    i_val = 1
+    while i_val < n_val:
+        if text_input[length_pref] == text_input[i_val]:
+            length_pref += 1
+            pi_arr[i_val] = length_pref
+            i_val += 1
+        else:
+            if length_pref != 0:
+                length_pref = pi_arr[length_pref - 1]
+            else:
+                pi_arr[i_val] = 0
+                i_val += 1
+    return pi_arr
+if __name__ == ""__main__"":
+    input_str = input()
+    lengths = get_prefix_function(input_str)
+    print(*lengths)",PrefixFunc
+1001,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+1002,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k-1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)",PrefixFunc
+1003,"def get_pi(seq):
+    length = len(seq)
+    pi_values = [0] * length
+    k_val = 0
+    i_val = 1
+    while i_val < length:
+        if seq[i_val] == seq[k_val]:
+            k_val += 1
+            pi_values[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_values[k_val - 1]
+            else:
+                pi_values[i_val] = 0
+                i_val += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_pi(input_string)
+    print(*pi_array)",PrefixFunc
+1004,"def prefix_function_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+        pi[i] = k
+        return prefix_function_recursive(text, i + 1, k, pi)
+    else:
+        if k > 0:
+            k = pi[k - 1]
+            return prefix_function_recursive(text, i, k, pi)
+        else:
+            pi[i] = 0
+            return prefix_function_recursive(text, i + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_array = prefix_function_recursive(input_string, 1, 0, pi_array)
+    print(*pi_array)",PrefixFunc
+1005,"def calculate_pi_slicing(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_slicing(input_string)
+    print(*pi_array)",PrefixFunc
+1006,"def pi_table(s):
+    n = len(s)
+    p = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = p[k-1]
+        if s[i] == s[k]:
+            k += 1
+        p[i] = k
+    return p
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = pi_table(input_string)
+    print(*pi_array)",PrefixFunc
+1007,"def compute_prefix(data):
+    length = len(data)
+    pi_arr = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and data[i] != data[k]:
+            k = pi_arr[k - 1]
+        if data[i] == data[k]:
+            k += 1
+        pi_arr[i] = k
+    return pi_arr
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_prefix(input_string)
+    print(*pi_array)",PrefixFunc
+1008,"def prefix_function_alt(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text[i] == text[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_alt(input_string)
+    print(*pi_array)",PrefixFunc
+1009,"def get_pi_array(input_str):
+    n = len(input_str)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and input_str[i] != input_str[k]:
+            k = pi[k - 1]
+        if input_str[i] == input_str[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+1010,"def calculate_pi_array_helper(text, index, k, pi_array):
+    if index == len(text):
+        return pi_array
+    if text[index] == text[k]:
+        k += 1
+        pi_array[index] = k
+        return calculate_pi_array_helper(text, index + 1, k, pi_array)
+    else:
+        if k > 0:
+            k = pi_array[k - 1]
+            return calculate_pi_array_helper(text, index, k, pi_array)
+        else:
+            pi_array[index] = 0
+            return calculate_pi_array_helper(text, index + 1, k, pi_array)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_array = calculate_pi_array_helper(input_string, 1, 0, pi_array)
+    print(*pi_array)",PrefixFunc
+1011,"def compute_pi_array_v1(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for q in range(1, n):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi_array_v1(input_string)
+    print(*pi_array)",PrefixFunc
+1012,"class PrefixFunctionV2:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.n = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.n
+        k = 0
+        for i in range(1, self.n):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k - 1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_function = PrefixFunctionV2(input_string)
+    print(*prefix_function.pi)",PrefixFunc
+1013,"def prefix_function_v3(sequence):
+    length = len(sequence)
+    pi_values = [0] * length
+    k = 0
+    i = 1
+    while i < length:
+        if sequence[i] == sequence[k]:
+            k += 1
+            pi_values[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_values[k-1]
+            else:
+                pi_values[i] = 0
+                i += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v3(input_string)
+    print(*pi_array)",PrefixFunc
+1014,"def get_pi_v4(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_pi_v4(input_string)
+    print(*pi_array)",PrefixFunc
+1015,"def compute_pi_recursive_v5(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+        pi[i] = k
+    else:
+        if k > 0:
+            k = pi[k-1]
+            compute_pi_recursive_v5(text, i, k, pi)
+        else:
+            pi[i] = 0
+    return compute_pi_recursive_v5(text, i+1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    compute_pi_recursive_v5(input_string, 1, 0, pi_array)
+    print(*pi_array)",PrefixFunc
+1016,"def prefix_function_v6(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        k = max(0, k)
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v6(input_string)
+    print(*pi_array)",PrefixFunc
+1017,"def calculate_pi_v7(string):
+    n = len(string)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and string[i] != string[k]:
+            k = pi[k - 1]
+        if string[i] == string[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_v7(input_string)
+    print(*pi_array)",PrefixFunc
+1018,"def prefix_function_v8(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v8(input_string)
+    print(' '.join(map(str, pi_array)))",PrefixFunc
+1019,"def compute_pi_v9(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi_v9(input_string)
+    for val in pi_array:
+        print(val, end="" "")
+    print()",PrefixFunc
+1020,"def prefix_function_v10(pattern):
+    n = len(pattern)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k-1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v10(input_string)
+    print(*pi_array, sep=' ')",PrefixFunc
+1021,"def compute_pi_array_1(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for q in range(1, n):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    pattern = input()
+    pi_array = compute_pi_array_1(pattern)
+    print(*pi_array)",PrefixFunc
+1022,"class PrefixFunction2:
+    def __init__(self, input_string):
+        self.s = input_string
+        self.length = len(input_string)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.s[k] != self.s[i]:
+                k = pi[k - 1]
+            if self.s[k] == self.s[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    text = input()
+    pf = PrefixFunction2(text)
+    print(*pf.pi)",PrefixFunc
+1023,"import sys
+def pi_function_3(string):
+    len_string = len(string)
+    pi_values = [0] * len_string
+    k_val = 0
+    i_val = 1
+    while i_val < len_string:
+        if string[k_val] == string[i_val]:
+            k_val += 1
+            pi_values[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_values[k_val - 1]
+            else:
+                pi_values[i_val] = 0
+                i_val += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_text = sys.stdin.readline().strip()
+    pi_vals = pi_function_3(input_text)
+    print(*pi_vals)",PrefixFunc
+1024,"def prefix_function_4(data):
+    n = len(data)
+    p = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if data[i] == data[j]:
+            j += 1
+            p[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = p[j-1]
+            else:
+                p[i] = 0
+                i += 1
+    return p
+if __name__ == ""__main__"":
+    s = input()
+    pi = prefix_function_4(s)
+    print(*pi)",PrefixFunc
+1025,"def prefix_calc_5(inp_str):
+  n_str = len(inp_str)
+  pi_arr = [0] * n_str
+  k_idx = 0
+  for i_idx in range(1, n_str):
+    while k_idx > 0 and inp_str[i_idx] != inp_str[k_idx]:
+      k_idx = pi_arr[k_idx - 1]
+    if inp_str[i_idx] == inp_str[k_idx]:
+      k_idx += 1
+    pi_arr[i_idx] = k_idx
+  return pi_arr
+if __name__ == ""__main__"":
+  text_str = input()
+  pi_vals = prefix_calc_5(text_str)
+  print(*pi_vals)",PrefixFunc
+1026,"def prefix_function_recursive_6(s, n, i, k, pi):
+    if i == n:
+        return pi
+    if s[i] == s[k]:
+        k += 1
+        pi[i] = k
+        return prefix_function_recursive_6(s, n, i + 1, k, pi)
+    else:
+        if k != 0:
+            k = pi[k - 1]
+            return prefix_function_recursive_6(s, n, i, k, pi)
+        else:
+            pi[i] = 0
+            return prefix_function_recursive_6(s, n, i + 1, 0, pi)
+if __name__ == ""__main__"":
+    pattern = input()
+    n = len(pattern)
+    pi = [0] * n
+    result = prefix_function_recursive_6(pattern, n, 1, 0, pi)
+    print(*result)",PrefixFunc
+1027,"def calculate_pi_7(input_string):
+    length = len(input_string)
+    pi = [0] * length
+    index = 1
+    match_length = 0
+    while index < length:
+        if input_string[index] == input_string[match_length]:
+            match_length += 1
+            pi[index] = match_length
+            index += 1
+        else:
+            if match_length > 0:
+                match_length = pi[match_length - 1]
+            else:
+                pi[index] = 0
+                index += 1
+    return pi
+if __name__ == ""__main__"":
+    text = input()
+    pi_array = calculate_pi_7(text)
+    print(*pi_array)",PrefixFunc
+1028,"def get_prefix_function_8(phrase):
+    size = len(phrase)
+    pi_values = [0] * size
+    current_length = 0
+    i_index = 1
+    while i_index < size:
+        if phrase[i_index] == phrase[current_length]:
+            current_length += 1
+            pi_values[i_index] = current_length
+            i_index += 1
+        else:
+            if current_length != 0:
+                current_length = pi_values[current_length - 1]
+            else:
+                pi_values[i_index] = 0
+                i_index += 1
+    return pi_values
+if __name__ == ""__main__"":
+    utterance = input()
+    prefix_info = get_prefix_function_8(utterance)
+    print(*prefix_info)",PrefixFunc
+1029,"def prefix_function_slicing_9(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    phrase = input()
+    pi_values = prefix_function_slicing_9(phrase)
+    print(*pi_values)",PrefixFunc
+1030,"def mask_function_10(string_in):
+    length_in = len(string_in)
+    mask_list = [0] * length_in
+    k = 0;
+    for i in range(1, length_in):
+        while k > 0 and string_in[i] != string_in[k]:
+            k = mask_list[k - 1]
+        if string_in[i] == string_in[k]:
+            k = k + 1
+        mask_list[i] = k
+    return mask_list
+if __name__ == ""__main__"":
+    input_word = input()
+    result_mask = mask_function_10(input_word)
+    print(*result_mask)",PrefixFunc
+1031,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+1032,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k - 1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)",PrefixFunc
+1033,"def get_pi(seq):
+    size = len(seq)
+    pi_val = [0] * size
+    k_val = 0
+    i_val = 1
+    while i_val < size:
+        if seq[i_val] == seq[k_val]:
+            k_val += 1
+            pi_val[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_val[k_val - 1]
+            else:
+                pi_val[i_val] = 0
+                i_val += 1
+    return pi_val
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)",PrefixFunc
+1034,"def pi_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        pi[i] = k + 1
+        return pi_recursive(text, i + 1, k + 1, pi)
+    else:
+        if k > 0:
+            return pi_recursive(text, i, pi[k - 1], pi)
+        else:
+            pi[i] = 0
+            return pi_recursive(text, i + 1, 0, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_array = pi_recursive(input_string, 1, 0, pi_array)
+    print(*pi_array)",PrefixFunc
+1035,"def prefix_function_slice(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_slice(input_string)
+    print(*pi_array)",PrefixFunc
+1036,"def calculate_pi_array(s):
+    length = len(s)
+    pi = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+1037,"def compute_pi(pattern):
+    m = len(pattern)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi(input_string)
+    print(*pi_array)",PrefixFunc
+1038,"def get_prefix_function(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k - 1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_prefix_function(input_string)
+    print(*pi_array)",PrefixFunc
+1039,"def prefix_function_alt(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text[i] == text[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k - 1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_alt(input_string)
+    print(*pi_array)",PrefixFunc
+1040,"def find_pi(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = find_pi(input_string)
+    print(*pi_array)",PrefixFunc
+1041,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)",PrefixFunc
+1042,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k-1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)",PrefixFunc
+1043,"def get_pi(seq):
+    size = len(seq)
+    pi_val = [0] * size
+    k_val = 0
+    i_val = 1
+    while i_val < size:
+        if seq[i_val] == seq[k_val]:
+            k_val += 1
+            pi_val[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_val[k_val - 1]
+            else:
+                pi_val[i_val] = 0
+                i_val += 1
+    return pi_val
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)",PrefixFunc
+1044,"def pi_function(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if s[i] == s[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k > 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_result = pi_function(input_string)
+    print(*pi_result)",PrefixFunc
+1045,"def prefix_array(text):
+    length = len(text)
+    pi = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k - 1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_values = prefix_array(input_string)
+    print(*pi_values)",PrefixFunc
+1046,"def calculate_prefix(string):
+    n = len(string)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and string[i] != string[k]:
+            k = pi[k-1]
+        if string[i] == string[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    result = calculate_prefix(input_string)
+    print(*result)",PrefixFunc
+1047,"def compute_pi(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        k = max(0, k)
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi(input_string)
+    print(*pi_array)",PrefixFunc
+1048,"def prefix_function_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+    else:
+        if k > 0:
+            k = pi[k-1]
+        else:
+            k = 0
+    pi[i] = k
+    return prefix_function_recursive(text, i + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi = [0] * n
+    pi_array = prefix_function_recursive(input_string, 1, 0, pi)
+    print(*pi_array)",PrefixFunc
+1049,"def get_pi_array(pattern):
+    m = len(pattern)
+    pi = [0] * m
+    k = 0
+    for i in range(1, m):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k-1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_result = get_pi_array(input_string)
+    print(*pi_result)",PrefixFunc
+1050,"def calculate_pi_slice(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_values = calculate_pi_slice(input_string)
+    print(*pi_values)",PrefixFunc

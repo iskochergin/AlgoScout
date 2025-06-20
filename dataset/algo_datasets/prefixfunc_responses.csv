@@ -1,0 +1,2213 @@
+number,code
+1,"def prefix_function_1(sequence):
+    pi = [0] * len(sequence)
+    k = 0
+    for q in range(1, len(sequence)):
+        while k > 0 and sequence[k] != sequence[q]:
+            k = pi[k-1]
+        if sequence[k] == sequence[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+2,"def prefix_function_2(pattern):
+    length = len(pattern)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if pattern[i] == pattern[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j > 0:
+                j = border[j-1]
+            else:
+                i += 1
+    return border"
+3,"def prefix_function_3(text):
+    n = len(text)
+    overlaps = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if text[:j] == text[i-j+1:i+1]:
+                overlaps[i] = j
+                break
+    return overlaps"
+4,"def prefix_function_4(string):
+    arr = [0] * len(string)
+    for idx in range(1, len(string)):
+        val = arr[idx-1]
+        while val > 0 and string[idx] != string[val]:
+            val = arr[val-1]
+        if string[idx] == string[val]:
+            val += 1
+        arr[idx] = val
+    return arr"
+5,"def prefix_function_5(s):
+    n = len(s)
+    pi_arr = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if s[i] == s[k]:
+            k += 1
+            pi_arr[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_arr[k-1]
+            else:
+                pi_arr[i] = 0
+                i += 1
+    return pi_arr"
+6,"def prefix_function_6(seq):
+    n = len(seq)
+    p = [0] * n
+    for i in range(1, n):
+        j = p[i-1]
+        while j > 0 and seq[i] != seq[j]:
+            j = p[j-1]
+        if seq[i] == seq[j]:
+            j += 1
+        p[i] = j
+    return p"
+7,"def prefix_function_7(pattern_str):
+    n = len(pattern_str)
+    pi = [0] * n
+    for i in range(1, n):
+        length = pi[i - 1]
+        while length > 0 and pattern_str[i] != pattern_str[length]:
+            length = pi[length - 1]
+        if pattern_str[i] == pattern_str[length]:
+            length += 1
+        pi[i] = length
+    return pi"
+8,"def prefix_function_8(txt):
+    length_txt = len(txt)
+    arr_pi = [0] * length_txt
+    current_length = 0
+    for i in range(1, length_txt):
+        while current_length > 0 and txt[i] != txt[current_length]:
+            current_length = arr_pi[current_length - 1]
+        if txt[i] == txt[current_length]:
+            current_length += 1
+        arr_pi[i] = current_length
+    return arr_pi"
+9,"def prefix_function_9(strng):
+    n = len(strng)
+    pi_val = [0] * n
+    for i in range(1, n):
+        j = 0
+        while j < i:
+            if strng[:j+1] == strng[i-j:i+1]:
+                pi_val[i] = j + 1
+            j += 1
+    return pi_val"
+10,"def prefix_function_10(s):
+  n = len(s)
+  pi = [0] * n
+  for i in range(1, n):
+    j = pi[i-1]
+    while j > 0 and s[i] != s[j]:
+      j = pi[j-1]
+    if s[i] == s[j]:
+      j += 1
+    pi[i] = j
+  return pi"
+11,"def compute_prefix_function_one(sequence):
+    pi = [0] * len(sequence)
+    k = 0
+    for q in range(1, len(sequence)):
+        while k > 0 and sequence[k] != sequence[q]:
+            k = pi[k-1]
+        if sequence[k] == sequence[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+12,"def compute_prefix_function_two(pattern):
+    prefix_val = [0] * len(pattern)
+    length = 0
+    i = 1
+    while i < len(pattern):
+        if pattern[i] == pattern[length]:
+            length += 1
+            prefix_val[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = prefix_val[length - 1]
+            else:
+                prefix_val[i] = 0
+                i += 1
+    return prefix_val"
+13,"def compute_prefix_function_three(string):
+    m = len(string)
+    pi_array = [0] * m
+    idx = 0
+    for i in range(1, m):
+        while idx > 0 and string[i] != string[idx]:
+            idx = pi_array[idx-1]
+        if string[i] == string[idx]:
+            idx += 1
+        pi_array[i] = idx
+    return pi_array"
+14,"def compute_prefix_function_four(text):
+    n = len(text)
+    p = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if text[i] == text[j]:
+            j += 1
+            p[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = p[j-1]
+            else:
+                p[i] = 0
+                i += 1
+    return p"
+15,"def compute_prefix_function_five(s):
+    length = [0] * len(s)
+    k = 0
+    for i in range(1, len(s)):
+        while k > 0 and s[i] != s[k]:
+            k = length[k-1]
+        if s[i] == s[k]:
+            k += 1
+        length[i] = k
+    return length"
+16,"def compute_prefix_function_six(seq):
+    arr = [0] * len(seq)
+    c = 0
+    for i in range(1, len(seq)):
+        while c > 0 and seq[i] != seq[c]:
+            c = arr[c - 1]
+        if seq[i] == seq[c]:
+            c += 1
+        arr[i] = c
+    return arr"
+17,"def compute_prefix_function_seven(string):
+    n = len(string)
+    prefix = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if string[i] == string[k]:
+            k += 1
+            prefix[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = prefix[k - 1]
+            else:
+                prefix[i] = 0
+                i += 1
+    return prefix"
+18,"def compute_prefix_function_eight(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi"
+19,"def compute_prefix_function_nine(text):
+    n = len(text)
+    pi_arr = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if text[i] == text[j]:
+            j += 1
+            pi_arr[i] = j
+            i += 1
+        else:
+            if j > 0:
+                j = pi_arr[j-1]
+            else:
+                i += 1
+    return pi_arr"
+20,"def compute_prefix_function_ten(word):
+    result = [0] * len(word)
+    l = 0
+    for i in range(1, len(word)):
+        while l > 0 and word[i] != word[l]:
+            l = result[l - 1]
+        if word[i] == word[l]:
+            l += 1
+        result[i] = l
+    return result"
+21,"def prefix_function_a(sequence):
+    pi = [0] * len(sequence)
+    k = 0
+    for q in range(1, len(sequence)):
+        while k > 0 and sequence[k] != sequence[q]:
+            k = pi[k-1]
+        if sequence[k] == sequence[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+22,"def prefix_function_b(string):
+    lps = [0] * len(string)
+    length = 0
+    i = 1
+    while i < len(string):
+        if string[i] == string[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = lps[length-1]
+            else:
+                lps[i] = 0
+                i += 1
+    return lps"
+23,"def prefix_function_c(txt):
+    border = [0] * len(txt)
+    j = 0
+    for i in range(1, len(txt)):
+        while j > 0 and txt[i] != txt[j]:
+            j = border[j - 1]
+        if txt[i] == txt[j]:
+            j += 1
+        border[i] = j
+    return border"
+24,"def prefix_function_d(pattern):
+    pi_arr = [0] * len(pattern)
+    for i in range(1, len(pattern)):
+        for j in range(i):
+            if pattern[:i+1] == pattern[j+1:i+1+j+1] and len(pattern[:i+1]) > pi_arr[i]:
+                pi_arr[i] = len(pattern[:i+1])
+    return pi_arr"
+25,"def prefix_function_e(s):
+    prefix = [0] * len(s)
+    def compute_prefix(index):
+        if index == 0:
+            return 0
+        k = prefix[index - 1]
+        while k > 0 and s[index] != s[k]:
+            k = prefix[k - 1]
+        if s[index] == s[k]:
+            k += 1
+        return k
+    for i in range(1, len(s)):
+        prefix[i] = compute_prefix(i)
+    return prefix"
+26,"def prefix_function_f(word):
+    pi_values = [0] * len(word)
+    yield from (pi_values[i] for i in range(len(word)))
+    for i in range(1, len(word)):
+      k = pi_values[i-1]
+      while k > 0 and word[i] != word[k]:
+        k = pi_values[k-1]
+      if word[i] == word[k]:
+        k += 1
+      pi_values[i] = k
+    return pi_values"
+27,"def prefix_function_g(input_str):
+    arr = [0] * len(input_str)
+    def decorator(func):
+        def wrapper(index):
+            if index == 0:
+                return 0
+            k = func(index - 1)
+            while k > 0 and input_str[index] != input_str[k]:
+                k = arr[k-1]
+            if input_str[index] == input_str[k]:
+                k += 1
+            return k
+        return wrapper
+    @decorator
+    def calculate_prefix(idx):
+        return 0
+    for i in range(1, len(input_str)):
+        arr[i] = calculate_prefix(i)
+    return arr"
+28,"def prefix_function_h(text):
+    pi_table = [0] * len(text)
+    def find_prefix(idx):
+      if idx==0: return 0
+      d = pi_table[idx-1]
+      while d > 0 and text[idx] != text[d]:
+        d = pi_table[d-1]
+      if text[idx] == text[d]:
+        d +=1
+      return d
+    for i in range(1, len(text)):
+        pi_table[i] = find_prefix(i)
+    return pi_table"
+29,"def prefix_function_i(s):
+  pi = [0] * len(s)
+  for i in range(1,len(s)):
+    pi[i] = max(0, *[j for j in range(i) if s[:i+1] == s[j+1:i+1+j+1]])
+  return pi"
+30,"def prefix_function_j(strng):
+    prefix_arr = [0] * len(strng)
+    for i in range(1, len(strng)):
+        max_len = 0
+        for j in range(i):
+            if strng[:i+1] == strng[j+1:i+1+j+1]:
+                max_len = max(max_len, len(strng[:i+1]))
+        prefix_arr[i] = max_len
+    return prefix_arr"
+31,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+32,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border"
+33,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result"
+34,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    def compute(idx):
+        if idx == 0:
+            return 0
+        for k in range(idx, 0, -1):
+            if seq[:k] == seq[idx-k+1:idx+1]:
+                return k
+        return 0
+    for i in range(1, n):
+        arr[i] = compute(i)
+    return arr"
+35,"def prefix_function_e(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        k = pi[i-1]
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi"
+36,"def prefix_function_f(pattern_str):
+    n = len(pattern_str)
+    pi_arr = [0] * n
+    for i in range(1, n):
+        j = pi_arr[i-1]
+        while j > 0 and pattern_str[i] != pattern_str[j]:
+            j = pi_arr[j-1]
+        if pattern_str[i] == pattern_str[j]:
+            j += 1
+        pi_arr[i] = j
+    return pi_arr"
+37,"def prefix_function_g(text_str):
+    n = len(text_str)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text_str[i] == text_str[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi"
+38,"def prefix_function_h(input_str):
+    n = len(input_str)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(1, i + 1):
+            if input_str[:j] == input_str[i - j + 1:i + 1]:
+                result[i] = j
+    return result"
+39,"def prefix_function_i(string_val):
+    n = len(string_val)
+    pi_values = [0] * n
+    for i in range(1, n):
+        max_len = 0
+        for j in range(1, i + 1):
+            if string_val[:j] == string_val[i - j + 1:i + 1]:
+                max_len = j
+        pi_values[i] = max_len
+    return pi_values"
+40,"def prefix_function_j(s_str):
+    n = len(s_str)
+    pi_list = [0] * n
+    for i in range(1, n):
+        k_val = pi_list[i-1]
+        while k_val > 0 and s_str[i] != s_str[k_val]:
+            k_val = pi_list[k_val-1]
+        if s_str[i] == s_str[k_val]:
+            k_val += 1
+        pi_list[i] = k_val
+    return pi_list"
+41,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+42,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border"
+43,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result"
+44,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    for i in range(1, n):
+        arr[i] = max(0, arr[i-1] if seq[i] == seq[arr[i-1]] else 0)
+        while arr[i] > 0 and seq[i] != seq[arr[i]]:
+            arr[i] = arr[arr[i]-1]
+        if seq[i] == seq[arr[i]]:
+            arr[i] += 1
+    return arr"
+45,"def prefix_function_e(s):
+    n = len(s)
+    pi = [0] * n
+    def compute_pi(idx):
+        if idx == 0:
+            return 0
+        k = pi[idx-1]
+        while k > 0 and s[idx] != s[k]:
+            k = pi[k-1]
+        if s[idx] == s[k]:
+            k += 1
+        return k
+    for i in range(1, n):
+        pi[i] = compute_pi(i)
+    return pi"
+46,"def prefix_function_f(pattern_str):
+    n = len(pattern_str)
+    pi_arr = [0] * n
+    for i in range(1, n):
+        k = pi_arr[i-1]
+        while k > 0 and pattern_str[i] != pattern_str[k]:
+            k = pi_arr[k-1]
+        if pattern_str[i] == pattern_str[k]:
+            k += 1
+        pi_arr[i] = k
+    return pi_arr"
+47,"def prefix_function_g(text_str):
+    n = len(text_str)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text_str[i] != text_str[k]:
+            k = pi[k-1]
+        if text_str[i] == text_str[k]:
+            k += 1
+        pi[i] = k
+    return pi"
+48,"def prefix_function_h(input_str):
+    n = len(input_str)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and input_str[i] != input_str[j]:
+            j = pi[j-1]
+        if input_str[i] == input_str[j]:
+            j += 1
+        pi[i] = j
+    return pi"
+49,"def prefix_function_i(s_str):
+    n = len(s_str)
+    pi = [0] * n
+    for i in range(1, n):
+        k = 0
+        while k < i:
+            if s_str[:k+1] == s_str[i-k:i+1]:
+                pi[i] = k + 1
+            k += 1
+    return pi"
+50,"def prefix_function_j(string_val):
+    n = len(string_val)
+    pi = [0] * n
+    for i in range(1, n):
+        k = pi[i-1]
+        while k > 0 and string_val[i] != string_val[k]:
+            k = pi[k-1]
+        if string_val[i] == string_val[k]:
+            k += 1
+        pi[i] = k
+    return pi"
+51,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+52,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border"
+53,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result"
+54,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    for i in range(1, n):
+        arr[i] = max(0, *[k for k in range(1, i + 1) if seq[:k] == seq[i-k+1:i+1]])
+    return arr"
+55,"def prefix_function_e(s):
+    def compute_prefix(idx):
+        if idx == 0:
+            return 0
+        for k in range(idx, 0, -1):
+            if s[:k] == s[idx-k+1:idx+1]:
+                return k
+        return 0
+    return [compute_prefix(i) for i in range(len(s))]"
+56,"def prefix_function_f(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    i = 1
+    while i < len(pattern):
+        if pattern[i] == pattern[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k > 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi"
+57,"def prefix_function_g(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi"
+58,"def prefix_function_h(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(1, min(i + 1, n)):
+            if string[:j] == string[i - j + 1:i + 1]:
+                result[i] = j
+            else:
+                break
+    return result"
+59,"def prefix_function_i(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        for j in range(1, i + 1):
+            if s[:j] == s[i - j + 1:i + 1]:
+                pi[i] = j
+    return pi"
+60,"def prefix_function_j(text):
+    n = len(text)
+    pi = [0] * n
+    i = 1
+    while i < n:
+        j = pi[i-1]
+        if text[i] == text[j]:
+            pi[i] = j + 1
+            i += 1
+        else:
+            if j == 0:
+                pi[i] = 0
+                i += 1
+            else:
+                j = pi[j-1]
+    return pi"
+61,"def prefix_function_a(pattern):
+    pi = [0] * len(pattern)
+    k = 0
+    for q in range(1, len(pattern)):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi"
+62,"def prefix_function_b(text):
+    length = len(text)
+    border = [0] * length
+    i = 1
+    j = 0
+    while i < length:
+        if text[i] == text[j]:
+            j += 1
+            border[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = border[j-1]
+            else:
+                border[i] = 0
+                i += 1
+    return border"
+63,"def prefix_function_c(string):
+    n = len(string)
+    result = [0] * n
+    for i in range(1, n):
+        for j in range(i, 0, -1):
+            if string[:j] == string[i-j+1:i+1]:
+                result[i] = j
+                break
+    return result"
+64,"def prefix_function_d(seq):
+    n = len(seq)
+    arr = [0] * n
+    def compute(idx):
+        if idx == 0:
+            return 0
+        for k in range(idx, 0, -1):
+            if seq[:k] == seq[idx-k+1:idx+1]:
+                return k
+        return 0
+    for i in range(1, n):
+        arr[i] = compute(i)
+    return arr"
+65,"def prefix_function_e(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        k = pi[i-1]
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi"
+66,"def prefix_function_f(pattern_str):
+    n = len(pattern_str)
+    pi_arr = [0] * n
+    for i in range(1, n):
+        j = pi_arr[i-1]
+        while j > 0 and pattern_str[i] != pattern_str[j]:
+            j = pi_arr[j-1]
+        if pattern_str[i] == pattern_str[j]:
+            j += 1
+        pi_arr[i] = j
+    return pi_arr"
+67,"def prefix_function_g(text_str):
+    n = len(text_str)
+    pi = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if text_str[i] == text_str[j]:
+            j += 1
+            pi[i] = j
+            i += 1
+        else:
+            if j > 0:
+                j = pi[j-1]
+            else:
+                i += 1
+    return pi"
+68,"def prefix_function_h(input_str):
+    n = len(input_str)
+    result = [0] * n
+    for i in range(1, n):
+        for k in range(1, i + 1):
+            if input_str[:k] == input_str[i - k + 1:i + 1]:
+                result[i] = k
+    return result"
+69,"def prefix_function_i(string_val):
+    n = len(string_val)
+    pi_values = [0] * n
+    for i in range(1, n):
+        k = 0
+        while k < i:
+            if string_val[:k+1] == string_val[i-k:i+1]:
+                pi_values[i] = k + 1
+            k += 1
+    return pi_values"
+70,"def prefix_function_j(s_str):
+    n = len(s_str)
+    pi_list = [0] * n
+    for i in range(1, n):
+        k = pi_list[i-1]
+        while k > 0 and s_str[i] != s_str[k]:
+            k = pi_list[k-1]
+        if s_str[i] == s_str[k]:
+            k += 1
+        pi_list[i] = k
+    return pi_list"
+71,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)"
+72,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k - 1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)"
+73,"def get_pi(seq):
+    size = len(seq)
+    pi_arr = [0] * size
+    k = 0
+    i = 1
+    while i < size:
+        if seq[i] == seq[k]:
+            k += 1
+            pi_arr[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_arr[k-1]
+            else:
+                pi_arr[i] = 0
+                i += 1
+    return pi_arr
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)"
+74,"def pi_function(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    result = pi_function(input_string)
+    print(*result)"
+75,"def prefix_array(text):
+    length = len(text)
+    pi = [0] * length
+    k = 0
+    for i in range(1, length):
+        k = 0
+        for j in range(i):
+            if text[j] == text[i]:
+                k = j + 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = prefix_array(input_string)
+    print(*pi_array)"
+76,"def calculate_pi(input_str):
+    n = len(input_str)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if input_str[i] == input_str[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k > 0:
+                k = pi[k - 1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_result = calculate_pi(input_string)
+    print(*pi_result)"
+77,"def compute_prefix(pattern):
+    n = len(pattern)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k - 1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_prefix(input_string)
+    print(*pi_array)"
+78,"def get_prefix_function(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_result = get_prefix_function(input_string)
+    print(*pi_result)"
+79,"def prefix_function_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+    else:
+        if k > 0:
+            k = pi[k-1]
+        else:
+            k = 0
+    pi[i] = k
+    return prefix_function_recursive(text, i + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi = [0] * n
+    result = prefix_function_recursive(input_string, 1, 0, pi)
+    print(*result)"
+80,"def find_pi(input_text):
+    length = len(input_text)
+    pi_values = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and input_text[i] != input_text[k]:
+            k = pi_values[k - 1]
+        if input_text[i] == input_text[k]:
+            k += 1
+        pi_values[i] = k
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = find_pi(input_string)
+    print(*pi_array)"
+81,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)"
+82,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        m = self.length
+        pi = [0] * m
+        k = 0
+        for q in range(1, m):
+            while k > 0 and self.pattern[k] != self.pattern[q]:
+                k = pi[k-1]
+            if self.pattern[k] == self.pattern[q]:
+                k += 1
+            pi[q] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)"
+83,"def get_pi(seq):
+    length = len(seq)
+    pi_values = [0] * length
+    k = 0
+    i = 1
+    while i < length:
+        if seq[i] == seq[k]:
+            k += 1
+            pi_values[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_values[k-1]
+            else:
+                pi_values[i] = 0
+                i += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)"
+84,"def pi_recursive(text, q, k, pi):
+    if q == len(text):
+        return pi
+    if k > 0 and text[k] != text[q]:
+        k = pi[k-1]
+        return pi_recursive(text, q, k, pi)
+    if text[k] == text[q]:
+        k += 1
+    pi[q] = k
+    return pi_recursive(text, q + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi = [0] * n
+    pi_array = pi_recursive(input_string, 1, 0, pi)
+    print(*pi_array)"
+85,"def prefix_function_slice(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = prefix_function_slice(input_string)
+    print(*pi_array)"
+86,"def calculate_pi_array(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_array(input_string)
+    print(*pi_array)"
+87,"def compute_pi(pattern):
+    m = len(pattern)
+    pi = [0] * m
+    k = 0
+    for i in range(1, m):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k-1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi(input_string)
+    print(*pi_array)"
+88,"def get_prefix_function(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_prefix_function(input_string)
+    print(*pi_array)"
+89,"def prefix_function_alt(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text[i] == text[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_alt(input_string)
+    print(*pi_array)"
+90,"def calculate_pi(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi(input_string)
+    print(' '.join(map(str, pi_array)))"
+91,"def compute_pi(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi(input_string)
+    print(*pi_array)"
+92,"def longest_prefix_suffix(pattern):
+    length = len(pattern)
+    lps = [0] * length
+    i = 1
+    len_prefix = 0
+    while i < length:
+        if pattern[i] == pattern[len_prefix]:
+            len_prefix += 1
+            lps[i] = len_prefix
+            i += 1
+        else:
+            if len_prefix != 0:
+                len_prefix = lps[len_prefix - 1]
+            else:
+                lps[i] = 0
+                i += 1
+    return lps
+if __name__ == ""__main__"":
+    str_input = input()
+    size = len(str_input)
+    result = longest_prefix_suffix(str_input)
+    print(*result)"
+93,"def kmp_table(text):
+    n = len(text)
+    table = [0] * n
+    length = 0
+    i = 1
+    while i < n:
+        if text[i] == text[length]:
+            length += 1
+            table[i] = length
+            i += 1
+        else:
+            if length != 0:
+                length = table[length - 1]
+            else:
+                table[i] = 0
+                i += 1
+    return table
+if __name__ == ""__main__"":
+    sequence = input()
+    seq_len = len(sequence)
+    pi_values = kmp_table(sequence)
+    print(*pi_values)"
+94,"class PrefixFunction:
+    def __init__(self, text):
+        self.text = text
+        self.n = len(text)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.n
+        k = 0
+        for q in range(1, self.n):
+            while k > 0 and self.text[k] != self.text[q]:
+                k = pi[k - 1]
+            if self.text[k] == self.text[q]:
+                k += 1
+            pi[q] = k
+        return pi
+if __name__ == ""__main__"":
+    input_str = input()
+    pf = PrefixFunction(input_str)
+    print(*pf.pi)"
+95,"def get_pi_array(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[k] != s[i]:
+            k = pi[k-1]
+        if s[k] == s[i]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_str = input()
+    length = len(input_str)
+    pi_array = get_pi_array(input_str)
+    print(*pi_array)"
+96,"def prep_func(pattern):
+    m = len(pattern)
+    p = [0] * m
+    j = 0
+    for i in range(1, m):
+        while j > 0 and pattern[i] != pattern[j]:
+            j = p[j-1]
+        if pattern[i] == pattern[j]:
+            j += 1
+        p[i] = j
+    return p
+if __name__ == ""__main__"":
+    input_str = input()
+    length = len(input_str)
+    result = prep_func(input_str)
+    print(*result)"
+97,"def find_prefix(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and s[i] != s[j]:
+            j = pi[j-1]
+        if s[i] == s[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    input_text = input()
+    text_len = len(input_text)
+    pi_values = find_prefix(input_text)
+    print(*pi_values)"
+98,"def prefix(text_str):
+    size = len(text_str)
+    pi_arr = [0] * size
+    k = 0
+    for i in range(1, size):
+        while k > 0 and text_str[i] != text_str[k]:
+            k = pi_arr[k - 1]
+        if text_str[i] == text_str[k]:
+            k += 1
+        pi_arr[i] = k
+    return pi_arr
+if __name__ == ""__main__"":
+    data = input()
+    result = prefix(data)
+    print(*result)"
+99,"def compute_pi_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    while k > 0 and text[i] != text[k]:
+        k = pi[k-1]
+    if text[i] == text[k]:
+        k += 1
+    pi[i] = k
+    return compute_pi_recursive(text, i+1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_result = compute_pi_recursive(input_string, 1, 0, pi_array)
+    print(*pi_result)"
+100,"def get_prefix_function(text_input):
+    n_val = len(text_input)
+    pi_arr = [0] * n_val
+    length_pref = 0
+    i_val = 1
+    while i_val < n_val:
+        if text_input[length_pref] == text_input[i_val]:
+            length_pref += 1
+            pi_arr[i_val] = length_pref
+            i_val += 1
+        else:
+            if length_pref != 0:
+                length_pref = pi_arr[length_pref - 1]
+            else:
+                pi_arr[i_val] = 0
+                i_val += 1
+    return pi_arr
+if __name__ == ""__main__"":
+    input_str = input()
+    lengths = get_prefix_function(input_str)
+    print(*lengths)"
+101,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)"
+102,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k-1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)"
+103,"def get_pi(seq):
+    length = len(seq)
+    pi_values = [0] * length
+    k_val = 0
+    i_val = 1
+    while i_val < length:
+        if seq[i_val] == seq[k_val]:
+            k_val += 1
+            pi_values[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_values[k_val - 1]
+            else:
+                pi_values[i_val] = 0
+                i_val += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_pi(input_string)
+    print(*pi_array)"
+104,"def prefix_function_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+        pi[i] = k
+        return prefix_function_recursive(text, i + 1, k, pi)
+    else:
+        if k > 0:
+            k = pi[k - 1]
+            return prefix_function_recursive(text, i, k, pi)
+        else:
+            pi[i] = 0
+            return prefix_function_recursive(text, i + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_array = prefix_function_recursive(input_string, 1, 0, pi_array)
+    print(*pi_array)"
+105,"def calculate_pi_slicing(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_slicing(input_string)
+    print(*pi_array)"
+106,"def pi_table(s):
+    n = len(s)
+    p = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = p[k-1]
+        if s[i] == s[k]:
+            k += 1
+        p[i] = k
+    return p
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = pi_table(input_string)
+    print(*pi_array)"
+107,"def compute_prefix(data):
+    length = len(data)
+    pi_arr = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and data[i] != data[k]:
+            k = pi_arr[k - 1]
+        if data[i] == data[k]:
+            k += 1
+        pi_arr[i] = k
+    return pi_arr
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_prefix(input_string)
+    print(*pi_array)"
+108,"def prefix_function_alt(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text[i] == text[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_alt(input_string)
+    print(*pi_array)"
+109,"def get_pi_array(input_str):
+    n = len(input_str)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and input_str[i] != input_str[k]:
+            k = pi[k - 1]
+        if input_str[i] == input_str[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_pi_array(input_string)
+    print(*pi_array)"
+110,"def calculate_pi_array_helper(text, index, k, pi_array):
+    if index == len(text):
+        return pi_array
+    if text[index] == text[k]:
+        k += 1
+        pi_array[index] = k
+        return calculate_pi_array_helper(text, index + 1, k, pi_array)
+    else:
+        if k > 0:
+            k = pi_array[k - 1]
+            return calculate_pi_array_helper(text, index, k, pi_array)
+        else:
+            pi_array[index] = 0
+            return calculate_pi_array_helper(text, index + 1, k, pi_array)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_array = calculate_pi_array_helper(input_string, 1, 0, pi_array)
+    print(*pi_array)"
+111,"def compute_pi_array_v1(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for q in range(1, n):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi_array_v1(input_string)
+    print(*pi_array)"
+112,"class PrefixFunctionV2:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.n = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.n
+        k = 0
+        for i in range(1, self.n):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k - 1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_function = PrefixFunctionV2(input_string)
+    print(*prefix_function.pi)"
+113,"def prefix_function_v3(sequence):
+    length = len(sequence)
+    pi_values = [0] * length
+    k = 0
+    i = 1
+    while i < length:
+        if sequence[i] == sequence[k]:
+            k += 1
+            pi_values[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi_values[k-1]
+            else:
+                pi_values[i] = 0
+                i += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v3(input_string)
+    print(*pi_array)"
+114,"def get_pi_v4(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_pi_v4(input_string)
+    print(*pi_array)"
+115,"def compute_pi_recursive_v5(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+        pi[i] = k
+    else:
+        if k > 0:
+            k = pi[k-1]
+            compute_pi_recursive_v5(text, i, k, pi)
+        else:
+            pi[i] = 0
+    return compute_pi_recursive_v5(text, i+1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    compute_pi_recursive_v5(input_string, 1, 0, pi_array)
+    print(*pi_array)"
+116,"def prefix_function_v6(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        k = max(0, k)
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v6(input_string)
+    print(*pi_array)"
+117,"def calculate_pi_v7(string):
+    n = len(string)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and string[i] != string[k]:
+            k = pi[k - 1]
+        if string[i] == string[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_v7(input_string)
+    print(*pi_array)"
+118,"def prefix_function_v8(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v8(input_string)
+    print(' '.join(map(str, pi_array)))"
+119,"def compute_pi_v9(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi_v9(input_string)
+    for val in pi_array:
+        print(val, end="" "")
+    print()"
+120,"def prefix_function_v10(pattern):
+    n = len(pattern)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k-1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_v10(input_string)
+    print(*pi_array, sep=' ')"
+121,"def compute_pi_array_1(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for q in range(1, n):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    pattern = input()
+    pi_array = compute_pi_array_1(pattern)
+    print(*pi_array)"
+122,"class PrefixFunction2:
+    def __init__(self, input_string):
+        self.s = input_string
+        self.length = len(input_string)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.s[k] != self.s[i]:
+                k = pi[k - 1]
+            if self.s[k] == self.s[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    text = input()
+    pf = PrefixFunction2(text)
+    print(*pf.pi)"
+123,"import sys
+def pi_function_3(string):
+    len_string = len(string)
+    pi_values = [0] * len_string
+    k_val = 0
+    i_val = 1
+    while i_val < len_string:
+        if string[k_val] == string[i_val]:
+            k_val += 1
+            pi_values[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_values[k_val - 1]
+            else:
+                pi_values[i_val] = 0
+                i_val += 1
+    return pi_values
+if __name__ == ""__main__"":
+    input_text = sys.stdin.readline().strip()
+    pi_vals = pi_function_3(input_text)
+    print(*pi_vals)"
+124,"def prefix_function_4(data):
+    n = len(data)
+    p = [0] * n
+    i = 1
+    j = 0
+    while i < n:
+        if data[i] == data[j]:
+            j += 1
+            p[i] = j
+            i += 1
+        else:
+            if j != 0:
+                j = p[j-1]
+            else:
+                p[i] = 0
+                i += 1
+    return p
+if __name__ == ""__main__"":
+    s = input()
+    pi = prefix_function_4(s)
+    print(*pi)"
+125,"def prefix_calc_5(inp_str):
+  n_str = len(inp_str)
+  pi_arr = [0] * n_str
+  k_idx = 0
+  for i_idx in range(1, n_str):
+    while k_idx > 0 and inp_str[i_idx] != inp_str[k_idx]:
+      k_idx = pi_arr[k_idx - 1]
+    if inp_str[i_idx] == inp_str[k_idx]:
+      k_idx += 1
+    pi_arr[i_idx] = k_idx
+  return pi_arr
+if __name__ == ""__main__"":
+  text_str = input()
+  pi_vals = prefix_calc_5(text_str)
+  print(*pi_vals)"
+126,"def prefix_function_recursive_6(s, n, i, k, pi):
+    if i == n:
+        return pi
+    if s[i] == s[k]:
+        k += 1
+        pi[i] = k
+        return prefix_function_recursive_6(s, n, i + 1, k, pi)
+    else:
+        if k != 0:
+            k = pi[k - 1]
+            return prefix_function_recursive_6(s, n, i, k, pi)
+        else:
+            pi[i] = 0
+            return prefix_function_recursive_6(s, n, i + 1, 0, pi)
+if __name__ == ""__main__"":
+    pattern = input()
+    n = len(pattern)
+    pi = [0] * n
+    result = prefix_function_recursive_6(pattern, n, 1, 0, pi)
+    print(*result)"
+127,"def calculate_pi_7(input_string):
+    length = len(input_string)
+    pi = [0] * length
+    index = 1
+    match_length = 0
+    while index < length:
+        if input_string[index] == input_string[match_length]:
+            match_length += 1
+            pi[index] = match_length
+            index += 1
+        else:
+            if match_length > 0:
+                match_length = pi[match_length - 1]
+            else:
+                pi[index] = 0
+                index += 1
+    return pi
+if __name__ == ""__main__"":
+    text = input()
+    pi_array = calculate_pi_7(text)
+    print(*pi_array)"
+128,"def get_prefix_function_8(phrase):
+    size = len(phrase)
+    pi_values = [0] * size
+    current_length = 0
+    i_index = 1
+    while i_index < size:
+        if phrase[i_index] == phrase[current_length]:
+            current_length += 1
+            pi_values[i_index] = current_length
+            i_index += 1
+        else:
+            if current_length != 0:
+                current_length = pi_values[current_length - 1]
+            else:
+                pi_values[i_index] = 0
+                i_index += 1
+    return pi_values
+if __name__ == ""__main__"":
+    utterance = input()
+    prefix_info = get_prefix_function_8(utterance)
+    print(*prefix_info)"
+129,"def prefix_function_slicing_9(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    phrase = input()
+    pi_values = prefix_function_slicing_9(phrase)
+    print(*pi_values)"
+130,"def mask_function_10(string_in):
+    length_in = len(string_in)
+    mask_list = [0] * length_in
+    k = 0;
+    for i in range(1, length_in):
+        while k > 0 and string_in[i] != string_in[k]:
+            k = mask_list[k - 1]
+        if string_in[i] == string_in[k]:
+            k = k + 1
+        mask_list[i] = k
+    return mask_list
+if __name__ == ""__main__"":
+    input_word = input()
+    result_mask = mask_function_10(input_word)
+    print(*result_mask)"
+131,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)"
+132,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k - 1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)"
+133,"def get_pi(seq):
+    size = len(seq)
+    pi_val = [0] * size
+    k_val = 0
+    i_val = 1
+    while i_val < size:
+        if seq[i_val] == seq[k_val]:
+            k_val += 1
+            pi_val[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_val[k_val - 1]
+            else:
+                pi_val[i_val] = 0
+                i_val += 1
+    return pi_val
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)"
+134,"def pi_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        pi[i] = k + 1
+        return pi_recursive(text, i + 1, k + 1, pi)
+    else:
+        if k > 0:
+            return pi_recursive(text, i, pi[k - 1], pi)
+        else:
+            pi[i] = 0
+            return pi_recursive(text, i + 1, 0, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = [0] * n
+    pi_array = pi_recursive(input_string, 1, 0, pi_array)
+    print(*pi_array)"
+135,"def prefix_function_slice(text):
+    n = len(text)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j > 0 and text[i] != text[j]:
+            j = pi[j-1]
+        if text[i] == text[j]:
+            j += 1
+        pi[i] = j
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_slice(input_string)
+    print(*pi_array)"
+136,"def calculate_pi_array(s):
+    length = len(s)
+    pi = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = calculate_pi_array(input_string)
+    print(*pi_array)"
+137,"def compute_pi(pattern):
+    m = len(pattern)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and pattern[k] != pattern[q]:
+            k = pi[k-1]
+        if pattern[k] == pattern[q]:
+            k += 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi(input_string)
+    print(*pi_array)"
+138,"def get_prefix_function(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k - 1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = get_prefix_function(input_string)
+    print(*pi_array)"
+139,"def prefix_function_alt(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if text[i] == text[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k != 0:
+                k = pi[k - 1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = prefix_function_alt(input_string)
+    print(*pi_array)"
+140,"def find_pi(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and s[i] != s[k]:
+            k = pi[k - 1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = find_pi(input_string)
+    print(*pi_array)"
+141,"def compute_pi_array(text):
+    m = len(text)
+    pi = [0] * m
+    k = 0
+    for q in range(1, m):
+        while k > 0 and text[k] != text[q]:
+            k = pi[k-1]
+        if text[k] == text[q]:
+            k = k + 1
+        pi[q] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = compute_pi_array(input_string)
+    print(*pi_array)"
+142,"class PrefixFunction:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        self.length = len(pattern)
+        self.pi = self.calculate_pi()
+    def calculate_pi(self):
+        pi = [0] * self.length
+        k = 0
+        for i in range(1, self.length):
+            while k > 0 and self.pattern[k] != self.pattern[i]:
+                k = pi[k-1]
+            if self.pattern[k] == self.pattern[i]:
+                k += 1
+            pi[i] = k
+        return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    prefix_func = PrefixFunction(input_string)
+    print(*prefix_func.pi)"
+143,"def get_pi(seq):
+    size = len(seq)
+    pi_val = [0] * size
+    k_val = 0
+    i_val = 1
+    while i_val < size:
+        if seq[i_val] == seq[k_val]:
+            k_val += 1
+            pi_val[i_val] = k_val
+            i_val += 1
+        else:
+            if k_val != 0:
+                k_val = pi_val[k_val - 1]
+            else:
+                pi_val[i_val] = 0
+                i_val += 1
+    return pi_val
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_array = get_pi(input_string)
+    print(*pi_array)"
+144,"def pi_function(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    i = 1
+    while i < n:
+        if s[i] == s[k]:
+            k += 1
+            pi[i] = k
+            i += 1
+        else:
+            if k > 0:
+                k = pi[k-1]
+            else:
+                pi[i] = 0
+                i += 1
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_result = pi_function(input_string)
+    print(*pi_result)"
+145,"def prefix_array(text):
+    length = len(text)
+    pi = [0] * length
+    k = 0
+    for i in range(1, length):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k - 1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_values = prefix_array(input_string)
+    print(*pi_values)"
+146,"def calculate_prefix(string):
+    n = len(string)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and string[i] != string[k]:
+            k = pi[k-1]
+        if string[i] == string[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    result = calculate_prefix(input_string)
+    print(*result)"
+147,"def compute_pi(s):
+    n = len(s)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        k = max(0, k)
+        while k > 0 and s[i] != s[k]:
+            k = pi[k-1]
+        if s[i] == s[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_array = compute_pi(input_string)
+    print(*pi_array)"
+148,"def prefix_function_recursive(text, i, k, pi):
+    if i == len(text):
+        return pi
+    if text[i] == text[k]:
+        k += 1
+    else:
+        if k > 0:
+            k = pi[k-1]
+        else:
+            k = 0
+    pi[i] = k
+    return prefix_function_recursive(text, i + 1, k, pi)
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi = [0] * n
+    pi_array = prefix_function_recursive(input_string, 1, 0, pi)
+    print(*pi_array)"
+149,"def get_pi_array(pattern):
+    m = len(pattern)
+    pi = [0] * m
+    k = 0
+    for i in range(1, m):
+        while k > 0 and pattern[i] != pattern[k]:
+            k = pi[k-1]
+        if pattern[i] == pattern[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    n = len(input_string)
+    pi_result = get_pi_array(input_string)
+    print(*pi_result)"
+150,"def calculate_pi_slice(text):
+    n = len(text)
+    pi = [0] * n
+    k = 0
+    for i in range(1, n):
+        while k > 0 and text[i] != text[k]:
+            k = pi[k-1]
+        if text[i] == text[k]:
+            k += 1
+        pi[i] = k
+    return pi
+if __name__ == ""__main__"":
+    input_string = input()
+    pi_values = calculate_pi_slice(input_string)
+    print(*pi_values)"

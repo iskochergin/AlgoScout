@@ -158,10 +158,11 @@ def preprocess_and_canonicalize(src: str) -> str:
 
     # 4. unparse
     try:                # Python 3.9+
-        return ast.unparse(tree)
+        out = ast.unparse(tree)
     except AttributeError:
         import astor    # pip install astor for <3.9
-        return astor.to_source(tree)
+        out = astor.to_source(tree)
+    return "\n".join(line for line in out.splitlines() if line.strip())
 
 
 if __name__ == "__main__":
